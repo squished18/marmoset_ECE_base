@@ -1,0 +1,1505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<!DOCTYPE web-app SYSTEM "book.dtd"[
+  <!ENTITY custom SYSTEM "custom.xml">
+]>
+-->
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!-- 
+	&custom;
+	<xi:include href="custom.xml" xpointer="xpointer(/web-app/*)"/>
+-->
+	<context-param>
+		<param-name>@DATABASE_NAME_KEY@</param-name>
+		<param-value>@DATABASE_NAME_VALUE@</param-value>
+	</context-param>
+	<context-param>
+		<param-name>fileupload.maxsize</param-name>
+		<param-value>15728640</param-value>
+	</context-param>
+	<context-param>
+		<param-name>minimum.course.project.manager.version</param-name>
+		<param-value>0.2.1</param-value>
+	</context-param>
+	<context-param>
+		<param-name>minimum.bluej.to.marmoset.version</param-name>
+		<param-value>0.0.1</param-value>
+	</context-param>
+	<context-param>
+		<param-name>buildserver.password</param-name>
+		<param-value>spyreindeer</param-value>
+	</context-param>
+	<context-param>
+		<param-name>admin.email</param-name>
+		<param-value>jspacco@cs.umd.edu</param-value>
+	</context-param>
+	<context-param>
+		<param-name>admin.SMTP</param-name>
+		<param-value>smtp.cs.umd.edu</param-value>
+	</context-param>
+	<context-param>
+		<param-name>max.buildserver.duration.minutes</param-name>
+		<param-value>18</param-value>
+	</context-param>
+<!-- 
+	<context-param>
+    	<param-name>authentication.service</param-name>
+	    <param-value>edu.umd.cs.submitServer.MarylandAuthenticationService</param-value>
+	</context-param>
+-->
+<!--
+	<context-param>
+    	<param-name>authentication.service</param-name>
+	    <param-value>edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService</param-value>
+	</context-param>
+-->	
+	<!-- 
+	<context-param>
+		<param-name>semester</param-name>
+		<param-value>Summer 2005</param-value>
+	</context-param>
+	-->
+	<context-param>
+		<param-name>findbugsDescriptionsURL</param-name>
+		<param-value>http://findbugs.sourceforge.net/allBugDescriptions.html</param-value>
+	</context-param>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Everything</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<!-- 
+		log all transactions that take longer than some lower bound
+	-->
+	<filter>
+		<filter-name>MonitorSlowTransactionsFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.MonitorSlowTransactionsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>MonitorSlowTransactionsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+
+	<!-- 
+		ServletExceptionFilter returns text/plain error messages to a browser
+		rather than returning the tomcat's default HTML.  This is useful because
+		the eclipse client currently cannot render HTML.
+	-->
+	<filter>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.ServletExceptionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<url-pattern>/eclipse/SubmitProjectViaEclipse</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<url-pattern>/bluej/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<url-pattern>/action/UploadSubmission</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<url-pattern>/eclipse/NegotiateOneTimePassword</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<url-pattern>/buildServer/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ServletExceptionFilter</filter-name>
+		<url-pattern>/snapshot/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 
+		MultipartRequestFilter
+	-->
+
+	<filter>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.MultipartRequestFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/action/SubmitProjectViaWeb</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/eclipse/SubmitProjectViaEclipse</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/bluej/SubmitProjectViaBlueJ</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/bluej/SubmitProjectViaBlueJSubmitter</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/buildServer/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>
+			/action/instructor/UploadProjectJarfile
+		</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>
+			/action/instructor/RegisterStudents
+		</url-pattern>
+	</filter-mapping>
+  <filter-mapping>
+    <filter-name>MultipartRequestFilter</filter-name>
+    <url-pattern>
+      /action/instructor/RegisterUWStudents
+    </url-pattern>
+  </filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>
+			/eclipse/LogEclipseLaunchEvent
+		</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/action/instructor/UploadProjectStarterFiles</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MultipartRequestFilter</filter-name>
+		<url-pattern>/action/instructor/ImportProject</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>OneTimePasswordAuthenticationFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.OneTimePasswordAuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>OneTimePasswordAuthenticationFilter</filter-name>
+		<url-pattern>/eclipse/LogEclipseLaunchEvent</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>OneTimePasswordAuthenticationFilter</filter-name>
+		<url-pattern>/eclipse/SubmitProjectViaEclipse</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>OneTimePasswordAuthenticationFilter</filter-name>
+		<url-pattern>/bluej/SubmitProjectViaBlueJ</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>SnapshotAuthenticationFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.SnapshotAuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SnapshotAuthenticationFilter</filter-name>
+		<url-pattern>/snapshot/*</url-pattern>
+	</filter-mapping>
+	
+	<!--
+		AuthenticationFilter
+	-->
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.AuthenticationFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/view/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/data/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/action/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/docs/instructor/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/research/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/status/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>AccessLogFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.AccessLogFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/view/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/action/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/research/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/data/*</url-pattern>
+	</filter-mapping>
+	<!-- 
+	Note that /eclipse/NegotiateOneTimePassword is the only servlet that
+	CANNOT have the AccessLogFilter applied to it!
+	-->
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/eclipse/LogEclipseLaunchEvent</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AccessLogFilter</filter-name>
+		<url-pattern>/eclipse/SubmitProjectViaEclipse</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>DocumentationFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.DocumentationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>DocumentationFilter</filter-name>
+		<url-pattern>/docs/instructor/*</url-pattern>
+	</filter-mapping>
+
+
+
+
+
+	<filter>
+		<filter-name>ExtractParametersFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.ExtractParametersFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ExtractParametersFilter</filter-name>
+		<url-pattern>/view/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ExtractParametersFilter</filter-name>
+		<url-pattern>/action/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ExtractParametersFilter</filter-name>
+		<url-pattern>/data/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ExtractParametersFilter</filter-name>
+		<url-pattern>/research/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>SurveyFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.SurveyFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SurveyFilter</filter-name>
+		<url-pattern>/view/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.TestPropertiesFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/research/tarantulaSourceFiles.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/submission.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/instructor/submission.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/instructor/studentProject.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/sourceFiles.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/sourceCode.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/project.jsp</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/instructor/project.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>TestPropertiesFilter</filter-name>
+		<url-pattern>/view/instructor/projectTestResults.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>QuerySystemFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.QuerySystemFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>QuerySystemFilter</filter-name>
+		<url-pattern>/research/snapshot.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>CodeCoverageStatsFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.CodeCoverageStatsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CodeCoverageStatsFilter</filter-name>
+		<url-pattern>/view/instructor/submission.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CodeCoverageStatsFilter</filter-name>
+		<url-pattern>/view/submission.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.FailedBackgroundRetestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<url-pattern>/view/instructor/failedBackgroundRetests.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<url-pattern>/view/project.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<url-pattern>/view/instructor/project.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<url-pattern>/view/instructor/projectUtilities.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<url-pattern>/view/instructor/projectTestResults.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>FailedBackgroundRetestFilter</filter-name>
+		<url-pattern>/view/instructor/studentProject.jsp</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.CanonicalTestRunFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/view/submission.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/view/instructor/assignPoints.jsp</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/view/instructor/projectTestResults.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/view/instructor/studentProject.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/view/instructor/submissionAllTests.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/view/instructor/projectTestHistory.jsp</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/data/instructor/TestResultHistory.jsp</url-pattern>
+	</filter-mapping><filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/research/studentProject.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CanonicalTestRunFilter</filter-name>
+		<url-pattern>/research/projectTestResults.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>SubmissionAllTestRunsFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.SubmissionAllTestRunsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SubmissionAllTestRunsFilter</filter-name>
+		<url-pattern>/view/instructor/submissionAllTests.jsp</url-pattern>
+	</filter-mapping>
+
+	
+	<filter>
+		<filter-name>SnapshotListFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.SnapshotListFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SnapshotListFilter</filter-name>
+		<url-pattern>/research/studentProject.jsp</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>SnapshotListTestOutcomesFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.SnapshotListTestOutcomesFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SnapshotListTestOutcomesFilter</filter-name>
+		<url-pattern>/research/studentProject.jsp</url-pattern>
+	</filter-mapping>
+
+	
+	<filter>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.AllStudentsSummaryFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/view/instructor/project.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/view/instructor/projectUtilities.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/view/instructor/projectTestResults.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/data/instructor/DownloadBestSubmissions</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/data/instructor/DownloadMostRecentOnTimeAndLateSubmissions</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/data/instructor/PrintGrades</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/data/instructor/PrintGradesForDatabase</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/data/instructor/DownloadCodeCoverageResultsForProject</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>AllStudentsSummaryFilter</filter-name>
+		<url-pattern>/data/instructor/DownloadCodeCoverageResultsByPackage</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>LastSubmissionTestOutcomesFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.LastSubmissionTestOutcomesFilter</filter-class>
+	</filter>
+		<filter-mapping>
+		<filter-name>LastSubmissionTestOutcomesFilter</filter-name>
+		<url-pattern>/view/instructor/projectTestResults.jsp</url-pattern>
+	</filter-mapping>
+		<filter>
+		<filter-name>SubmissionListTestOutcomesFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.SubmissionListTestOutcomesFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SubmissionListTestOutcomesFilter</filter-name>
+		<url-pattern>/view/instructor/studentProject.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SubmissionListTestOutcomesFilter</filter-name>
+		<url-pattern>/view/project.jsp</url-pattern>
+	</filter-mapping>	
+	<filter>
+		<filter-name>AllStudentsFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.AllStudentsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AllStudentsFilter</filter-name>
+		<url-pattern>/view/admin/index.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>AllProjectTestSetups</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.AllProjectTestSetups</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>AllProjectTestSetups</filter-name>
+		<url-pattern>/view/instructor/project.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllProjectTestSetups</filter-name>
+		<url-pattern>/view/instructor/projectUtilities.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>ProjectJarfileFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.ProjectJarfileFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>ProjectJarfileFilter</filter-name>
+		<url-pattern>/view/instructor/assignPoints.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ProjectJarfileFilter</filter-name>
+		<url-pattern>/action/instructor/AssignPoints</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>ProjectJarfileFilter</filter-name>
+		<url-pattern>/view/submission.jsp</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>ProjectJarfileFilter</filter-name>
+		<url-pattern>/view/project.jsp</url-pattern>
+	</filter-mapping>
+	
+		
+	
+	<!-- 
+		TODO rewrite this so that it expects a multipart request
+		BuildServerAuthenticationFilter
+		Can't apply this to the multipart ReportTestOutcomes servlet because the parameters
+		aren't in the request!
+	-->
+	<filter>
+		<filter-name>BuildServerAuthenticationFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.BuildServerAuthenticationFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>BuildServerAuthenticationFilter</filter-name>
+		<url-pattern>/buildServer/*</url-pattern>
+	</filter-mapping>
+
+
+
+	<filter>
+		<filter-name>InstructorFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.InstructorFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>InstructorFilter</filter-name>
+		<url-pattern>/data/instructor/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>InstructorFilter</filter-name>
+		<url-pattern>/view/instructor/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>InstructorActionFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.InstructorActionFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>InstructorActionFilter</filter-name>
+		<url-pattern>/action/instructor/*</url-pattern>
+	</filter-mapping>
+
+
+
+	<filter>
+		<filter-name>NoCacheFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.NoCacheFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>NoCacheFilter</filter-name>
+		<url-pattern>/view/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- 
+		AdminFilter
+	-->
+	<filter>
+		<filter-name>AdminFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.AdminFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AdminFilter</filter-name>
+		<url-pattern>/action/admin/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AdminFilter</filter-name>
+		<url-pattern>/view/admin/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AdminFilter</filter-name>
+		<url-pattern>/research/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>SourceCodeFilter</filter-name>
+		<filter-class>
+			edu.umd.cs.submitServer.filters.SourceCodeFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SourceCodeFilter</filter-name>
+		<url-pattern>/view/sourceCode.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SourceCodeFilter</filter-name>
+		<url-pattern>/view/sourceFiles.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SourceCodeFilter</filter-name>
+		<url-pattern>/research/tarantulaSourceFiles.jsp</url-pattern>
+	</filter-mapping>	
+	
+	<filter>
+		<filter-name>SourceFileListFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.SourceFileListFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SourceFileListFilter</filter-name>
+		<url-pattern>/view/sourceFiles.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SourceFileListFilter</filter-name>
+		<url-pattern>/research/tarantulaSourceFiles.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>BackgroundDataFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.BackgroundDataFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>BackgroundDataFilter</filter-name>
+		<url-pattern>/view/background.jsp</url-pattern>
+	</filter-mapping>
+	
+	
+	<filter>
+		<filter-name>ConnectionFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.ConnectionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ConnectionFilter</filter-name>
+		<url-pattern>/view/instructor/course.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ConnectionFilter</filter-name>
+		<url-pattern>/view/sourceCode.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ConnectionFilter</filter-name>
+		<url-pattern>/view/instructor/project.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>ConnectionFilter</filter-name>
+		<url-pattern>/view/instructor/projectUtilities.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>QueryTestOutcomesFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.QueryTestOutcomesFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>QueryTestOutcomesFilter</filter-name>
+		<url-pattern>/research/query.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>AllCoursesFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.AllCoursesFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AllCoursesFilter</filter-name>
+		<url-pattern>/demo.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AllCoursesFilter</filter-name>
+		<url-pattern>/index.jsp</url-pattern>
+	</filter-mapping>
+	<!-- 
+		Hack alert:  Because I'm using a response.forward() rather than a redirect
+		I'm adding another filter-mapping to the servlet I forward to.  This is a hack
+		But I don't know any other ways to do it.
+	-->
+	<filter-mapping>
+		<filter-name>AllCoursesFilter</filter-name>
+		<url-pattern>/authenticate/RegisterDemoAccount</url-pattern>
+	</filter-mapping>
+		
+		<filter>
+		<filter-name>WarningWithCoverageFilter</filter-name>
+		<filter-class>edu.umd.cs.submitServer.filters.WarningWithCoverageFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>WarningWithCoverageFilter</filter-name>
+		<url-pattern>/view/instructor/warningWithCoverage.jsp</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<description>Perform Login</description>
+		<display-name>PerformLogin</display-name>
+		<servlet-name>PerformLogin</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.PerformLogin
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Creates a new course. Requires admin privileges checked for
+			by AdminFilter
+		</description>
+		<display-name>CreateCourse</display-name>
+		<servlet-name>CreateCourse</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.CreateCourse
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Creates a new project for a given course. Requires
+			InstructorAction privileges checked for by
+			InstructorActionFilter
+		</description>
+		<display-name>CreateProject</display-name>
+		<servlet-name>CreateProject</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.CreateProject
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Submits a project using the web interface
+		</description>
+		<display-name>SubmitProjectViaWeb</display-name>
+		<servlet-name>SubmitProjectViaWeb</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.SubmitProjectViaWeb
+		</servlet-class>
+	</servlet>
+
+	<servlet>
+		<description>
+			Uploads a submission into the submission table. This servlet
+			does the heavy lifting for SubmitProjectViaWeb and
+			SubmitProjectViaEclipse
+		</description>
+		<display-name>UploadSubmission</display-name>
+		<servlet-name>UploadSubmission</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.UploadSubmission
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Requests a release test for a particular submission
+		</description>
+		<display-name>RequestReleaseTest</display-name>
+		<servlet-name>RequestReleaseTest</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.RequestReleaseTest
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Negotiates a one-time password between an eclipse client and
+			the submitServer
+		</description>
+		<display-name>NegotiateOneTimePassword</display-name>
+		<servlet-name>NegotiateOneTimePassword</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.NegotiateOneTimePassword
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Handles the submission of a project through the Course
+			Project Manager in Eclipse
+		</description>
+		<display-name>SubmitProjectViaEclipse</display-name>
+		<servlet-name>SubmitProjectViaEclipse</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.SubmitProjectViaEclipse
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Handles a buildserver request for a submission to be tested
+		</description>
+		<display-name>RequestSubmission</display-name>
+		<servlet-name>RequestSubmission</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.RequestSubmission
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Returns a project jarfile to a buildServer
+		</description>
+		<display-name>GetProjectJarfile</display-name>
+		<servlet-name>GetProjectJarfile</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.GetProjectJarfile
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Reports test outcomes from the buildserver
+		</description>
+		<display-name>ReportTestOutcomes</display-name>
+		<servlet-name>ReportTestOutcomes</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.ReportTestOutcomes
+		</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+			Uploads a new project jarfile for a given project
+		</description>
+		<display-name>UploadProjectJarfile</display-name>
+		<servlet-name>UploadProjectJarfile</servlet-name>
+		<servlet-class>
+			edu.umd.cs.submitServer.servlets.UploadProjectJarfile
+		</servlet-class>
+	</servlet>
+  <servlet>
+    <description>Downloads a submission for the given submissionPK</description>
+    <display-name>DownloadSubmission</display-name>
+    <servlet-name>DownloadSubmission</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadSubmission</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Logout from the current session</description>
+    <display-name>Logout from the session</display-name>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.Logout</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Registers students for a given course</description>
+    <display-name>RegisterStudents</display-name>
+    <servlet-name>RegisterStudents</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.RegisterStudents</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Registers UW students for a given course using a classlist</description>
+    <display-name>RegisterUWStudents</display-name>
+    <servlet-name>RegisterUWStudents</servlet-name>
+    <servlet-class>ca.uwaterloo.cs.submitServer.servlets.RegisterUWStudents</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Downloads a project jarfile from the database</description>
+    <display-name>DownloadProjectJarfile</display-name>
+    <servlet-name>DownloadProjectJarfile</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadProjectJarfile</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Assigns points to each test value</description>
+    <display-name>AssignPoints</display-name>
+    <servlet-name>AssignPoints</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.AssignPoints</servlet-class>
+  </servlet>
+  <servlet>
+    <description>MakeProjectVisible</description>
+    <display-name>MakeProjectVisible</display-name>
+    <servlet-name>MakeProjectVisible</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.MakeProjectVisible</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Logs a message from the buildserver</description>
+    <display-name>HandleBuildServerLogMessage</display-name>
+    <servlet-name>HandleBuildServerLogMessage</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.HandleBuildServerLogMessage</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Changes the status of a testSetup (projectJarfile)</description>
+    <display-name>ChangeTestSetupStatus</display-name>
+    <servlet-name>ChangeTestSetupStatus</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ChangeTestSetupStatus</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Grants an extension of N hours for a student for a particular project</description>
+    <display-name>GrantExtension</display-name>
+    <servlet-name>GrantExtension</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.GrantExtension</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Downloads a zip archive of the best submissions per student</description>
+    <display-name>DownloadBestSubmissions</display-name>
+    <servlet-name>DownloadBestSubmissions</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadBestSubmissions</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Re-computes the point values for a project by calculating the overall scores for the testRuns and submissions according to the testOutcomeCollection</description>
+    <display-name>ReComputePointValues</display-name>
+    <servlet-name>ReComputePointValues</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ReComputePointValues</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Prints the grades in CSV format</description>
+    <display-name>PrintGrades</display-name>
+    <servlet-name>PrintGrades</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintGrades</servlet-class>
+  </servlet>
+   <servlet>
+    <description>Prints the grades in CSV format</description>
+    <display-name>PrintTestDetailsForDatabase</display-name>
+    <servlet-name>PrintTestDetailsForDatabase</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintTestDetailsForDatabase</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <description>Uploads a snapshot submission from CVS</description>
+    <display-name>UploadSnapshotFromCVS</display-name>
+    <servlet-name>UploadSnapshotFromCVS</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.UploadSnapshotFromCVS</servlet-class>
+  </servlet>
+
+  <servlet>
+    <description>Print table giving test result history</description>
+    <display-name>TestResultHistory</display-name>
+    <servlet-name>TestResultHistory</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.TestResultHistory</servlet-class>
+  </servlet>
+
+ <servlet>
+    <description>Prints the grades in CSV format for the grades database</description>
+    <display-name>PrintGradesForDatabase</display-name>
+    <servlet-name>PrintGradesForDatabase</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintGradesForDatabase</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Prints a diff file from a snapshot</description>
+    <display-name>PrintDiffFile</display-name>
+    <servlet-name>PrintDiffFile</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintDiffFile</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Downloads the most recent on-time and late submissions</description>
+    <display-name>DownloadMostRecentOnTimeAndLateSubmissions</display-name>
+    <servlet-name>DownloadMostRecentOnTimeAndLateSubmissions</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadMostRecentOnTimeAndLateSubmissions</servlet-class>
+  </servlet>
+  <servlet>
+    <description>UpdateProject will update a project in the database</description>
+    <display-name>UpdateProject</display-name>
+    <servlet-name>UpdateProject</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.UpdateProject</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Update a user's background data in the database</description>
+    <display-name>UpdateBackgroundData</display-name>
+    <servlet-name>UpdateBackgroundData</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.UpdateBackgroundData</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Registers a demo account for use on marmosetdemo.cs.umd.edu</description>
+    <display-name>RegisterDemoAccount</display-name>
+    <servlet-name>RegisterDemoAccount</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.RegisterDemoAccount</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Performs the login steps required for a demo account.  Mirrors the normal "PerformLogin" servlet but does not use LDAP</description>
+    <display-name>PerformDemoLogin</display-name>
+    <servlet-name>PerformDemoLogin</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PerformDemoLogin</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Logs an eclipse launch event to the database</description>
+    <display-name>LogEclipseLaunchEvent</display-name>
+    <servlet-name>LogEclipseLaunchEvent</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.LogEclipseLaunchEvent</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Changes the permissions available (read-only or modify) to a user registered for a particular course. </description>
+    <display-name>ChangePermission</display-name>
+    <servlet-name>ChangePermission</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ChangePermission</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Updates the post-deadline visibility for a project (i.e. adds/removes the ability of students to see more information about their test cases after the project deadline has passed)</description>
+    <display-name>UpdatePostDeadlineOutcomeVisibility</display-name>
+    <servlet-name>UpdatePostDeadlineOutcomeVisibility</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.UpdatePostDeadlineOutcomeVisibility</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Prints grades for all submissions, for all students</description>
+    <display-name>PrintGradesForAllSubmissions</display-name>
+    <servlet-name>PrintGradesForAllSubmissions</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintGradesForAllSubmissions</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Marks a submission for re-test by the buildServer.  Re-tests have a higher priority than new submissions or submissions that are re-testing because of a new test-setup.</description>
+    <display-name>ChangeSubmissionBuildStatus</display-name>
+    <servlet-name>ChangeSubmissionBuildStatus</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ChangeSubmissionBuildStatus</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Prints the raw xml results with code coverage information in them</description>
+    <display-name>PrintRawCoverageXmlResults</display-name>
+    <servlet-name>PrintRawCoverageXmlResults</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintRawCoverageXmlResults</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Downloads the code coverage results in CSV form</description>
+    <display-name>DownloadCodeCoverageResultsForProject</display-name>
+    <servlet-name>DownloadCodeCoverageResultsForProject</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadCodeCoverageResultsForProject</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Updates a student or student_registration record</description>
+    <display-name>EditStudentRegistration</display-name>
+    <servlet-name>EditStudentRegistration</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.EditStudentRegistration</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Download code coverage results by package</description>
+    <display-name>DownloadCodeCoverageResultsByPackage</display-name>
+    <servlet-name>DownloadCodeCoverageResultsByPackage</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadCodeCoverageResultsByPackage</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Queries status information from the various buildServers</description>
+    <display-name>QueryBuildServerStatus</display-name>
+    <servlet-name>QueryBuildServerStatus</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.QueryBuildServerStatus</servlet-class>
+  </servlet>
+  <servlet>
+    <description>View the source using Tarantula-style coverage highlighting</description>
+    <display-name>TarantulaSourceDisplay</display-name>
+    <servlet-name>TarantulaSourceDisplay</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.TarantulaSourceDisplay</servlet-class>
+  </servlet>
+
+	<servlet>
+		<description>Downloads all submissions for a given project</description>
+		<display-name>DownloadAllSubmissions</display-name>
+		<servlet-name>DownloadAllSubmissions</servlet-name>
+		<servlet-class>edu.umd.cs.submitServer.servlets.DownloadAllSubmissions</servlet-class>
+	</servlet>
+  <servlet>
+    <description>Prints the results of all submissions after adjusting for background retests that may hav failed.  Useful for multi-threaded projects where results are not necessarily consistent.</description>
+    <display-name>PrintGradesForAllSubmissionsAdjustedByBackgroundRetests</display-name>
+    <servlet-name>PrintGradesForAllSubmissionsAdjustedByBackgroundRetests</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.PrintGradesForAllSubmissionsAdjustedByBackgroundRetests</servlet-class>
+  </servlet>
+  <servlet>
+    <description>SubmitProjectViaBlueJ</description>
+    <display-name>SubmitProjectViaBlueJ</display-name>
+    <servlet-name>SubmitProjectViaBlueJ</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.SubmitProjectViaBlueJ</servlet-class>
+  </servlet>
+  <servlet>
+    <description>SubmitProjectViaBlueJSubmitter</description>
+    <display-name>SubmitProjectViaBlueJSubmitter</display-name>
+    <servlet-name>SubmitProjectViaBlueJSubmitter</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.SubmitProjectViaBlueJSubmitter</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Changes the password for a student record.  Passwords are used by the GenericStudentPasswordAuthenticationService.</description>
+    <display-name>ChangePassword</display-name>
+    <servlet-name>ChangePassword</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ChangePassword</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Register a new instructor for this course.</description>
+    <display-name>RegisterInstructor</display-name>
+    <servlet-name>RegisterInstructor</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.RegisterInstructor</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Register a single student for this course.</description>
+    <display-name>RegisterOneStudent</display-name>
+    <servlet-name>RegisterOneStudent</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.RegisterOneStudent</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Creates a .submit file for the given project.</description>
+    <display-name>CreateDotSubmitFile</display-name>
+    <servlet-name>CreateDotSubmitFile</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.CreateDotSubmitFile</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Exports a project into a zipfile that can be read in by another server</description>
+    <display-name>ExportProject</display-name>
+    <servlet-name>ExportProject</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ExportProject</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Imports a project from a zipfile created by a different server</description>
+    <display-name>ImportProject</display-name>
+    <servlet-name>ImportProject</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ImportProject</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Upload a new archive of project starter files</description>
+    <display-name>UploadProjectStarterFiles</display-name>
+    <servlet-name>UploadProjectStarterFiles</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.UploadProjectStarterFiles</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Downlaod an archive of project starter files</description>
+    <display-name>DownloadProjectStarterFiles</display-name>
+    <servlet-name>DownloadProjectStarterFiles</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.DownloadProjectStarterFiles</servlet-class>
+  </servlet>
+  <servlet>
+    <description>Process a student survey and put the results into the Database</description>
+    <display-name>ProcessStudentSurveyResults</display-name>
+    <servlet-name>ProcessStudentSurveyResults</servlet-name>
+    <servlet-class>edu.umd.cs.submitServer.servlets.ProcessStudentSurveyResults</servlet-class>
+  </servlet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<servlet-mapping>
+		<servlet-name>PerformLogin</servlet-name>
+		<url-pattern>/authenticate/PerformLogin</url-pattern>
+	</servlet-mapping>
+	  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/authenticate/Logout</url-pattern>
+  </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateCourse</servlet-name>
+		<url-pattern>/action/admin/CreateCourse</url-pattern>
+	</servlet-mapping>
+	<!-- 
+	TODO Admin privileges should be required, not instructor privileges, correct?
+	-->
+	<servlet-mapping>
+		<servlet-name>CreateCourse</servlet-name>
+		<url-pattern>/action/instructor/CreateCourse</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateProject</servlet-name>
+		<url-pattern>/action/instructor/CreateProject</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SubmitProjectViaWeb</servlet-name>
+		<url-pattern>/action/SubmitProjectViaWeb</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UploadSubmission</servlet-name>
+		<url-pattern>/action/UploadSubmission</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RequestReleaseTest</servlet-name>
+		<url-pattern>/action/RequestReleaseTest</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>NegotiateOneTimePassword</servlet-name>
+		<url-pattern>/eclipse/NegotiateOneTimePassword</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>NegotiateOneTimePassword</servlet-name>
+		<url-pattern>/bluej/NegotiateOneTimePassword</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SubmitProjectViaEclipse</servlet-name>
+		<url-pattern>/eclipse/SubmitProjectViaEclipse</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RequestSubmission</servlet-name>
+		<url-pattern>/buildServer/RequestSubmission</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetProjectJarfile</servlet-name>
+		<url-pattern>/buildServer/GetProjectJarfile</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ReportTestOutcomes</servlet-name>
+		<url-pattern>/buildServer/ReportTestOutcomes</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UploadProjectJarfile</servlet-name>
+		<url-pattern>
+			/action/instructor/UploadProjectJarfile
+		</url-pattern>
+	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadSubmission</servlet-name>
+    <url-pattern>/data/DownloadSubmission</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterStudents</servlet-name>
+    <url-pattern>/action/instructor/RegisterStudents</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterUWStudents</servlet-name>
+    <url-pattern>/action/instructor/RegisterUWStudents</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadProjectJarfile</servlet-name>
+    <url-pattern>/data/instructor/DownloadProjectJarfile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AssignPoints</servlet-name>
+    <url-pattern>/action/instructor/AssignPoints</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MakeProjectVisible</servlet-name>
+    <url-pattern>/action/instructor/MakeProjectVisible</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>HandleBuildServerLogMessage</servlet-name>
+    <url-pattern>/buildServer/HandleBuildServerLogMessage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChangeTestSetupStatus</servlet-name>
+    <url-pattern>/action/instructor/ChangeTestSetupStatus</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GrantExtension</servlet-name>
+    <url-pattern>/action/instructor/GrantExtension</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadBestSubmissions</servlet-name>
+    <url-pattern>/data/instructor/DownloadBestSubmissions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ReComputePointValues</servlet-name>
+    <url-pattern>/action/instructor/ReComputePointValues</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintGrades</servlet-name>
+    <url-pattern>/data/instructor/PrintGrades</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>PrintTestDetailsForDatabase</servlet-name>
+    <url-pattern>/data/instructor/PrintTestDetailsForDatabase</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>TestResultHistory</servlet-name>
+    <url-pattern>/data/instructor/TestResultHistory</url-pattern>
+  </servlet-mapping>
+  
+
+	<servlet-mapping>
+		<servlet-name>UploadSnapshotFromCVS</servlet-name>
+		<url-pattern>/snapshot/UploadSnapshotFromCVS</url-pattern>
+	</servlet-mapping>
+
+
+  <servlet-mapping>
+    <servlet-name>PrintGradesForDatabase</servlet-name>
+    <url-pattern>/data/instructor/PrintGradesForDatabase</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintDiffFile</servlet-name>
+    <url-pattern>/research/PrintDiffFile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadMostRecentOnTimeAndLateSubmissions</servlet-name>
+    <url-pattern>/data/instructor/DownloadMostRecentOnTimeAndLateSubmissions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateProject</servlet-name>
+    <url-pattern>/action/instructor/UpdateProject</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateBackgroundData</servlet-name>
+    <url-pattern>/action/UpdateBackgroundData</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterDemoAccount</servlet-name>
+    <url-pattern>/authenticate/RegisterDemoAccount</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PerformDemoLogin</servlet-name>
+    <url-pattern>/authenticate/PerformDemoLogin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogEclipseLaunchEvent</servlet-name>
+    <url-pattern>/eclipse/LogEclipseLaunchEvent</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChangePermission</servlet-name>
+    <url-pattern>/action/instructor/ChangePermission</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdatePostDeadlineOutcomeVisibility</servlet-name>
+    <url-pattern>/action/instructor/UpdatePostDeadlineOutcomeVisibility</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintGradesForAllSubmissions</servlet-name>
+    <url-pattern>/data/instructor/PrintGradesForAllSubmissions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChangeSubmissionBuildStatus</servlet-name>
+    <url-pattern>/action/instructor/ChangeSubmissionBuildStatus</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintRawCoverageXmlResults</servlet-name>
+    <url-pattern>/research/PrintRawCoverageXmlResults</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadCodeCoverageResultsForProject</servlet-name>
+    <url-pattern>/data/instructor/DownloadCodeCoverageResultsForProject</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EditStudentRegistration</servlet-name>
+    <url-pattern>/action/instructor/EditStudentRegistration</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadCodeCoverageResultsByPackage</servlet-name>
+    <url-pattern>/data/instructor/DownloadCodeCoverageResultsByPackage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>QueryBuildServerStatus</servlet-name>
+    <url-pattern>/status/QueryBuildServerStatus</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadAllSubmissions</servlet-name>
+    <url-pattern>/data/instructor/DownloadAllSubmissions</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>PrintGradesForAllSubmissionsAdjustedByBackgroundRetests</servlet-name>
+    <url-pattern>/data/instructor/PrintGradesForAllSubmissionsAdjustedByBackgroundRetests</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SubmitProjectViaBlueJ</servlet-name>
+    <url-pattern>/bluej/SubmitProjectViaBlueJ</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SubmitProjectViaBlueJSubmitter</servlet-name>
+    <url-pattern>/bluej/SubmitProjectViaBlueJSubmitter</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChangePassword</servlet-name>
+    <url-pattern>/action/ChangePassword</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterInstructor</servlet-name>
+    <url-pattern>/action/instructor/RegisterInstructor</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterOneStudent</servlet-name>
+    <url-pattern>/action/instructor/RegisterOneStudent</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CreateDotSubmitFile</servlet-name>
+    <url-pattern>/data/instructor/CreateDotSubmitFile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExportProject</servlet-name>
+    <url-pattern>/data/instructor/ExportProject</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ImportProject</servlet-name>
+    <url-pattern>/action/instructor/ImportProject</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadProjectStarterFiles</servlet-name>
+    <url-pattern>/action/instructor/UploadProjectStarterFiles</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadProjectStarterFiles</servlet-name>
+    <url-pattern>/data/DownloadProjectStarterFiles</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProcessStudentSurveyResults</servlet-name>
+    <url-pattern>/action/ProcessStudentSurveyResults</url-pattern>
+  </servlet-mapping>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>http://jakarta.apache.org/taglibs/c</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/c.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>http://www.cs.umd.edu/marmoset/ss</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/ss.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>
+				http://jakarta.apache.org/taglibs/fmt
+			</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/fmt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>http://jakarta.apache.org/taglibs/log-1.0</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/log.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/page_not_found.jsp</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>
+		java.lang.Throwable
+		</exception-type>
+		<location>/error.jsp</location>
+	</error-page>
+	
+</web-app>

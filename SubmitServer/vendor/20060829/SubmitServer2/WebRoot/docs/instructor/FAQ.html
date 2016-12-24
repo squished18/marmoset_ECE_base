@@ -1,0 +1,336 @@
+<html>
+<head><title>SubmitServer Instructor's Documentation</title></head>
+<body>
+
+<h2> SubmitServer Instructor's Documentation </h2> If there's
+something you think needs to be documented for future instructors,
+please email me (Jaime) and I'll add it to this list.
+
+<ul>
+
+<li> <font color=blue> DO NOT INCLUDE YOUR SOLUTION IN YOUR TEST-SETUP
+JAR OR ZIPFILE </font>
+<p>
+This is extremely important.  If you include your solution with the
+test-setup, your reference solution will clobber each student's
+submission, and they will all receive perfect scores.
+<p>
+It's very important for you to be careful about this because you won't
+notice that there's a problem until students or TAs start submitting.
+<p>
+There's no trivial way for the server to detect it if you've
+accidentally included the reference solution with the test-setup
+jarfile, and I haven't had time to implement non-trivial solutions to
+this problem.  So be vigilant!
+
+<p>
+<li> <font color=blue> </font>
+<p>
+
+
+<p>
+<li> <font color=blue> You can now make test outcomes visible to students after
+the late deadline has passed.</font>
+<p>
+You can set this feature in 2 places
+<p>
+This is an all-or-nothing feature-- either they see results of all public, private and release tests
+or they see nothing.  Please be careful with this feature, it's very new and hasn't been
+thoroughly tested yet-- I think it respects extensions on a per-student basis but I've only
+lightly tested it.
+
+<p>
+<li> <font color=blue> Make sure that you get the UID, not the SID </font>
+<p>
+The university has 2 different numbers for students-- their UID (also know as Employee Number)
+which is a unique identifier-- and their SID (or Student ID) which up until this year
+defaulted to the Social Security Number.  Make sure you use the UID when registering students
+and TAs.
+
+<p>
+<li> <font color=blue> Sessions and Cookies </font>
+<p>
+We use sessions and cookies so for example you can't be logged in with
+your instructor and student account in different windows of the same
+browser.
+
+<p>
+<li> <font color=blue> The campus LDAP server we use for authentication periodically refuses
+connections </font>
+<p>
+I suspect this is because it's overloaded.  These errors are normally transient and go away after
+a minute or two.  If this happens to you or happens to one of your students, try logging
+in again in a minute or two.
+<p>
+The stack trace will look like this:
+<pre>
+javax.naming.CommunicationException: directory.umd.edu:389 [Root exception is java.net.ConnectException: Connection refused]
+	at com.sun.jndi.ldap.Connection.<init>(Connection.java:204)
+	at com.sun.jndi.ldap.LdapClient.<init>(LdapClient.java:118)
+	at com.sun.jndi.ldap.LdapClient.getInstance(LdapClient.java:1578)
+	at com.sun.jndi.ldap.LdapCtx.connect(LdapCtx.java:2596)
+	at com.sun.jndi.ldap.LdapCtx.<init>(LdapCtx.java:283)
+	at com.sun.jndi.ldap.LdapCtxFactory.getUsingURL(LdapCtxFactory.java:175)
+	at com.sun.jndi.ldap.LdapCtxFactory.getUsingURLs(LdapCtxFactory.java:193)
+	at com.sun.jndi.ldap.LdapCtxFactory.getLdapCtxInstance(LdapCtxFactory.java:136)
+	at com.sun.jndi.ldap.LdapCtxFactory.getInitialContext(LdapCtxFactory.java:66)
+	at javax.naming.spi.NamingManager.getInitialContext(NamingManager.java:667)
+	at javax.naming.InitialContext.getDefaultInitCtx(InitialContext.java:247)
+	at javax.naming.InitialContext.init(InitialContext.java:223)
+	at javax.naming.InitialContext.<init>(InitialContext.java:197)
+	at javax.naming.directory.InitialDirContext.<init>(InitialDirContext.java:82)
+	at edu.umd.cs.submitServer.servlets.PerformLogin.authenticateViaLDAP(PerformLogin.java:261)
+	at edu.umd.cs.submitServer.servlets.PerformLogin.authenticateLDAP(PerformLogin.java:226)
+	at edu.umd.cs.submitServer.servlets.PerformLogin.doPost(PerformLogin.java:89)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:709)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:802)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:252)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:173)
+	at edu.umd.cs.submitServer.filters.MonitorSlowTransactionsFilter.doFilter(MonitorSlowTransactionsFilter.java:46)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:202)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:173)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:213)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:178)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:126)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:105)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:107)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:148)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:856)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:744)
+	at org.apache.tomcat.util.net.PoolTcpEndpoint.processSocket(PoolTcpEndpoint.java:527)
+	at org.apache.tomcat.util.net.LeaderFollowerWorkerThread.runIt(LeaderFollowerWorkerThread.java:80)
+	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:684)
+	at java.lang.Thread.run(Thread.java:595)
+Caused by: java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(PlainSocketImpl.java:333)
+	at java.net.PlainSocketImpl.connectToAddress(PlainSocketImpl.java:195)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:182)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:364)
+	at java.net.Socket.connect(Socket.java:507)
+	at java.net.Socket.connect(Socket.java:457)
+	at java.net.Socket.<init>(Socket.java:365)
+	at java.net.Socket.<init>(Socket.java:178)
+	at com.sun.jndi.ldap.Connection.createSocket(Connection.java:346)
+	at com.sun.jndi.ldap.Connection.<init>(Connection.java:181)
+	... 36 more
+</pre>
+
+<p>
+<li> <font color=blue> Sessions Timeouts </font>
+<p>
+The session timeout is pretty short, I think only 15 or 30 min.  If
+your sessions times out and the very next operation you try is an
+HTTP-post operation, this will fail.  The reason is that the redirect
+to the login page loses the actual post information, so after logging
+in your will be re-directed back to the post page, but without the
+required bits of post request.
+<p>
+This is annoying, but not really a bug.  Just
+remember to re-authenticate yourself (you can do that by reloading the
+current page) before trying an HTTP-post operation.
+
+<p>
+<li> <font color=blue> TAs can now see invisible projects </font>
+<p>
+Your TAs will be able to view and submit projects as soon as
+projects are created; i.e. you <b>DO NOT</b> need to mark a project as
+"visible to students" for TAs to view the project and submit their own
+implementations.
+
+<p>
+<li> <font color=blue> You can add/remove TA permissions </font>
+<p>
+
+There are links from /view/instructor/course.jsp that allow you to
+add/remove TA permissions for people that have been registered for
+your class.
+
+<p>
+<li> <font color=blue> Your "canonical" account </font>
+<p>
+Each person has a "canonical" account.  This account must
+<b>ONLY</b> be used to submit reference implementations.  You can
+submit reference implementations through Eclipse, using the
+command-line tool, or using the "Project submission via jar file for
+canonical account" web form available at /view/instructor/project.jsp.
+Note that you must use your regular instructor account (NOT the
+canonical account) to access the web form.  Also note that you can
+view canonical test outcomes with your instructor account.  Thus it
+should <b>never</b> be necessary to log into the server directly with
+your canonical account.
+
+<p>
+<li> <font color=blue> Any instructor can submit as the canonical
+account by using the web form (and the web form <i>only</i> </font>
+<p>
+The way we create your instructor, canonical, and test student
+account makes it impossible to share a canonical account without
+sharing a DirectoryID password.
+<p>
+However, for courses with 2 instructors, either instructor can submit
+a canonical solution from the web form located at
+/view/instructor/project.jsp
+<p>
+Currently you cannot change the canonical account once you've created
+a project.
+
+<p>
+<li> <font color=blue> Your student test account </font>
+<p>
+Your instructor account has a "student" view as well as an
+"instructor" view.  However, if you want to see <i>exactly</i> what a
+student would see when logging into the system, log in with your
+student account.  The username is &lt;DirectoryID&gt;-student and has
+the same password as your regular DirectoryID.  If for some reason you
+don't have a student account, let me know and I'll create one.
+
+<p>
+<li> <font color=blue> There are 3 levels of permissions: Instructor,
+TA, and Student </font>
+<p>
+Instructors and TAs can both view all information about everyone
+else's submissions-- including each other-- whether or not they have
+used release tokens.
+<p>
+TAs cannot create or modify projects, register students, or add/remove
+TA privileges.  If you (or your TAs) ever discover that TAs can do any
+things they should not have permissioni to do, tell me right away.
+<p>
+Students cannot do any of the above-- they can only submit and view
+their own work, and can only view release test results subject to
+their use of release tokens.
+<p>
+Technically there's another level of permission for the canonical
+account, but this account should only ever be used to submit reference
+solutions.  You should not ever need to directly log into the server
+with your canonical account.
+
+<p>
+<li> <font color=blue> Class Accounts are just a unique identifier for a student
+registration </font>
+<p>
+But the SubmitServer does not communicate with any of the clusters
+where students have class accounts and so does not actually know (or
+care) that the class accounts are accurate.
+<p>
+Note that I sometimes use the terms 'class account' and 'cvs account' interchangeably
+but they mean the same thing-- it's just a unique identifier for a student
+who's registered for a particular class.  It doesn't really have anything to do with CVS.
+<p>
+Thus, if your course is not assigning class accounts on one of the
+clusters, when registering students use the students' DirectoryIDs in
+place of their class accounts.  This method will only fail if the student is
+registered for multiple courses that are using the SubmitServer, but
+that will not be the case in Fall 2005.
+
+<p>
+<li> <font color=blue> Don't use the /submitServer context anymore </font>
+<p>
+Don't use the /submitServer context anymore.  Last semester, you
+could use https://submit.cs.umd.edu and
+https://submit.cs.umd.edu/submitServer interchangably.  Now you should
+always use https://submit.cs.umd.edu instead.
+<p>
+The context stills work this semester, but I'd like to phase out the
+use of this context because of some issues in Tomcat.
+<p>
+Some places where stray references to the /submitServer context may be
+are in .submit files, either in Eclipse or in whatever template you
+use to populate your CVS repositories, and in any BuildServer you
+might be running.
+
+<p>
+<li> <font color=blue> Java projects now support student-written tests
+</font>
+<p>
+If you specify a classfile in the test.properties file like this:
+<p>
+test.class.student=StudentTests
+<p>
+and include a JUnit classfile called "StudentTests" with no tests (or
+one smaple test or whatver) for students to put their test cases into,
+we'll run these test cases on the server and store the results in the
+database.
+<p>
+Note that you <i>must</i> include a JUnit classfile, even if it has
+one silly test, or the BuildServer won't be able to test your submission
+(I'll eventually make the bulid process more tolerant of this).
+<p>
+Currently instructors and TAs can view results and coverage information for student-written
+tests, but in a primitive way.  This will improve when I have time to work on it.
+
+<p>
+<li> <font color=blue> For Java projects, test coverage information is
+only visible to TAs/Instructors </font>
+<p>
+There was some discussion last week as to whether students can see the
+coverage information-- the answer is "no".
+<p>
+Eventually students will be able to see coverage information for their own 
+student-written tests.
+
+<p>
+<li> <font color=blue> You can't view the source for C, OCaml or Ruby
+projects--only Java projects</font>
+<p>
+This feature simply won't work with non-Java files.  Soon I'll make
+this generate an error message but until then, be aware that this
+feature doesn't work for non-Java files.
+
+<p>
+<li> <font color=blue> Some notes about due dates </font>
+<p>
+Due dates are defined upto the second, for example:
+<p>
+2005-09-15 22:00:00
+<p>
+Note that dates use a 24-hour clock.
+<p>
+There are 2 important due dates to set: the on-time and the late
+deadline.  If you make them the same then there is effectively no late
+deadline.
+<p>
+When creating a project you can also specify the penalty for late
+submissions by specifying a 'constant' that will be subtracted from
+the score of all late submissions-- for example a 20 point penalty--
+or a 'multiplier' that will be applied to all late submissions-- for
+example late submissions are worth 0.8 (80%) of their value.
+<p>
+Values for late projects are applied dynamically in case you decide to
+change the late penalty for a project.
+<p>
+You can grant extensions for a given project from the main instructor
+view of that project.  Extensions are granted on a per project basis
+and are given in HOURS.
+<p>
+These two deadlines split all submissions into 3 classes: on-time,
+late and very-late.  When you download the student submissions, you
+will get the "best" on-time and late submission after taking into
+account the late penalties.
+<p>
+We define the "best" submission as the max of the most recent
+submission and the most recent release-tested submission.  This
+behaviour is unfortunately not at all configruable, so tell students
+that if they submit something worse than a previous submission, they
+can always download a previous submission from the web interface and
+submit the older version instead.
+
+
+<p>
+<li> <font color=blue> </font>
+<p>
+
+<p>
+<li> <font color=blue> </font>
+<p>
+
+<p>
+<li> <font color=blue> </font>
+<p>
+
+</ul>
+
+</body>
+</html>

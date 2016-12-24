@@ -1,0 +1,10 @@
+<project name="clover-clean" default="clean">
+
+<taskdef resource="clovertasks"/>
+<typedef resource="clovertypes"/>
+
+	 <target name="clean">
+	 	<clover-clean verbose="true" initstring="${initstring}"/>
+	 </target>
+
+</project>

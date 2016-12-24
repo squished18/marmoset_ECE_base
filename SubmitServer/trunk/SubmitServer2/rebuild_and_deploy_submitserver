@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# update vars below for your host
+
+export JAVA_HOME=$( dirname $(dirname $( readlink -e /usr/bin/java )))
+ant production.install
+#echo $JAVA_HOME
+

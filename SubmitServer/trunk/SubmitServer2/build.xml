@@ -1,0 +1,398 @@
+<project name="submitServer" default="dist" basedir=".">
+	
+	<!-- Servlets Ant build file -->
+
+	<!-- local.properties should not be checked into CVS -->
+	<property file="local.properties" />
+	<!-- set global properties for this build -->
+	<property file="build.properties" />
+
+	<property name="modelClasses.home" value="../SubmitServerModelClasses"/>
+	<property name="shared.jarfile" value="sharedSubmitServer.jar"/>
+	<property name="tags.stamp" value="dist/tags.stamp"/>
+
+	<!-- The classpath to be used to compile  -->
+	<path id="base.classpath">
+		<pathelement path="${classpath}"/>
+		<pathelement location="WebRoot/WEB-INF/lib/commons-fileupload.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/commons-logging.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/commons-io.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/jstl.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/mysql-connector-java.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/standard.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/modelClasses.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/log4j.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/dom4j-full.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/taglibs-log.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/ffident.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/cos.jar"/>
+		<pathelement location="lib/j2ee.jar"/>
+		<pathelement location="lib/annotations.jar"/>
+		<pathelement location="WebRoot/WEB-INF/classes"/>
+	</path>
+
+	<path id="junit.classpath">
+		<pathelement path="${classpath}"/>
+		<pathelement location="WebRoot/WEB-INF/lib/commons-fileupload.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/commons-logging.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/commons-io.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/jstl.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/mysql-connector-java.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/standard.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/modelClasses.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/log4j.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/dom4j-full.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/taglibs-log.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/ffident.jar"/>
+		<pathelement location="WebRoot/WEB-INF/lib/cos.jar"/>
+		<pathelement location="lib/j2ee.jar"/>
+		<pathelement location="lib/annotations.jar"/>
+		<pathelement location="${eclipse.home}/plugins/org.junit_3.8.1/junit.jar"/>
+		<pathelement location="WebRoot/WEB-INF/classes"/>
+	</path>
+
+
+	<!-- ====================================================================== -->
+	<!-- Init -->
+	<!-- ====================================================================== -->
+
+	<!-- init rule creates build directory -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${dist}" />
+		<mkdir dir="WebRoot/WEB-INF/classes"/>
+	</target>
+
+	<target name="modelClasses" depends="init">
+		<!--
+		Effectively builds the modelClasses jarfile in the ${dist} directory for this project.
+		Calls over to the antfile for the model classes (separate eclipse project) 
+		but passes an output.dir to the ${dist} directory in THIS project.
+		-->
+		<echo message="user.dir = ${user.dir}"/>
+		<ant
+			antfile="${modelClasses}/build.xml"
+			inheritall="false"
+			>
+			<property name="output.dir" value="${user.dir}/WebRoot/WEB-INF/lib"/>
+		</ant>
+	</target>
+
+	<target name="junit-compile" depends="compile">
+		<javac 
+			srcdir="${junit}"
+			includes="**/*.java"
+			destdir="${bin}"
+			deprecation="yes"
+			debug="on"
+			>
+			<classpath refid="junit.classpath" />
+		</javac>
+	</target>
+	
+	<!-- compile rule: Compile the servlets -->
+	<target name="compile" depends="init, modelClasses">
+		<javac 
+			srcdir="${src}"
+			includes="**/*.java"
+			destdir="${bin}"
+			deprecation="yes"
+			debug="on"
+			>
+			<classpath refid="base.classpath" />
+		</javac>
+	</target>
+
+	<!-- See if tags are up to date. -->
+	<target name="checktags">
+		<!-- Tags are up to date if the tags stamp file is newer
+			than any tag source file (both default and custom). -->
+		<condition property="tags.uptodate">
+			<uptodate targetfile="${tags.stamp}">
+				<srcfiles dir="lnf/tags/default" includes="*.tag"/>
+				<srcfiles dir="lnf/tags/${taglib.custom}" includes="*.tag"/>
+			</uptodate>
+		</condition>
+	</target>
+
+	<!-- If necessary, copy tags to WebRoot/WEB-INF/tags directory -->
+	<target name="copytags" depends="checktags" unless="tags.uptodate">
+		<!-- Copy tag files.  First the default tags, then the custom tags (if any). -->
+		<copy todir="WebRoot/WEB-INF/tags" overwrite="true">
+			<fileset dir="lnf/tags/default" includes="**/*.tag"/>
+		</copy>
+		<copy todir="WebRoot/WEB-INF/tags" overwrite="true">
+			<fileset dir="lnf/tags/${taglib.custom}" includes="**/*.tag"/>
+		</copy>
+		<touch file="${tags.stamp}"/>
+	</target>
+	
+	<!-- Create a war file-->
+	<target name="war" depends="compile,copytags">
+		<copy todir="${bin}" overwrite="true">
+			<fileset dir="${src}">
+				<include name="log4j.properties"/>
+			</fileset>
+			<filterset>
+				<filter token="LOGS_LOCATION" value="${logs.location}"/>
+			</filterset>
+		</copy>
+		<copy todir="WebRoot/docs" overwrite="true">
+			<fileset dir="fulldoc" includes="MarmosetHelp/**" excludes="**CVS**" />
+		</copy>
+		<copy todir="WebRoot/docs" overwrite="true">
+			<fileset dir="doc">
+				<include name="manual/**"/>
+			</fileset>
+		</copy>
+		<echo message="${bin}/edu/umd/cs/submitServer/BuildServerMonitor.class"/>
+		<war 
+			destfile="${dist}/${warfile}"
+			webxml="WebRoot/WEB-INF/web.xml" 
+			>
+			<fileset dir="WebRoot">
+				<exclude name="WEB-INF/classes/edu/umd/cs/submitServer/shared/*class"/>
+				<exclude name="WEB-INF/lib/log4j.jar"/>
+			</fileset>
+		</war>
+		<jar destfile="${dist}/${shared.jarfile}">
+			<fileset dir="${bin}">
+				<include name="**/shared/*class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="distribution">
+		<jar destfile="marmoset.jar" >
+			<fileset dir="../.." includes="workspace/SubmitServer2/src/**,workspace/SubmitServer2/WebRoot/**,workspace/SubmitServer2/lib/**,workspace/SubmitServer2/build*,workspace/SubmitServer2/doc/**"/>
+			<fileset dir="../.." includes="workspace/SubmitServerModelClasses/src/**,workspace/SubmitServerModelClasses/build.xml,workspace/SubmitServerModelClasses/dbScripts/**,workspace/SubmitServerModelClasses/lib/**"
+				excludes="workspace/SubmitServerModelClasses/dbScripts/mysql.tgz"/>
+			<fileset dir="../.." includes="workspace/BuildServer/src/**,workspace/BuildServer/scripts/**,workspace/BuildServer/build*,workspace/BuildServer/lib/**,workspace/BuildServer/install,workspace/BuildServer/killall"/>
+<!--			<fileset dir=".." includes="*schema*"/> -->
+		</jar>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		 marmoset.distribution: Create a directory with all the components 
+								of the marmoset distribution 
+		 STEPS to create distribution:
+		 1. Check out SubmitServer2, BuildServer, SubmitServerModelClasses
+		 2. Update SubmitServer2/fulldoc/MarmosetHelp.xsl to point to the local docbook installation
+		 3. Run the target 'fulldoc' to create the documentation
+		 4. Run the target 'marmoset.distribution' to create the distribution
+	 	 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+	<target name="marmoset.distribution">
+		
+		<property name="distro.dir" value="../MarmosetDistribution"/>
+		
+		<mkdir dir="${distro.dir}"/>
+		
+		<jar destfile="${distro.dir}/SubmitServer.jar" >
+			<fileset dir="../" includes="SubmitServer2/src/**,SubmitServer2/WebRoot/**," excludes="**CVS**"/>
+			<fileset dir="../" includes="SubmitServer2/lib/**,SubmitServer2/lnf/**" excludes="**CVS**"/>
+			<fileset dir="../" includes="SubmitServer2/scripts/**,SubmitServer2/junit/**,SubmitServer2/build*" excludes="**CVS**"/>
+			<fileset dir="../" includes="SubmitServer2/examples/**" excludes="**CVS**,**/.metadata/**"/>
+			<fileset dir="../" includes="SubmitServer2/fulldoc/**,SubmitServer2/doc/**" excludes="**CVS**"/>
+			<fileset dir="../" includes="SubmitServer2/.project,SubmitServer2/.classpath"/>
+		</jar>
+		
+		<jar destfile="${distro.dir}/BuildServer.jar" >
+			<fileset dir="../" includes="BuildServer/**" excludes="**CVS**"/>
+		</jar>
+		
+		<jar destfile="${distro.dir}/SubmitServerModelClasses.jar" >
+			<fileset dir="../" includes="SubmitServerModelClasses/**" excludes="**CVS**"/>
+		</jar>
+
+		<copy todir="${distro.dir}/doc" overwrite="true">
+			<fileset dir="fulldoc/MarmosetHelp" includes="**" excludes="**CVS**"/>
+		</copy>
+		
+		<copy todir="${distro.dir}/examples" overwrite="true">
+			<fileset dir="examples/" includes="**" excludes="**CVS**,**/.metadata/**"/>
+		</copy>
+
+		<copy todir="${distro.dir}" overwrite="true">
+			<fileset dir="fulldoc" includes="README"/>
+		</copy>
+		
+		<jar destfile="../MarmosetDistribution.jar" >
+			<fileset dir="../" includes="MarmosetDistribution/**" />
+		</jar>
+		
+	</target>
+
+	<!-- Dist rule -->
+	<target name="dist" depends="modelClasses, compile, war"/>
+
+	<!-- Production -->
+
+	<target name="production.install">
+		<property name="generic.install.location" value="${production.install.location}"/>
+		<antcall target="generic.install"/>
+	</target>
+	
+	<!-- Marmoset2 Playground sever -->
+	<target name="research.install">
+		<property name="generic.install.location" value="${research.install.location}"/>
+		<antcall target="generic.install"/>
+	</target>
+	
+	<target name="spring2005" depends="clean">
+		<property name="database.name.value" value="spring2005"/>
+		<property name="warfile" value="spring2005.war"/>
+		<antcall target="archive.install"/>
+	</target>
+	<target name="fall2005" depends="clean">
+		<property name="database.name.value" value="fall2005"/>
+		<property name="warfile" value="fall2005.war"/>
+		<antcall target="archive.install"/>
+	</target>
+	<target name="spring2006" depends="clean">
+		<property name="database.name.value" value="spring2006"/>
+		<property name="warfile" value="spring2006.war"/>
+		<antcall target="archive.install"/>
+	</target>
+	
+	<target name="archive.install">
+		<property name="database.name.key" value="database.name__override"/>
+		<property name="generic.install.location" value="${archive.install.location}"/>
+		<antcall target="generic.install"/>
+	</target>
+	
+	<target name="generic.install" depends="clean">
+		<!-- 
+		Use default name for warfile if the warfile hasn't yet been named.
+		-->
+		<property name="warfile" value="submitServer.war"/>
+		<copy file="lnf/web.xml" todir="WebRoot/WEB-INF" overwrite="true">
+			<filterset>
+				<filter token="DATABASE_NAME_KEY" value="${database.name.key}"/>
+				<filter token="DATABASE_NAME_VALUE" value="${database.name.value}"/>
+			</filterset>
+		</copy>
+		<echo message="generic install location = ${generic.install.location}"/>
+
+		<antcall target="dist"/>
+		
+		<exec executable="scp" os="${os}">
+			<arg line="${dist}/${warfile} ${generic.install.location}/${webapps}"/>
+		</exec>
+		<exec executable="scp" os="${os}">
+			<arg line="${dist}/${shared.jarfile} ${generic.install.location}/${shared.lib}"/>
+		</exec>
+		<exec executable="scp" os="${os}">
+			<arg line="lib/log4j.jar ${generic.install.location}/${shared.lib}"/>
+		</exec>
+	</target>
+	
+	<!-- Local -->
+	<target name="local.install" depends="clean">
+		<property name="generic.install.location" value="${local.install.location}"/>
+		<antcall target="generic.install"/>
+	</target>
+	
+	<target name="demo.install" depends="clean">
+		<property name="generic.install.location" value="${demo.install.location}"/>
+		<antcall target="generic.install"/>
+	</target>
+	
+	<target name="playground.install" depends="clean">
+		<property name="generic.install.location" value="${playground.install.location}"/>
+		<antcall target="generic.install"/>
+	</target>
+	
+	<target name="shadow.install" depends="dist">
+		<exec executable="scp" os="${os}">
+			<arg line="${dist}/${warfile} ${production.install.location}/${webapps}/newSubmitServer.war"/>
+		</exec>		
+	</target>
+	
+	<!-- ====================================================================== -->
+	<!-- Clean -->
+	<!-- ====================================================================== -->
+
+	<target name="clean">
+		<!-- Delete the ${dist} directory tree -->
+		<delete dir="${dist}"/> 
+	<!--
+		<delete>
+			<fileset dir="${bin}" includes="edu/*"/>
+		</delete>
+	-->
+	</target>
+	
+	<target name="fulldoc">
+		<exec executable="xsltproc">
+			<arg line="-o fulldoc/ fulldoc/MarmosetHelp.xsl fulldoc/MarmosetHelp.xml"/>
+		</exec>
+		
+		<copy todir="fulldoc/MarmosetHelp/samples" overwrite="true">
+			<fileset dir="examples/java_workspace/JavaProjectTemplate" includes="build.xml,security.policy"/>
+		</copy>
+		
+		<copy file="examples/java_workspace/JavaProjectTemplate/test.properties" 
+			  tofile="fulldoc/MarmosetHelp/samples/java.test.properties" overwrite="true" />		
+		
+		<copy file="examples/c_workspace/vigenere-c/test.properties" 
+			  tofile="fulldoc/MarmosetHelp/samples/c.test.properties" overwrite="true" />		
+		
+		<delete>
+			<fileset dir="fulldoc/MarmosetHelp/samples" includes="examples.jar"/>
+		</delete>
+		
+		<jar destfile="fulldoc/MarmosetHelp/samples/examples.jar" >
+			<fileset dir="." includes="examples/**" excludes="**CVS**,**/.metadata/**"/>
+		</jar>
+		
+		<jar destfile="fulldoc/MarmosetHelp/samples/JavaTemplate.jar" >
+			<fileset dir="examples/java_workspace" includes="JavaProjectTemplate/**" excludes="**CVS**"/>
+		</jar>
+		
+		<!-- The other jar files are part of the CVS repos. -->
+
+	</target>
+	
+	<target name="doc">
+		<exec executable="xsltproc" os="${os}">
+			<arg line="-o doc/ doc/manual.xsl doc/manual.xml"/>
+		</exec>
+		<!--
+		<copy dir="doc/manual">
+			<fileset dir="doc/manual">
+				<include name="*png"/>
+			</fileset>
+		</copy>
+		-->
+	</target>
+	
+	<target name="doc-xslt">
+		<xslt
+			destdir="dist"
+			scanincludeddirectories="false"
+			extension=".html"
+			style="doc/manual.xsl">
+		<include name="doc/manual.xml"/>
+		</xslt>
+	</target>
+	
+	<target name="check">
+		<copy tofile="/tmp/check/local2.props">
+			<fileset dir="/tmp/check">
+				<include name="local.properties"/>
+			</fileset>
+			<filterset>
+			</filterset>
+		</copy>
+	</target>
+	
+	<target name="test">
+		<fail message="fail"/>
+		<echo message="hello"/>
+		<echo message="classpath: ${classpath}"/>
+		<!--	<echoproperties/> -->
+		<echo message="user home: ${user.home}" />
+	</target>
+
+</project>
+

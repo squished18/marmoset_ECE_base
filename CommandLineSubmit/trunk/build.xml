@@ -1,0 +1,67 @@
+<project name="CommandLineSubmission" default="all">
+
+  <target name="all" depends="jarFile"/>
+	
+  <path id="base.classpath">
+    <pathelement path="${classpath}"/>
+    <pathelement location="lib/commons-logging.jar"/>
+    <pathelement location="lib/commons-httpclient.jar"/>
+  </path>	
+
+	<!-- Using ant to produce Java-1.5 compatible classfiles -->
+  <target name="classes">
+    <javac classpathref="base.classpath" source="1.5" target="1.5" 
+      destdir="unpackedLibraries" srcdir="src" />
+    <copy todir="unpackedLibraries">
+      <fileset dir="src">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="jarFile" depends="unpackedLibraries, classes">
+    <jar destfile="marmoset_submit.jar" compress="false">
+      <!-- Note that our compiled file for the command line submit
+           is already in this directory being included -->
+      <fileset dir="unpackedLibraries" includes="**/*.class"/>
+      <!-- Include the submit properties -->
+      <fileset dir="unpackedLibraries" includes="submit.properties"/>
+      <manifest>
+        <attribute name="Main-class" value="edu.umd.cs.submit.CommandLineSubmit"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="unpackedLibraries">
+    <mkdir dir="./unpackedLibraries"/>
+    <unjar dest="unpackedLibraries/">
+      <fileset dir=".">
+        <include name="lib/*.jar"/>
+      </fileset>
+    </unjar>
+  </target>
+	
+	<!--
+		Delete generated files.
+	-->
+  <target name="clean">
+    <delete dir="unpackedLibraries" />
+    <delete file="marmoset_submit.jar" />
+<!--
+    <delete>
+      <fileset dir="unpackedLibraries" />
+      <fileset dir="." includes="**/*.class" />
+      <fileset dir="." file="tester.jar"/>
+    </delete>
+-->
+  </target>
+
+	<!--
+		Delete generated files.
+	-->
+  <target name="distribute">
+    <jar destfile="../CommandLineSubmission.jar" >
+      <fileset dir="../" includes="CommandLineSubmission/**" excludes="**CVS**"/>
+    </jar>
+  </target>
+</project>

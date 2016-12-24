@@ -1,0 +1,254 @@
+body {
+	color: black;
+	background: white;
+	margin: 1em;
+	/*font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 13px;	*/
+}
+h1 {
+	font-size: 1.5em;
+	font-weight: bold;
+	font-family: verdana, arial, helvetica, sans-serif;
+	bottom-margin: 2px;
+}
+h2 {
+	font-size: 1.25em;
+	font-weight: bold;
+	font-family: verdana, arial, helvetica, sans-serif;
+		bottom-margin: 2px;
+}
+h3 {
+	font-size: 1.125em;
+	font-weight: bold;
+	font-family: verdana, arial, helvetica, sans-serif;
+		bottom-margin: 2px;
+}
+a:link {
+	color: #0000cc;
+}
+
+a:visited {
+	color: #000099;
+}
+
+div.header {
+	background: #FFCC00; /*#FFCC00;*/
+	padding: 0px 1em 5px 1em; /*5px 4px 2px 8em;*/
+	margin: 0 5em 0 1em;
+	color: black;
+	border: 3px solid black;
+}
+
+div.header p {
+	font: bold 200% verdana, arial, helvetica, sans-serif; /*"new century schoolbook", times, serif;*/
+	padding: 0;
+	margin: 0;
+}
+
+div.breadcrumb {
+	background: #000099; /*#cc0000;*/
+	padding: 0px 5px 5px 10px;
+	margin: 0px 1em 2em 5em;
+	color: white;
+}
+
+div.breadcrumb  p {
+	font-size: 80%;
+	font-weight: bold;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-variant: small-caps;
+	padding: 0;
+	margin: 0;
+}
+
+div.breadcrumb a:link {
+	color: white;
+	text-decoration: none;
+}
+
+div.breadcrumb a:visited {
+	color: white;
+	text-decoration: none;
+}
+
+div.breadcrumb a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+div.logout {
+	float: right;
+	width: 4em;
+	padding: 0.5em;
+	margin: -1.4em 2em -1em 0.5em;
+	border: 0;
+	background: black;
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	font-family: verdana, arial, helvetica, sans-serif;
+}
+
+div.logout a:link {
+	color: white;
+	text-decoration: none;
+}
+
+div.logout a:visited {
+	color: white;
+	text-decoration: none;
+}
+
+div.logout a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+div.footer {
+	border-top: 1px solid black;
+	text-align: left;
+	padding: 5px;
+	margin: 2em 3em 0;
+}
+
+table {
+	border-style: ridged;
+	border-width: 6px;
+	border-collapse: collapse;
+}
+
+th {
+	vertical-align: bottom;
+	padding: 4px;
+	border: 1px solid black;
+	margin: 0px;
+	background: #FFCC00;
+}
+
+td {
+	text-align: center;
+	vertical-align: top;
+	padding: 4px;
+	border: 1px solid black;
+	margin: 0px;
+}
+
+td.description {
+	text-align: left;
+}
+
+th.description {
+	text-align: left;
+}
+
+th.number {
+	text-align: right;
+}
+td.number {
+	text-align: right;
+}
+table  {
+	margin: 0.5em 2em;
+}
+
+col.right {
+	border-right: 7px solid black;
+}
+
+form { padding: 0; margin: 0; }
+
+table.stacktrace td {
+	left-padding: 5em;
+}
+
+table.form td {
+	padding: 0.25em;
+	text-align: left;
+}
+
+table.form td.label {		/* light rows #FFFF99?*/
+	font-weight: bold;
+	text-align: right;
+	background: #fff9e5; /* login page */
+	padding-left: 3em;
+	padding-right: 0.5em;
+}
+
+
+table.form tr.submit td {
+	background: #FFCC00;
+	text-align: center;
+}
+
+tr.r0 {				/* alternate rows */
+	background: #fff6cc; /*#fff3cc;*/
+}
+
+tr.r1 {
+	background: white;
+}
+tr.highlight {
+	background: #00ffaf;
+}
+td.passed {
+	BACKGROUND: #5fbf5f;
+}
+td.failed {
+	BACKGROUND: #9f3f3f;
+}
+td.error {
+	BACKGROUND: #CC0000;
+}
+td.huh {
+	BACKGROUND: #FFCC00;
+}
+td.timeout {
+	BACKGROUND: #ff00ff;	
+}
+td.not_implemented {
+	BACKGROUND: #FFFFFF;
+}
+td.could_not_run {
+	BACKGROUND: #808080;
+}
+td.warning {
+	BACKGROUND: #0000df;
+}
+
+/* Styles for source code display */
+table.codetable {
+	border-style: none;
+	border-width: 0px;
+	border-collapse: collapse;
+	margin: 0px;
+}
+table.codetable td {
+	text-align: left;
+	vertical-align: center;
+	padding: 0px;
+	border: none;
+	margin: 0px;
+}
+.codehighlight {
+	background: #fff3cc;
+}
+.codecovered {
+	background: #abcabd;
+}
+.codeuncovered {
+	background: #f0c8c8;
+}
+.codekeyword {
+	color: green;
+	font-weight: bold;
+}
+.codestring {
+	color: fuchsia;
+}
+.codeliteral {
+	color: fuchsia;
+}
+.codecomment {
+	color: blue;
+	font-style: italic;
+}

@@ -1,0 +1,1752 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY Marmoset "<application>SubmitServer</application>">
+<!ENTITY nbsp "&#160;">
+]>
+ 
+<book lang="en" id="submitserver-manual">
+ 
+  <bookinfo>
+    <title>Marmoset SubmitServer Manual</title>
+
+    <authorgroup>
+      <author>
+	<firstname>Jaime</firstname>
+	<surname>Spacco</surname>
+      </author>
+      <author>
+	<firstname>David</firstname>
+	<surname>Hovemeyer</surname>
+      </author>
+	<author>
+	<firstname>Nat</firstname>
+	<surname>Ayewah</surname>
+	</author>      
+      <author>
+	<firstname>Bill</firstname>
+	<surname>Pugh</surname>
+      </author>
+    </authorgroup>
+
+    <copyright>
+      <year>2005</year>
+      <year>2006</year>
+      <holder>University of Maryland</holder>
+    </copyright>
+
+    <legalnotice>
+      <!--
+      This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike License.
+      To view a copy of this license, visit
+      <ulink url="http://creativecommons.org/licenses/by-nc-sa/1.0/">http://creativecommons.org/licenses/by-nc-sa/1.0/</ulink>
+      or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+      -->
+		<para>
+      All Rights Reserved
+      	</para>
+    </legalnotice>
+
+  </bookinfo>
+
+<!--
+	**************************************************************************
+	Introduction
+	**************************************************************************
+-->
+ 
+  <chapter id="introduction">
+    <title>Introduction</title>
+
+    <para>
+      This document explains how to use the SubmitServer component of Marmoset.
+      The SubmitServer is a web application that stores submissions, allows students
+      and instructors to view submissions and their outcomes, and facilitates automated
+      testing by one or more BuildServers running on other machines.
+    </para>
+
+    <para>
+      The goals of this document are to specify how to set up and run a
+      SubmitServer instance.  This includes configuration information for a Tomcat installation
+      where the SubmitServer can be deployed (typically by dropping a submitServer.war file 
+      into a certain directory).
+    </para>
+
+  </chapter>
+
+<!--
+	**************************************************************************
+	Installation Instructions
+	**************************************************************************
+-->
+
+  <chapter id="installation">
+    <title>Installation Instructions</title>
+
+    <para>
+      This chapter describes how to install a new SubmitServer
+      installation for Marmoset.
+    </para>
+
+    <para>
+      Before doing anything else: First acquire the SubmitServer2 and
+      SubmitServerModelClasses source modules, either from CVS (if you
+      have access to Maryland's CVS repository for Marmoset) or as a
+      tarball directly from one of the members of the Marmoset project
+      (probably Jaime jspacco at cs.umd.edu).
+    </para>
+
+    <sect1 id="install_prerequisites">
+      <title>Prerequisites</title>
+
+      <para>
+	To install and run the SubmitServer, you need the following:
+      </para>
+
+      <itemizedlist>
+	<listitem>
+		<para>
+		A Unix machine, preferable Linux.  The short reason for this:  The whole system was built on a Linux machine
+		with no eye towards making it portable to other Unices or Windows.
+	<warning>
+	The whole system was built on a Linux machine with no eye towards making it portable to 
+	other Unices or Windows.
+	</warning>
+		</para>
+		<para>
+		The longer answer:  There are serveral assumptions that simply won't be true on 
+		Windows.  For example:
+		<orderedlist>
+		<listitem> The way the BuildServer cleans up processes
+		</listitem>
+		<listitem>
+		There are references "/tmp" for where the
+		BuildServer stores Clover's code coverage results
+		</listitem>
+		<listitem>
+		Most of the file separators used in SubmitServer2 are hard-coded 
+		to"/" rather than File.pathSeparatorChar, which will probably fail on Windows.
+		</listitem>
+		<listitem>
+		Various parts of the BuildServer and various installation scripts
+		assume a unix-style filesystem where commands like 'chmod' and 'chgrp' work.
+		</listitem>
+		<listitem>
+		There are shell scripts written in bash that (obviously) won't work easily on Windows
+		unless you're running cygwin.
+		</listitem>
+		<listitem>
+		There are
+		undoubtedly other linux or unix-specific bits of the code but I can't think of them right
+		now.  You have been warned!
+		</listitem>
+		</orderedlist>
+		</para>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    SubmitServer2 and SubmitServerModelClasses modules,
+	    available from Maryland's CVS repository or as a tarball
+	    available from one of the Marmoset developers (probably Jaime
+	    <email>jspacco at cs.umd.edu</email>)
+	  </para>
+	</listitem>
+
+	<listitem><para>JDK 1.5 (a.k.a. 5.0) or later (<ulink url="http://java.sun.com/j2se/">Download Java</ulink>)</para></listitem>
+	<listitem><para>
+	  Ant 1.6 or later (<ulink url="http://ant.apache.org/">Download Ant</ulink>)
+	</para></listitem>
+
+	<listitem>MySQL 4.1.16 or later (<ulink
+	url="http://dev.mysql.com/downloads">Download MySQL</ulink>)
+	  <para>
+	    The standard MySQL distribution is the one we use at Maryland
+	    (the exact version is
+	    mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23).
+	    Marmoset has also been tested successfully using mysql-standard-5.0.22-linux-i686-glibc23.
+	  </para>
+	</listitem>
+	<listitem><para>Jakarta Tomcat 5.5.9 or later (<ulink
+	url="http://tomcat.apache.org/">Download Tomcat</ulink>); 
+	    Marmoset works with Tomcat 5.5.9; I haven't tested with
+	    anything more recent and I don't know what changes will be
+	    made for the 6.0 series of Tomcat.
+	  </para>
+	</listitem>
+<!--	
+	<listitem>Perl 5 or later (<ulink url="http://www.perl.org/">Download Perl</ulink>)</listitem> 
+-->
+	
+      </itemizedlist>
+
+      <para>
+	NOTE: You will almost certainly want to put MySQL and tomcat onto
+	the same machine because it's more secure to only allow
+	connections to the database only from localhost (than to try to deal
+	with MySQL+SSL).
+      </para>
+      <para>
+	NOTE about unix accounts: The MySQL database and Tomcat can
+	both run as any user account.  For security purposes, it's not
+	a good idea in general to run either of these as the root user
+	of the unix system.  Also keep in mind that the 'root' user of
+	the unix host machine <emphasis>is not the same
+	thing</emphasis> as the 'root' user of a MySQL installation.
+	These are two separate, unrelated concepts that happen to have
+	the same name.  You can connect to the MySQL database as the
+	root database user using <emphasis>any</emphasis> unix user
+	account.
+      </para>
+      <para>
+	NOTE about NFS:  It is a terrible idea to install either MySQL
+	or Tomcat onto an NFS-mounted volume.  Doing so almost
+	guarantees problems with stale NFS-filehandles, problems
+	locking files, and so on.
+      </para>
+      <para>
+	
+      </para>
+    </sect1>
+
+    <sect1 id="mysql">
+      <title>Installing MySQL and the database for Marmoset</title>
+
+      <orderedlist numeration="arabic">
+	<listitem>
+	  <para>
+	  If MySQL is not already installed on the system, simply download 
+	  and untar a binary distribution from http://dev.mysql.com/. Point 
+	  the shell variable MYSQL_HOME at your installation. Then put
+	  $MYSQL_HOME/bin and $MYSQL_HOME/scripts on your path.
+	  </para>
+
+	  <para>
+	  For example, you could untar MySQL into $HOME/software/mysql and
+	  then (assuming your shell is bash) do:
+	  </para>
+
+	  <literallayout>
+	    export MSYQL_HOME=$HOME/software/mysql
+	    export PATH=$MYSQL_HOME/bin:$MYSQL_HOME/scripts:$PATH
+	  </literallayout>
+
+	</listitem>
+
+	<listitem>
+	  <para>
+	    Even with MYSQL_HOME clearly pointing to the MySQL
+	    installation, MySQL still seems to assume that it got put
+	    into /usr/local.
+	  </para>
+	  <para>
+	    So, edit $MYSQL_HOME/bin/mysqld_safe (the daemon program
+	    that starts/stops mysql) by finding the following lines
+	    (located at lines 106-107 for mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23):
+	  <literallayout>
+	    MY_BASEDIR_VERSION=/usr/local/mysql
+	    ledir=/usr/local/mysql/bin
+	  </literallayout>
+	  </para>
+	  <para>
+	    and then replacing them with this:
+	  <literallayout>
+	    MY_BASEDIR_VERSION=$MYSQL_HOME
+	    ledir=$MYSQL_HOME/bin
+	  </literallayout>
+	  </para>
+	  <para>
+	    I have no idea why this is necessary, and rather than
+	    trying to figure out why, I just make this change
+	    everytime I install MySQL since it works.  If anyone knows
+	    a better way to do this (i.e. without editing the
+	    mysqld_safe file)
+	    please send email to <email>jspacco@cs.umd.edu</email>.
+	  </para>
+	</listitem>
+
+	<listitem>
+	<para>
+	  All of the database-related scripts for Marmoset are located
+	  in SubmitServerModelClasses/dbScripts.  I will hereafter refer
+	  to the SubmitServerModelClasses/dbScripts/ directory as
+	  simply <emphasis>dbScripts</emphasis>.  You need to add
+	  this directory to your path.
+	</para>
+	<note>
+	  You also may need to change the permissions
+	  to make fresh-install, start-innodb, and stop-innodb executable.
+	  In general, jarfiles (and I think zipfiles)
+	  won't preserve file permissions, due to compatbility issues between file systems
+	  that don't use the same types of permissions for controlling access to files.
+	</note>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    If you're not that familiar with MySQL and are installing
+	    a fresh database, don't worry, as we provide a script that will
+	    create and startup a fresh database.
+	  </para>
+	  <para>
+	    You can do this by simply going into the dbScripts directory and running
+	    the following command:
+	  </para>
+	  <para>
+	    <literal>
+	    ./fresh-install &lt;database password&gt; 
+	    &lt;directory for database&gt;
+	    [ -p &lt;port&gt; ]
+	    [ -d &lt;database&gt; ]
+      </literal> 
+	  </para>
+	  <para>
+	    The &lt;directory for database&gt; can be anywhere on the
+	    local file system.  It is <emphasis>NOT A GOOD IDEA</emphasis> to put the
+	    directory on an NFS-mounted volume.  This will almost
+	    certainly cause annoying problems with stale file handles
+	    and file locks.
+	  </para>
+	  <para>
+	    The &lt;database password&gt; you pick will be for the
+	    root database user.  Note that the root database user
+	    account is not the same thing as the root unix account on
+	    the machine you're running the database.  This password
+	    will allow you to access the database as root using any
+	    unix user account.
+	  </para>
+	  <para>
+	  The &lt;port&gt; is an optional parameter that will change the port used by MySQL.
+	  If you don't set a parameter here, it will use the default, which is port 3306.
+	  </para>
+	  <para>
+	  The &lt;database&gt; parameter will change the name of the database.  The default
+	  name is <emphasis>submitserver</emphasis>.
+	  </para>
+	  <para>
+	    This will create and start a new database, and set the
+	    root password to what you picked.  This will also
+	    create a $HOME/.my.cnf file, the hidden file MySQL uses to
+	    store configuration information necessary (like username, passwords,
+	    paths to the database socket file, etc) to log into the database.
+	  </para>
+	  <para>
+	    NOTE:  The $HOME/.my.cnf file contains your root database
+	    password so make sure the file is not visible to anyone
+	    that shouldn't be able to see it.  The fresh-install
+	    script will try to set the file permission so that group and
+	    others can't see the file (chmod og-rwx).
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    Make sure that creating and starting the database worked
+	    by running the mysql command line program:
+	  </para>
+	  <para>
+	    mysql
+	  </para>
+	  <para>
+	    You should see a prompt that looks something like this:
+	  </para>
+	  <literallayout>
+	    <literal>
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5 to server version: 4.1.16-standard-log
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql&gt; 
+	    </literal>
+	  </literallayout>
+	  <para>
+	    Once you see the prompt, to quit mysql, you just type 'quit'.
+	  </para>
+		<note>
+		  The fresh-install script also starts the database server. If the mysql
+		  command fails with error: "Can't connect to local MySQL server", it is likely
+		  the database server has not been started. Do this manually by running the
+		  dbScripts/start-innodb script. The only required parameter is the directory
+		  where the database is installed (i.e. the directory used in the ./fresh-install
+		  command above):
+		  <para>
+		    <literal>
+		    ./start-innodb &lt;directory for database&gt;
+		    </literal> 
+		  </para>
+		</note>
+	</listitem>
+
+	<listitem>
+	  <para>
+	    Next you need to create all the tables according to the
+	    Marmoset database schema.  Again, go into the dbScripts
+	    directory and run this command:
+	  </para>
+	  <para>
+	    <literal>
+	    ./runsql marmoset-schema.sql
+	    </literal>
+	  </para>
+	  <para>
+	    The runsql script is a useful script that will run any
+	    *.sql script against the database referred to in the .my.cnf file.
+	  </para>
+	  <para>
+	    The next step is to update the basic schema using a patch script located
+	    in the sql-patches directory. Use the command:
+	  </para>
+	  <para>
+	    <literal>
+	    ./runsql sql-patches/project-starter-file-archives.sql
+	    </literal>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Now run the mysql command line program again, and make
+	    sure that the database you created exists (by running
+	    'show databases;') and that the tables for the database also
+	    exist (use 'show tables;'). Refer to the MySQL reference manual
+	    (http://dev.mysql.com/doc/)
+	    for more information about querying MySQL from the command line.
+	  </para>
+	</listitem>
+      </orderedlist>
+    </sect1>
+
+    <sect1 id="superuser">
+      <title>Creating a SuperUser account</title>
+
+      <para> The first thing you need to do after creating the database is create a superuser
+	account that you can use to log into the system and bootstrap the rest of the
+	installation process.  You need to do this directly in the database,
+	because all operations done by Marmoset require authentication
+	against the database.  It's kind of a chicken-and-egg problem.
+      </para>
+
+      <para>
+	Find and edit the file
+	SubmitServerModelClasses/dbScripts/bootstrap.sql.  The file
+	will look like this:
+	<literal>
+	<literallayout>
+INSERT INTO students
+VALUES (DEFAULT, 'campus_uid', 'employee_num', 'firstname', 'lastname', 'yes', DEFAULT, DEFAULT, DEFAULT, 'password');
+	</literallayout>
+      </literal>
+	You need to set a value for each non-DEFAULT column.  Each
+	column is described in the following table.
+	<table>
+	  <title>Important values for the Marmoset super-user
+	  account</title>
+	  <tgroup cols="3">
+	    <thead>
+	      <row>
+		<entry>column</entry>
+		<entry>description</entry>
+	      </row>
+	    </thead>
+	    <tbody>
+	      <row>
+		<entry>campus_uid</entry>
+		<entry>A campus-wide unique identifier for each
+		account.  This is typically a unix login, but can anything
+		else.  Values in this column <emphasis>MUST BE
+		UNIQUE</emphasis>.
+		  <para> You will see the terms "directoryID" and
+		"campus_uid" used interchangably in the submitServer.
+		This is a Maryland-ism that I hope to factor out at
+		some point.</para>
+		</entry>
+	      </row>
+	      <row>
+		<entry>employee_num</entry>
+		<entry>Maryland-specific database field that stores
+		the employee number (our campus-wide database
+		uses the ambiguous term "employee number" even though students
+		as well as staff and faculty are identified by this
+		number).  If you are using the
+		GenericStudentPasswordAuthenticationService then set
+		the employee_num to the same value as the campus_uid.
+		The employee_num does NOT need to be unique.</entry>
+	      </row>
+	      <row>
+		<entry>firstname, lastname</entry>
+		<entry>The person's firstname and lastname</entry>
+	      </row>
+	      <row>
+		<entry>yes</entry>
+		<entry>This is the super-user permissions column.
+		Leave it as 'yes' so that the superuser account has
+		superuser permissions.</entry>
+	      </row>
+	      <row>
+		<entry>password</entry>
+		<entry>The password to be used by the
+		GenericStudentPasswordAuthenticationService.  This is
+		the password you will use to login.</entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</table>
+      </para>
+      <para>
+	Once you've finished editing the bootstrap.sql script, run it
+	like this:
+	<literal><literallayout>
+	  cd SubmitServerModelClasses/dbScripts
+	  ./runsql bootstrap.sql
+	</literallayout></literal>
+	This will create the superuser account you can use to start
+	creating courses.
+      </para>
+      
+    </sect1><sect1 id="jakarta-tomcat">
+      <title>Installing Jakarta Tomcat</title>
+      <para>How to install tomcat</para>
+      <itemizedlist>
+	<listitem>
+	<para>
+	  Unpack Jakarta Tomcat 5.5.9 (<ulink url="http://tomcat.apache.org/">Download Tomcat</ulink>) or higher into a
+	  directory.  Note that Tomcat should go into a local part of
+	  the filesystem; it is a <emphasis>VERY BAD
+	  IDEA</emphasis> to put Tomcat in a directory on an
+	  NFS-mounted volume.  Doing so practically guarantees
+	  problems from stale NFS-filehandles and so on.  We know from
+	  experience; just don't do it.
+	  </para>
+	  <para>
+	  	I always symlink $HOME/tomcat to whereever I've
+	    unpacked tomcat.  From this point on I will refer to this directory
+	    simply as <literal>Tomcat</literal>, or the
+	    <literal>Tomcat</literal> directory.
+	  </para>
+	</listitem>
+	<listitem>
+	 <para> Configure <xref linkend="server.xml">Tomcat/conf/server.xml</xref></para>
+	</listitem>
+	<listitem>
+	  <para>Configure <xref linkend="web.xml">Tomcat/conf/web.xml</xref></para>
+	</listitem>
+	<listitem>
+	 <para> <xref linkend="clean-up-tomcat">Optionally clean up the Tomcat/webapps directory</xref></para>
+	</listitem>
+      </itemizedlist>
+
+      <sect2 id="server.xml">
+	<title>Configure Tomcat/conf/server.xml</title>
+	<para>
+	  The file Tomcat/conf/server.xml contains (among other
+	  things) configuration information for the various ports
+	  Tomcat will listen on for incoming connections (i.e. 8080
+	  for http, 8443 for https, etc).
+	</para>
+	<para>
+	  You need to find this chunk of xml:
+	  <literal>
+	  <literallayout>
+      &lt;Host name="localhost" appBase="webapps"
+       unpackWARs="true" autoDeploy="true"
+       xmlValidation="false" xmlNamespaceAware="false"&gt;
+	  </literallayout>
+	  </literal>
+	  And then add this underneath it:
+	  <literal>
+	  <literallayout>
+	&lt;Context path=""
+	  docBase="submitServer"
+	  debug="0"
+	  reloadable="true"/&gt;
+	  </literallayout>
+	  </literal>
+	  This will make sure that the submitServer context is the
+	  default context (thus you can simply access
+	  https://foo.cs.umd.edu:8443 rather than
+	  https://foo.cs.umd.edu:8443/submitServer)
+	</para>
+	<para>
+	  Also, <ulink
+	  url="http://tomcat.apache.org/tomcat-5.5-doc/">there's tons
+	  of documentation on Tomcat on the web</ulink>, so feel free
+	  to look there for more info on what all of the other stuff in
+	  server.xml and web.xml are there for, I don't actually know
+	  what every feature does.
+	</para>
+      </sect2>
+
+      <sect2 id="web.xml">
+	<title>Configure Tomcat/conf/web.xml</title>
+	<para>
+	  The file Tomcat/conf/web.xml contains (among other things) a
+	  series of <literal>context-param</literal> nodes specified as children
+      of the root <literal>web-app</literal> element.
+     These are initialization
+	  parameters that are passed to your web application.  You
+	  want to configure any resources here that are specific to
+	  this particular tomcat installation (for example which
+	  database this tomcat installation will be connecting to).
+	  This is useful because you may have a development Marmoset
+	  installation with one database, and a production
+	  installation with its own database.
+	</para>
+	<para>
+	  NOTE:  You can also configure context-param resources in
+	  SubmitServer2/WebRoot/WEB-INF/web.xml.  In general, I've put
+	  things that are the same for all installations into
+	  SubmitServer2/WebRoot/WEB-INF/web.xml while I've put things
+	  that vary in Tomcat/conf/web.xml.  This also keeps
+	  things like database passwords from being checked into CVS.
+	</para>
+	<para>
+	  DO NOT set the same context-param in BOTH
+	  Tomcat/conf/web.xml and
+	  SubmitServer2/WebRoot/WEB-INF/web.xml.  This will cause
+	  your web-application to fail upon startup.
+	</para>
+
+	<para>
+	  web.xml is (obviously) an xml file.  A context-param looks
+	  like this:
+	  <literallayout>
+	    <literal>
+	    &lt;context-param&gt;
+	    &lt;param-name&gt;authentication.service&lt;/param-name&gt;
+	    &lt;param-value&gt;edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService&lt;/param-value&gt;
+	    &lt;/context-param&gt;
+	    </literal>
+	  </literallayout>
+	</para>
+
+	<para>
+	  You need to make sure you set the following context-params
+	  in Tomcat/conf/web.xml 
+	  (replace PASSWORD with the database password you chose when
+	  you configured MySQL, of course):
+	  <literal>
+	  <literallayout>
+  &lt;context-param&gt;
+    &lt;param-name&gt;authentication.service&lt;/param-name&gt;
+    &lt;param-value&gt;edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService&lt;/param-value&gt;
+  &lt;/context-param&gt;
+  &lt;context-param&gt;
+    &lt;param-name&gt;database.server.jdbc.url&lt;/param-name&gt;
+    &lt;param-value&gt;
+      jdbc:mysql://localhost/submitserver
+    &lt;/param-value&gt;
+  &lt;/context-param&gt;
+  &lt;context-param&gt;
+    &lt;param-name&gt;database.user&lt;/param-name&gt;
+    &lt;param-value&gt;root&lt;/param-value&gt;
+  &lt;/context-param&gt;
+  &lt;context-param&gt;
+    &lt;param-name&gt;database.password&lt;/param-name&gt;
+    &lt;param-value&gt;PASSWORD&lt;/param-value&gt;
+  &lt;/context-param&gt;
+  &lt;context-param&gt;
+    &lt;param-name&gt;database.driver&lt;/param-name&gt;
+    &lt;param-value&gt;org.gjt.mm.mysql.Driver&lt;/param-value&gt;
+  &lt;/context-param&gt;
+	  </literallayout>
+	</literal>
+	</para>
+	<para>
+	  There are several other context-params than you can set in
+	  this file:
+	  <table>
+	    <title>Valid Marmoset context-params</title>
+	    <tgroup cols='5' align='left' colsep='1' rowsep='1'>
+	      <colspec colname='name'/>
+	      <colspec colname='values'/>
+	      <colspec colname='required'/>
+	      <colspec colname='default'/>
+	      <colspec colname='descsription'/>
+	      <thead>
+		<row>
+		  <entry>name</entry>
+		  <entry>values</entry>
+		  <entry>required?</entry>
+		  <entry>default</entry>
+		  <entry>description</entry>
+		</row>
+	      </thead>
+	      <tbody>
+		<row>
+		  <entry>authentication.service</entry>
+		  <entry>edu.umd.cs.submitServer.MarylandAuthenticationService
+		  or
+		  edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService</entry>
+		  <entry>no</entry>
+		  <entry>MarylandAuthenticationService</entry>
+		  <entry>The name of the class to be used for
+		  authentication purposes.  The web app will use the
+		  string name given here to dynamically load the
+		  class, create an instance of that class, and use the
+		  class for authentication.  The
+		  GenericStudentPasswordAuthenticationService
+		  authentications against the password stored in
+		  'password' column of the 'students' table in the
+		  database; this is suitable for most environments.
+		  You could also implement your own authentication
+		  service by providing an implementation of
+		  edu.umd.cs.submitServer.IAuthenticationService and
+		  then providing the name of your implementation.
+		  </entry>
+		</row>
+		<row>
+		  <entry>perform.background.retesting</entry>
+		  <entry>true|false</entry>
+		  <entry>no</entry>
+		  <entry>false</entry>
+		  <entry>Should Marmoset keep re-testing submissions
+		    in the background in order to get more confidence in the
+		    results?  Useful for multi-threaded code.  TODO: Link to
+		    the section describing bg retests once it's written.</entry>
+		</row>
+	      </tbody>
+	    </tgroup>
+	  </table>
+	</para>
+	<para>
+	  To prevent Tomcat from listing the contents of directories,
+	  find this chunk in web.xml and make sure that "listings" is
+	  set to "false", like this:
+	  <literallayout>
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;debug&lt;/param-name&gt;
+            &lt;param-value&gt;0&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;listings&lt;/param-name&gt;
+            &lt;param-value&gt;false&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+	  </literallayout>
+	</para>
+      </sect2>
+
+	<sect2 id="tomcat-ssl">
+	<title>Configuring SSL</title>
+	<para>
+	You probably want to configure Tomcat to use SSL so that you can transmit secure traffic
+	between clients and the server.  This is especially important if you are communicating
+	over wireless connections, where sniffing packets is quite easy.
+	</para>
+	<para>
+	There are two types of certificates that you can use:  a <emphasis>signed</emphasis>
+	certificate and a <emphasis>self-signed</emphasis> certificate.
+	</para>
+	<para>
+	A <emphasis>signed certificate</emphasis> is a certificate that has been signed by a
+	recognized Certificate Authority (CA) and will be accepted by most browsers or client 
+	programs. These certificates are valid for a certain amount of time, such as one year, 
+	and	typically cost money.
+	</para>
+	<para>
+	A <emphasis>self-signed certificate</emphasis> is a certificate that you can produce and
+	sign yourself using Java or another program.
+	</para>
+	<warning>
+	Self-signed certificates are not automatically
+	accepted by client programs.  Browsers will typically ask the user whether they want to
+	accept the certificate or not, while some client programs such as Java will simply refuse
+	to accept an unsigned certificate unless that certificate is explicitly imported by
+	the user.
+	</warning>
+	<para>
+	The following section assumes that you are using a <emphasis>self-signed certificate</emphasis>.
+	The steps for using a <emphasis>signed certificate</emphasis> are usually similar, but
+	depend to some extent on which CA you get to sign your certificate.  Whatever CA you choose,
+	they should have instructions or documentation on how to set up your certificate.
+	</para>
+	<para>
+	<itemizedlist>
+		<listitem>
+			<para>
+			First, you need to create a self-signed certificate using the "keytool" command
+			included with Java (you will need Java installed somewhere on your system and
+			$JAVA_HOME/bin on your PATH):
+			</para>
+			<para>
+				<command>
+				keytool -genkey -alias tomcat -keyalg RSA -validity 365 -keystore marmosetKeystore
+				</command>
+			</para>
+			<para>
+			This command will ask you to fill in a bunch of information about your organization.
+			I'm not sure of difference this makes.
+			</para>
+			<para>
+			This will produce a "keystore" containing all of your keys (currently just the one key you
+			just created) called "marmosetKeystore" stored under the alias "tomcat".
+			</para>
+			<warning>
+			You will be asked to supply a password for the keystore.  Use the password "changeit",
+			which is the default passwork used by most of the example I've seen.  I know that
+			this password works, and I have anecdotal evidence that using a different password,
+			or no password at all, will not work.  I believe that Tomcat always supplies the password
+			"changeit" by default when it needs to extract keys from a keystore.
+			</warning>
+			<note>
+			In this documents, I refer to the keystore as "marmosetKeystore" and choose "tomcat" 
+			for the alias of the key.  However, you can pick any names you'd like.
+			</note>
+		</listitem>
+		
+		<listitem>
+			<para>
+			Now you need to copy your keystore somplace where Tomcat can find it.
+			To do this,	first create the directory Tomcat/conf/ssl (Tomcat/conf should already 
+			be there), and copy marmosetKeystore into Tomcat/conf/ssl.
+			</para>
+		</listitem>
+		
+		<listitem>
+			<para>
+			Now you need to configure Tomcat to use your newly create keystore.  Find the
+			XML chunk in Tomcat/conf/web.xml that looks like this:
+			</para>
+			<literallayout>
+	&lt;Connector port="8443"
+	maxHttpHeaderSize="8192"
+	maxThreads="150"
+	minSpareThreads="25"
+	maxSpareThreads="75"
+	enableLookups="false"
+	disableUploadTimeout="true"
+	acceptCount="100"
+	scheme="https"
+	secure="true"
+	clientAuth="false"
+	sslProtocol="TLS"
+	/&gt;
+		</literallayout>
+		<para>
+		And add the following line (replace TOMCAT_ROOT with the full path to your Tomcat
+		installation):
+		</para>
+		<para>
+		keystoreFile="TOMCAT_ROOT/tomcat/conf/ssl/marmosetKeystore"
+		</para>
+		<para>
+		This should yield an XML chunk that looks something like this:
+		</para>
+		<literallayout>
+	&lt;Connector port="8443"
+	maxHttpHeaderSize="8192"
+	maxThreads="150"
+	minSpareThreads="25"
+	maxSpareThreads="75"
+	enableLookups="false"
+	disableUploadTimeout="true"
+	acceptCount="100"
+	scheme="https"
+	secure="true"
+	keystoreFile="/export/homes/submit/tomcat/conf/ssl/marmosetKeystore"
+	clientAuth="false"
+	sslProtocol="TLS"
+	/&gt;
+		</literallayout>
+		</listitem>
+
+		<listitem>
+			<note>
+			A self-signed certificate will cause most browsers to prompt the user as to whether
+			or not they want to accept a given certificate.  However, any client programs that
+			run under Java, such as the BuildServer, will fail when trying to connect over SSL
+			to an entity identified by a self-signed keystore.
+			</note>
+			<para>
+			To allow a program running under Java to connect an entity identified by a 
+			self-signed keystore, you need to export a certificate from the keystore and
+			then import the certificate into the JVM.
+			</para>
+			<para>
+			To export a certificate from the marmosetKeystore:
+			</para>
+			<para>
+				<command>
+				keytool -export -keystore marmosetKeystore -alias tomcat -file marmoset.cer
+				</command>
+			</para>
+			<para>
+			This command will produce marmoset.cer, a certificate that you can import into
+			your JVM so that your Java will trust your self-signed keystore.
+			</para>
+			<para>
+			To import this certificate into a JVM (assuming that shell variable JAVA_HOME points
+			to your Java installation):
+			<para>
+			<command>
+			keytool -import -alias tomcat -keystore $JAVA_HOME/jre/lib/security/cacerts  -file marmoset2.cer 
+			</command>
+			</para>
+			</para>
+			<note>
+			The file $JAVA_HOME/jre/lib/security/cacerts is often not writable on unix systems, 
+			so you will first need to run:
+			<para>
+			<command>
+			chmod u+w $JAVA_HOME/jre/lib/security/cacerts
+			</command>
+			</para>
+			before importing the certificate into your JVM.
+			</note>
+		</listitem>
+
+	</itemizedlist>
+	</para>
+    </sect2>
+
+    <sect2 id="tomcat-unix">
+	<title>Starting and stopping Tomcat, and other Tomcat-related Configuration Notes</title>
+	<itemizedlist>
+	  <listitem>
+	    To startup Tomcat:
+	    <literal>
+	    <literallayout>
+	      cd Tomcat/bin
+	      ./startup.sh
+	    </literallayout>
+	  </literal>
+	    To shutdown Tomcat:
+	    <literal>
+	    <literallayout>
+	      cd Tomcat/bin
+	      ./shutdown.sh
+	    </literallayout>
+	  </literal>
+	  </listitem>
+
+	  <listitem><para>
+	    If Tomcat does not start-up properly,
+	    Tomcat/logs/catalina.out should tell you why.
+	 </para> </listitem>
+
+	  <listitem><para>
+	    The shutdown script doesn't always work; sometimes I have
+	    to find and kill the Java process.
+	 </para></listitem>
+
+	  <listitem>
+	    <para>
+	      Sometimes you'll do everything right to startup Tomcat,
+	      but when you try to access a page, you will get a 404
+	      (page not found/not available).  If this happens,
+	      shutting down tomcat and then restarting it usually
+	      fixes the problem.
+	    </para>
+	    <para>
+	      However, sometimes it's necessary to stop the webapp container
+	      and delete the exploded web-archive, like this:
+	      <literal>
+	      <literallayout>
+		cd Tomcat/bin
+		./shutdown.sh
+		/bin/rm -rf ../webapps/submitServer
+		./startup.sh
+	      </literallayout>
+	    </literal>
+	    </para>
+     </listitem>
+
+	  <listitem>
+	    It's a good idea to install and run tomcat with a normal
+	    user account rather than running it as the root user of
+	    the unix system. 
+	    <para>
+	      We set port-forwarding from port 80 to
+	      8080 and from 443 to 8443 so people can access
+	      the server using only the protocol (i.e. https) rather
+	      than the protocol and the port number.  For example, with
+	      forwarding from 443 to 8443 enabled, the server can be
+	      accessed like this:
+	    </para>
+	    <para>
+	      https://hostname.cs.umd.edu/
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+      <sect2 id="clean-up-tomcat">
+	<title>Clean up the Tomcat/webapps directory</title>
+	<para>
+	  You can delete everything in Tomcat/webapps except for the
+	  Tomcat/webapps/balancer.  The stuff in there is just example
+	  stuff to show off how to write servlets and jsps and is
+	  neither a secure nor professional thing to have sitting around.
+	</para>
+      </sect2>
+      
+      <sect2 id="troubleshooting">
+      <title>Troubleshooting Tomcat</title>
+		<para>
+		This is a list of things that have gone wrong with Tomcat for us
+		that you might run into.  Note that Tomcat is a large, evolving
+		piece of software with lots of good documentation on the web.  If
+		something doesn't work, try googling whatever error message is being
+		generated.
+		</para>
+		<itemizedlist>
+			<listitem>
+			<para>
+			The first place to look is in Tomcat/logs/catalina.out.  This file will
+			often contain useful errors that will tell you what the problem is.
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			Sometimes you need to shutdown and restart Tomcat.  I don't know why, but
+			sometimes that works.
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			In general, Tomcat does a good job of hot-deploying whatever you copy into
+			the Tomcat/webapps directory, and will usually be able to hot-update a
+			webapp that's already running when you copy a new warfile into Tomcat/webapps.
+			But, sometimes Tomcat will not be able to hot-deploy or hot-update, and you'll need
+			to do the following:
+			</para>
+			<para>
+			Shutdown Tomcat, delete the Tomcat/webapps/submitServer
+			directory, and then restart (sometimes stopping and re-starting again).
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			You can only define context parameters (context-param) in ONE place at a time,
+			either Tomcat/conf/web.xml or in WEB-INF/web.xml of your warfile.  If you put
+			the same parameter in both places, either the webapp will fail to load or
+			Tomcat itself will fail to load.
+			</para>
+			<para>
+			This is very annoying, it should be possible to over-ride parameters in web.xml.
+			I've written a hacked-up mechanism for doing that that involves defining
+			properties with __override on the end of them and having a special mechanism
+			for doing the lookups in the web.xml file in servlets.  Of course this doesn't
+			easily translate to jsps, and in general this is pretty annoying.  Such a far
+			cry from POJOs, or anything resembling useful programming...
+			</para>
+			</listitem>
+		</itemizedlist>
+      </sect2>
+      
+    </sect1>
+
+    <sect1 id="compile">
+      <title>Compiling and installing SubmitServer2</title>
+      <orderedlist numeration="arabic">
+	<listitem>
+	  Make sure that SubmitServer2 and SubmitServerModelClasses
+	  are checked out/unpacked next to each other in the same directory.
+	</listitem>
+	<listitem>
+	  Create SubmitServer2/local.properties so that
+	  production.install.location points to your tomcat
+	  installation.  For example, put:
+	  <para>
+	    production.install.location=marmoset@foo.cs.umd.edu:/path/to/tomcat
+	  </para>
+	  <note>
+		local.properties is the correct place to put configuration parameters specific
+		to your institution.  DO NOT update build.properties directly if you are checking
+		our code out of CVS because build.properties is under CVS control.
+	  </note>
+	  <note>
+	  	local.properties and build.properties are both read by the build.xml file used by 
+	  	ant.  In ant, a property is only set the FIRST time it is read.  Any other attempts
+	  	to set the value of that property are ignored.  Thus, because local.properties
+	  	is read before build.properties, any property set in local.properties will be used
+	  	instead of a property with the same name in build.properties.
+	  </note>
+	</listitem>
+	<listitem>
+	  cd into SubmitServer2 and run this command:
+	  <para>
+	    <literal>ant production.install</literal>
+	  </para>
+	  <para>
+	    This will find and compile the SubmitServerModelClasses
+	    into SubmitServer2, and then produce a SubmitServer2/dist
+	    directory with submitServer.war and
+	    sharedSubmitServer.jar, and copy those to the appropriate
+	    places in the tomcat installation.
+	   </para> 
+	  <para>
+	    The production.install ant task uses "scp" to copy
+	    the submitServer.war and sharedSubmitServer.jar files to
+	    the appropriate location.  It assumes that "scp" is on
+	    your path and that you're running Linux.  You can always
+	    copy the two files produced into the appropriate places:
+	    submitServer.war goes into Tomcat/webapps and
+	    sharedSubmitServer.jar goes into Tomcat/shared/lib.
+	  </para>
+	  <para>
+	    You do not need to compile the software with any
+	    particular user account or with any special privileges, so long
+		as the generated files can be copied into the Tomcat installation.
+	    I always compile Marmoset on my desktop machine with my
+	    regular user account and install it into tomcat using a
+	    special 'submit' account reserved for running the
+	    SubmitServer.
+	  </para>
+	  <para>
+	    sharedSubmitServer.jar contains some shared code for
+	    monitoring the connections with the buildServers.  If
+	    you don't install it, the only thing that won't work is
+	    the BuildServerStatus link available to instructors.
+	  </para>
+	  <note>
+		Troubleshooting: You can also build the SubmitServer2 project in Eclipse. The
+		project is set up to work in Eclipse with <ulink url="http://www.myeclipseide.com">MyEclipse</ulink>
+		plugin. If you do not have this plugin, ensure that the j2ee.jar is properly linked, 
+		by going to Project Properties -- Java Build Path -- Libraries. If j2ee.jar is not in 
+		the list, add it by clicking "Add Jars..." and selecting it from SubmitServer2/lib.
+		<important>You need to perform this step if you open the project in Eclipse, even if you do not
+		plan to run the ant instruction through Eclipse, because Eclipse automatically builds
+		the files when you open it. When ant sees that the class files are already created, it
+		does not rebuild them.</important>
+	  </note>
+	</listitem>
+	<listitem>
+		To test the submit server, first ensure the tomcat server is running:
+		<para>
+		<literal>Tomcat/bin/startup.sh</literal>
+		</para>
+		
+		Then go to https://localhost:8443 and log in using the super user account you 
+		created in <xref linkend="superuser"/>.
+	</listitem>
+      </orderedlist>
+    </sect1>
+
+    
+  </chapter>
+  
+  <chapter id="auxiliary-tools">
+  	<title>Installing and configuring phpMyAdmin</title>
+		<para>           
+        <ulink url="http://www.phpmyadmin.net/home_page/"> PhpMyAdmin </ulink> is a MySQL 
+        database administration tool written in php.  PhpMyAdmin is useful because Marmoset is
+        an active research project that is sometimes unstable, so it is often necessary
+        to view or update the raw data in the database directly with another tool.
+        </para>  	
+  <sect1 id="prerequsites">
+      <title>Prerequisites</title>
+      <itemizedlist>
+      <listitem><ulink url="http://httpd.apache.org/"> Apache httpd-2.0.55 (not tested with the 2.2 httpd series)</ulink></listitem>
+      <listitem><ulink url="http://www.php.net/downloads.php"> PHP-4.4.2 (not tested with PHP-5.0 or higher) </ulink></listitem>
+      <listitem><ulink url=""> openSSL-0.9.7e (optional but strongly recommended)</ulink></listitem>
+      <listitem><ulink url="http://www.phpmyadmin.net/home_page/"> PhpMyAdmin 2.8.0.2 or above </ulink></listitem>
+      </itemizedlist>
+	</sect1>
+
+    <sect1 id="php">
+	<title>Installing PHP</title>
+	     <para />
+    </sect1>
+    <sect1 id="configure-phpmyadmin">
+	<title>Configuring phpMyAdmin</title>
+	     <para />
+    </sect1>
+    <sect1 id="openssl">
+	<title>Installing OpenSSL</title>
+    	<para>
+		Use the openssl_install script to compile and install openssl (openSSL might already be
+		installed on your system; I always compile it myself anyway).
+		<itemizedlist>
+		<listitem>
+		I always put everything into $HOME/software and create symlinks, for example:
+		<para>
+		ln -s software/openssl-0.9.7e openssl
+		</para>
+		</listitem>
+		<listitem>
+		Edit $HOME/www/conf/ssl.conf
+		</listitem>
+		<para>
+		change all occurrences of port 443 (default SSL port) to something else (I always 3006)
+		</para>
+		<para>
+		Create $HOME/www/conf/ssl.key and $HOME/www/conf/ssl.crt and copy in a key and a certificate.  TODO link the key and cert
+		</para>
+		<para>
+		In ssl.conf, change "Listen 443" to "Listen 3006" (or some other port)
+		</para>
+		<listitem>
+		Edit $HOME/www/conf/httpd.conf:
+		<para>
+		Add:
+		AddType application/x-httpd-php .php
+		AddType application/x-httpd-php-source .phps
+		To the "AddType" section of httpd.conf
+		</para>
+		<para>
+		Comment out the "Listen 80" line, we're using a VirtualHost created by the ssl.conf
+		file instead so there's no need for http to listen (since https will be listening).
+		</para>
+		</listitem>
+		</itemizedlist>
+		</para>
+    </sect1>
+
+    <sect1 id="apache-ssl">
+	<title>Installing and Configuring Apache with SSL</title>
+	     <para>
+	     <itemizedlist>
+	     <listitem>
+	     unpack httpd-2.0.55 into $HOME/software
+	     </listitem>
+	     <listitem>
+	     Make sure that there's nothing installed in $HOME/www
+	     </listitem>
+	     <listitem>
+	     run the apache_install script inside the $HOME/software/httpd-2.0.55 directory.
+	     This will install apache httpd into $HOME/www.
+	     </listitem>
+	     </itemizedlist>
+	     </para>
+    </sect1>
+    </chapter>
+
+  <chapter id="configuring-marmoset">
+    <title>Configuring Marmoset</title>
+    
+    <sect1 id="create-course">
+      <title>Creating a new course</title>
+      <para>
+	Only an account with SuperUser privileges can create classes.
+      </para>
+      <para>
+	The first item on the left of the "breadcrumb" bar at the top
+	of the screen should be the SuperUser menu.  Clicking this will
+	bring up the form for creating a new course.
+	</para>
+	<warning>
+		<para>
+		When creating a new course, make sure to get the spacing exactly correct
+		(i.e. "Spring 2006" is not the same as "Spring2006" and "CMSC 456" is not the same
+		as "CMSC456").  It's a good idea to establish a convention and stick with it, because
+		when creating BuildServers to build and test student submissions you will need to 
+		enter the exact courseName and semester.
+		</para>
+	</warning>
+	<note>
+		<para>
+		TODO item:  Sloppy-matching for string values going into and out of the database, so
+		that "Spring 2006" == "Spring2006".
+		</para>
+	</note>
+	<para>
+	Creating a course automatically registers the SuperUser account that created the
+	course as an instructor in that course.  This account can then be used to register the
+	instructor(s) for the course, who can in turn register their TAs and students.  For more
+	information on types of accounts, see <xref linkend="account-types"/>.
+	</para>
+	<warning>
+	<para>
+		It's possible for a system to have multiple SuperUser accounts.  Keep in mind that
+		any SuperUser accounts that did not create a course will not be registered for the course
+		and therefore will not be able to see the course.  Currently
+		it is impossible for a SuperUser to register themselves for a course created by
+		a different SuperUser.  This is somewhat counter-intuitive.  The current solution
+		is that SuperUsers usually have direct access to the database and can register
+		themselves for courses directly in the database.
+	</para>
+	</warning>
+    </sect1>
+    <sect1 id="create-instructor-accounts">
+      <title>Creating instructor accounts</title>
+      <para>
+	The link labeled "Register an
+	Instructor for this course using a web interface" 
+	available from /view/instructor/course.jsp will bring up the
+	webform to register a new instructor account. Fill in the fields with appropriate 
+	registration information. The DirectoryID is the name the user will use to login to the
+	Submit Server. (The name DirectoryID comes from the University of Maryland's authentication
+	service.) This can be different from the "Class Account" used to log in to a CVS repository 
+	associated with this course. The Employee number is a field used by the University of 
+	Maryland authentication service. Replace this with the DirectoryID if it is not relevant to
+	your default authentication service.
+      </para>
+    <sect2 id="choose-authentication-service">
+      <title>Choosing an authentication service</title>
+      <para>
+      Marmoset currently supports two authentication services (see <xref linkend="web.xml"/> in 
+      the Installation Instructions).
+      The default authentication service was specified in Tomcat/conf/web.xml. Marmoset
+      now allows individual users to authenticate using the generic service instead of
+      the default. (The generic authentication service stores passwords in the submitServer
+      database). 
+      </para>
+      <para>
+      To register a user to use the generic service, select the "Use generic
+      marmoset authentication" radio box. (This is not available if the generic service is 
+      already the default.) If the Generic service is the default service, an
+      additional field is displayed giving you the option of creating a password. Leave
+      this field blank to have the system generate a password.
+      </para>
+      <para>
+      When a user is registered to authenticate with the generic service, a 
+      password is generated and displayed on the next screen. Save this password and 
+      deliver it to the user. TODO Provide support for user changing password.
+      </para>
+    </sect2>
+      
+    <sect2 id="instructor-accounts">
+      <title>Instructor Accounts</title>
+      <para>
+	Either a SuperUser or an Instructor is allowed to register
+	instructors.  Registering an instructor account actually
+	creates three different accounts (for a description of account
+	types, see <xref linkend="account-types"/>):
+      </para>
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    An instructor account:  Instructor's account with
+	    'modify' privilege.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    A canonical account: Account for submitting canonical
+	    project solutions.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    An instructor's student-test account.  The student-test
+	    account is an unprivileged student account.  The
+	    instructor account has a "student-view" mode for many
+	    pages; however, sometimes it is useful to see <emphasis>exactly</emphasis> what
+	    a student is seeing, especailly if there is some kind of
+	    problem or discrepency with the server.
+	  </para>
+	</listitem>
+      </itemizedlist>
+    </sect2>
+      <para>
+      </para>
+    </sect1>
+    <sect1 id="register-students-bulk">
+      <title>Registering students from a textfile</title>
+      <para>
+      		Students can be registered by either instructors or superusers. To register
+      		many students at once use the file upload utility. From the main course link,
+      		select "Register students for this course by uploading a text file". Then browse 
+      		to the text file and upload. The format for each line in the file is:      		
+      </para>
+      <para>
+      		<literal>Last name, First name, University ID, Section, ClassAcct, DirectoryID,...</literal>
+      </para>
+      <para>
+      		This format is based on the output format from the 
+      		<ulink url="http://grades.cs.umd.edu">Grades Server</ulink> used at the
+      		<ulink url="http://www.cs.umd.edu">University of Maryland</ulink> and so 
+      		contains some redundant fields. The University ID is the same as the Employee 
+      		number in <xref linkend="instructor-accounts"/>. ClassAcct should be the same
+      		as DirectoryID if no separate CVS accounts are used for the course. The Section
+      		field is a legacy field from the Grades Server and is not used by the Submit
+      		Server -- it should nevertheless be present to provide the correct number of
+      		delimiters.
+      </para>
+      <para>
+      		As with instructors, you can select an authentication service to be applied to
+      		all students specified in the text file. (See <xref linkend="choose-authentication-service"/>)
+      </para>
+    </sect1>
+    <sect1 id="register-one-student">
+    	<title>Registering a student or TA one at a time</title>
+    	<para>
+    		Students and TAs can be registered by either instructors or superusers. To 
+    		register one student or TA, select " Register one student or TA for this course using a web interface".
+    		Much of the information required for instructors is also required here (Employee number is typically
+    		a University ID) -- see <xref linkend="instructor-accounts"/>.
+    	</para>
+    	<para>
+    		As with instructors, you can select an authentication service to be used by the
+    		student being registered. (See <xref linkend="choose-authentication-service"/>.)
+    		If you select the generic authentication service, a password will be generated and 
+    		presented on the next screen. If the Generic service is the default service, an
+    		additional field is displayed giving you the option of creating a password. Leave
+    		this field blank to have the system generate a password.
+    	</para>
+    </sect1>
+    <sect1 id="adding-ta-permissions">
+      <title>Adding/removing TA permissions</title>
+        <para>
+        	Submit Server allows super users and instructors to modify the privileges of any
+        	students registered for a course. The students can receive TA privileges, which
+        	allows them to access all information in the course (including all student
+        	submissions), but not to change the course or its projects.
+        </para>
+        <para>
+        	To give a student TA privileges, select "add" in the "Add TA Permission" column
+        	next to the student. This will move the student up in the sort order to the group
+        	that includes all registrants with some level of instructor rights (indicated by
+        	an asterisk next to the name). To remove TA privileges, select "remove" in the 
+        	"Remove TA Permission" column next to the student.
+        </para>
+    </sect1>
+    <sect1 id="editing-student-registrations">
+      <title>Editing student registrations</title>
+        <para>
+        	Submit Server allows super users and instructors to modify student 
+        	registration information for all students registered in a course.
+        	To edit a student's registration, select "edit" in the "Edit Student Registration" column
+        	next to the student. The next screen allows you to change the name, directory id, employee number 
+        	and class account for the student (but not the password, even for accounts registering under the
+        	Generic authentication service).
+        </para>
+    </sect1>
+    <sect1 id="account-types">
+      <title>Types of accounts</title>
+      <table id="account-types-table">
+	<title>Types of Accounts</title>
+	<para>
+	  The following table briefly describes the different types of
+	  accounts, their functions, and the corresponding 'instructor_capability'
+	  value in the database.
+	</para>
+	<tgroup cols="3" align="left">
+	  <thead>
+	    <row>
+	      <entry>type</entry>
+	      <entry>instructor_capability in database</entry>
+	      <entry>description</entry>
+	    </row>
+	  </thead>
+	  <tbody>
+	    <row>
+	      <entry>student</entry>
+	      <entry>NULL</entry>
+	      <entry>
+		A student account.  Can see pages in /view/* but not
+		/view/instructor/*, /view/admin/*, or research/*.  Can
+		perform download operations with servlets mapped to
+		/data/* or /action/* but not /data/instructor/* or
+		/action/instructor/*.  This is a fancy way of saying
+		that the a student account can download its own
+		submissions and submit new submissions, but cannot
+		download other students' submissions or test-setups,
+		or perform any actions reserved for instructors.
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>TA</entry>
+	      <entry>read-only</entry>
+	      <entry>
+		a TA account.  Can see pages in /view/*,
+		/view/instructor/*, and servlets mapped to /data/*,
+		/action/*, /data/instructor/*.  Cannot access servlets
+		mapped to /action/instructor/*.  A TA account cannot
+		create new projects, update existing projects, upload
+		new canonical solutions or test-setups, or register
+		students or TAs or instructors.
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>Instructor</entry>
+	      <entry>modify</entry>
+	      <entry>
+		An Instructor account.  Instructors can do
+		basically anything, such as create projects,
+		register students, TAs and other instructors, update
+		projects, and upload new canonical solutions or new
+		test-setups.
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>Canonical</entry>
+	      <entry>canonical</entry>
+	      <entry>
+		Each instructor has a canonical account.  It
+		should never be necessary to log into the system
+		directly using the canonical account.  In fact it will
+		eventually become impossible to log into the system
+		using the canonical account.  The only reason
+		that there are multiple canonical accounts is so that
+		instructors using Eclipse can submit canonical
+		solutions using the Course Project Manager plugin.
+		Any instructor can upload a new canonical solution
+		through the web interface at
+		/view/instructor/projectUtilities.jsp
+	      </entry>
+	    </row>
+<!--
+	    <row>
+	      <entry></entry>
+	      <entry></entry>
+	      <entry></entry>
+	    </row>
+-->
+
+	  </tbody>
+	 </tgroup>
+      </table>
+    </sect1>
+
+  </chapter>
+  
+  <chapter id="projects">
+  <title> Projects </title>
+    <sect1 id="create-project">
+      <title>Creating a project</title>
+      <para>
+		When projects are first created they are marked "invisible to students".  This means
+		that students cannot see the project when they log in to the SubmitServer.
+      </para>
+      <para>
+      	Instructors and TAs <emphasis>can</emphasis> see invisible projects.  Thus you can
+      	create a project and let your TAs try it out for a couple of days before officially
+      	making it "visible" to your students.
+      </para>
+      <warning>
+      	Once a project is made visible, there's no way to make it invisible again (without
+      	changing the value of the field in the database).
+      </warning>
+      <note>
+      	An Invisible project is only invisible when a student logs into the server, but the 
+      	project still exists and will accept submissions.  Thus,
+      	students can submit to an invisible project using either the command-line submission tool
+      	or the Course Project Manager Eclipse plugin.  This can happen if student CVS repositories
+      	or project skeletons are made available before the project is made visible.  These 
+      	submissions will be tested normally and should not present any problems except for
+      	potential confusion to the students that they are submitting but can't find the project
+      	on the server.
+      </note>
+	</sect1>
+	<sect1 id="late-penalties">
+    	<title>Explanation of late penalties</title>
+    	<para>
+    		When creating a project, you have the choice between two types of late penalties:
+    	</para>
+    	<itemizedlist>
+    		<listitem>
+    		Late Constant: The value specified will be subtracted from the score of each submission.
+    		For example, a Late Constant penalty of 20 means that a late submission worth 85 points
+    		would be adjusted to 65 points.
+	    	</listitem>
+	    	<listitem>
+	    	Late Multiplier: The value specified will be multiplied by the score of each submission.
+	    	For example, a Late Multiplier penalty of 0.8 means that a late submission worth 85 points
+	    	would be adjusted to 68 points.
+	    	<warning><para>
+	    	The Late Muliplier will be multiplied by the score, so to 
+	    	subtract 20%, be sure to set the Late Multiplier value to 0.8!
+	       	</para>	</warning>
+	    	</listitem>
+    	</itemizedlist>
+		<para>
+		<note><para>
+			To have a project without a late deadline (i.e. where late submissions are worth
+			zero credit), make the on-time and late deadlines the same.
+		</para></note>
+		</para>
+		<para>
+			Whether a submission is ontime, late or very-late is computed dynamically for each
+			student	based on the deadline for the project and any extension granted to that student.
+			Thus it is possible for a submission to change from late to ontime when an extension 
+			is granted or if the deadline is changed by the instructor.
+		</para>
+    	<para>
+    		Only the on-time and late submissions are used when determining the "best"
+    		score for a project.  Very-late submissions are kept for a variety of reasons:
+    		some classes have a policy that students must make a "good faith" attempt to implement
+    		each project before the semester ends; students are somtimes granted extensions
+    		retroactively.
+    	</para>
+	</sect1>
+	<sect1 id="best-submission-policy">
+		<title> The policy for computing the "best" score</title>
+		<para>
+
+		<table>
+		<title>Best submission policies</title>
+		<tgroup cols="2">
+			<thead>
+		    <row>
+			<entry>policy</entry>
+			<entry>description</entry>
+		    </row>
+   	    	</thead>
+	    <tbody>
+		    <row>
+			    <entry>
+			    Last Submission (Default)
+			    </entry>
+		    	<entry>
+		    	The best submission for a category (on-time or late) is the last submission
+		    	that compiles in this category.
+			    </entry>
+		    </row>
+   		    <row>
+			    <entry>
+			    Release Test Aware
+			    </entry>
+		    	<entry>
+		    	Best submission for a category (on-time or late) is the max of the
+		    	last submission that compiles and the highest-scoring release tested submission.
+			    </entry>
+		    </row>
+		    <!-- 
+		    <row>
+			    <entry>
+			    </entry>
+		    	<entry>
+			    </entry>
+		    </row>
+		    -->
+	    </tbody>
+	    </tgroup>
+		</table>
+		<note><para>
+			The best submission policy takes into account extensions granted to 
+			individual students, as well as late penalties.
+		</para></note>
+		<note><para>
+			We don't simply pick the highest scoring submission overall to prevent
+			students from taking the "shotgun" approach of submitting 200
+			versions of a program knowing that we'll pick the best one.  By choosing
+			to release test a submission students are (hopefully) telling us something
+			about the quality of a submission.
+		</para></note>
+	</para>
+	</sect1>
+	
+	<sect1 id="stack-trace-policy">
+		<title>Stack Trace Policy:  How much information to reveal when students use a release-test </title>
+		<para>
+		The default when students use a release test is to reveal simply the names of some number
+		of tests failed (the number of release tests to reveal information about is of course configurable).
+		</para>
+		<para>
+		After using this policy for several semesters, it became clear that there are situations
+		where students need or deserve more information to help them learn about their code.  For
+		example, if a student submission fails many release tests because of run-time exceptions,
+		then it will be useful for them to know the type of exception and perhaps the line number
+		in their code where the exception is generated.
+		</para>
+		<para>
+		Similarly, there are many situations
+		where the test-drivers used for Makefile-based projects (C/C++, Ruby, etc) generate 
+		output that the students
+		could greatly benefit from seeing.  Thus we have created some new policies regarding how
+		much information to reveal that are detailed in the following table.
+		</para>
+		<table>
+		<title> Stack Trace Policies:  How much information to reveal when students request 
+		a release test </title>
+		<tgroup cols="3">
+		<thead>
+		<row>
+			<entry>policy</entry>
+			<entry>language(s)</entry>
+			<entry>description</entry>
+		</row>
+		</thead>
+		<tbody>
+		<row>
+			<entry>test name only (default)</entry>
+			<entry>any</entry>
+			<entry>Reveals only the name of the test case</entry>
+		</row>
+		<row>
+			<entry>line number of exception</entry>
+			<entry>Java only</entry>
+			<entry>Reveals a partial stack trace including the name of the exception and the
+			line in the student code that generates the exception.  Will hot-link the line
+			that generates the exception, if possible.  Does not reveal all
+			methods called in student-written code leading up to the exception.			
+			</entry>
+		</row>
+		<row>
+			<entry>line number of exception, if covered by public/student-written test</entry>
+			<entry>Java only</entry>
+			<entry>Reveals the partial stack trace as described by the 
+			"line-number of exception" policy, but only if there is a public or student-written
+			test case that covers the source of the exception.  This rewards students that
+			are writing their own test cases to achieve better coverage.
+			</entry>
+		</row>
+		<row>
+			<entry>full stack trace</entry>
+			<entry>any</entry>
+			<entry>Reveals the full stack trace for Java or everything that was printed to
+			stdout and stderr for other languages.</entry>
+		</row>
+
+		<!-- 
+		<row>
+			<entry></entry>
+			<entry></entry>
+			<entry></entry>
+		</row>
+		-->
+		</tbody>
+		</tgroup>
+		</table>
+	</sect1>
+      
+    <sect1 id="update-project">
+    	<title>Updating a project</title>
+    	<para/>
+    </sect1>
+	</chapter>
+  
+  <chapter id="customizing">
+  	<title>Customizing the look-and-feel for a new institution</title>
+      <sect1 id="index.jsp">
+      <title>Changing the main login page</title>
+      <para>
+		
+      </para>
+    </sect1>
+  </chapter>
+  
+  <chapter id="TODO">
+  <title>TODO</title>
+	<orderedlist>
+	<listitem>
+	Sloppy matching for courses/semesters
+	</listitem>
+	<listitem>
+	Finish this f-in documentation
+	</listitem>
+	<listitem>
+	Instructor CVS documentation
+	</listitem>
+	<listitem>
+	CPM documentation
+	</listitem>
+	<listitem>
+	localization documentation section for how to customize
+	</listitem>
+	<listitem>
+	Sections for student Registration
+	</listitem>
+	<listitem>
+	build.xml should be able to build the documenation and put it into the submitServer.war as well
+	</listitem>
+	<listitem>
+	document that log4j.jar needs to go into Tomcat/shared/lib
+	</listitem>
+	<listitem>
+	Sample Java/C projects should be included in here, with their corresponding build.xml files
+	</listitem>
+	<listitem>
+	
+	</listitem>
+	</orderedlist>
+  </chapter>
+
+</book>
+
+<!-- vim:set ts=3: -->

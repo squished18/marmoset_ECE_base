@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+
+use strict qw(refs vars);
+
+my @dirList = split /\s+/, `ls`;
+
+#
+# TODO: Check that the PID actually exists
+# and is a java process with the string "BuildServer" in it
+#
+
+foreach my $dir (@dirList) {
+    if ($dir =~ /bs\d/) {
+#	print "$dir\n";
+	my $pid = `cat $dir/buildserver.pid`;
+	chomp $pid;
+	print "killing buildserver in $dir with pid $pid\n";
+	print `kill $pid`;
+    }
+}

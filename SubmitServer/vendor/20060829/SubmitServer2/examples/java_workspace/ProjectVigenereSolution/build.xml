@@ -1,0 +1,108 @@
+<project name="submitServer" default="canonical" basedir=".">
+
+	<!-- THIS BUILD FILE HAS BEEN CUSTOMIZED TO THIS PROJECT -->
+	
+	<!--
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		build.xml: Use this file to build jar archives containing the canonical submission,
+				   the test setup and the skeleton that corresponds to this project.
+				   The canonical and test setup should be built with a version of the project
+				   that contains the full implementation and all tests (e.g. ProjectXSolution)
+				   while the skeleton should be built with a version that excludes the code 
+				   students should implement (e.g. ProjectX).
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	-->
+
+
+	<!-- 
+		PROPERTIES: Customize this section to match your project. 
+				    - - - - - - - - - - - - - - - - - - - - - - -
+	-->
+	<!-- class files to exclude from test setup 
+		 (**IMPORTANT** do not include class files for code students must implement)-->
+	<property name="bin.exclude" 
+			  value="**/VigenereCipher.class" />
+
+	<!-- JAR files -->
+	<property name="setup.name" value="test-setup.jar" />
+	<property name="canonical.name" value="canonical.jar" />
+	<property name="skeleton.name" value="skeleton.jar" />
+
+	<!-- Test setup files -->
+	<property name="test.setup.files" value="test.properties,security.policy" />
+	<!-- Eclipse project files -->
+	<property name="eclipse.files" value=".project,.classpath" />
+	<!-- Student project files (for inclusion in skeleton) -->
+	<property name="student.files" value=".submit" />
+
+	<!-- Output directory: location of .class files -->
+	<property name="bin.dir" value="bin" />
+	<!-- List of all class files (do not include output dir)-->
+	<property name="bin.files" value="**/*class" />
+
+	<!-- Java source directory -->
+	<property name="java.dir" value="src" />
+	<!-- List of all java source files (excluding tests) -->
+	<property name="java.source" value="src/**/VigenereCipher.java, src/**/InvalidCharacterException.java" />
+	<!-- java source files to exclude from skeleton. Typically, these are utility classes
+	     that support your implementation, but are not to be given to students. -->
+	<property name="java.exclude" value="" />
+
+	<!-- JUnit source directory: location of all tests -->
+	<property name="junit.dir" value="src" />
+	<!-- List of all junit source files -->
+	<property name="junit.source" value="src/**/*Tests.java" />
+	<!-- junit source files to exclude from skeleton -->
+	<property name="junit.exclude" value="src/**/ReleaseTests.java,src/**/SecretTests.java" />
+
+	<!-- Other supporting files needed the project. 
+		 This could include txt, html, image files etc. 
+		 Include the full path from the root of the project.
+		 These files will be added to the test setup and skeleton
+	 -->
+	<property name="other.files" value="" />
+
+
+	<!-- 
+		TARGETS: The builds available in this file. 
+			    - - - - - - - - - - - - - - - - - -
+	-->
+
+	<target name="canonical">
+		<jar destfile="${canonical.name}" update="false">
+			<fileset dir="." includes="${eclipse.files}" />
+			<fileset dir="." includes="${java.source}" />
+			<fileset dir="." includes="${junit.source}" excludes="${junit.exclude}" />
+
+			<!-- Other necessary files -->
+			<!-- <fileset dir="." includes="${other.files}" /> -->
+		</jar>
+	</target>
+
+	<target name="test.setup">
+		<jar destfile="${setup.name}" update="false">
+			<fileset dir="." includes="${test.setup.files}" />
+			<fileset dir="${bin.dir}" includes="${bin.files}" excludes="${bin.exclude}" />
+			<fileset dir="." includes="${junit.source}" />
+
+			<!-- Other necessary files -->
+			<!-- <fileset dir="." includes="${other.files}" /> -->
+		</jar>
+	</target>
+
+	<!-- This target should be built in a version of the project that has 
+		 replacement code in the functions students should implement.
+ 	-->
+	<target name="skeleton">
+		<jar destfile="${skeleton.name}" update="false">
+			<fileset dir="." includes="${eclipse.files}" />
+			<fileset dir="." includes="${student.files}" />
+			<fileset dir="." includes="${java.source}" excludes="${java.exclude}" />
+			<fileset dir="." includes="${junit.source}" excludes="${junit.exclude}" />
+
+			<!-- Other necessary files -->
+			<!-- <fileset dir="." includes="${other.files}" /> -->
+		</jar>
+	</target>
+
+</project>

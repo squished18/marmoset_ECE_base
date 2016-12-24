@@ -1,0 +1,118 @@
+<html>
+<head>
+<title> Configuring Jakarta Tomcat to run the SubmitServer </title>
+</head>
+<body>
+
+<ul>
+
+<li> First, symlink wherever tomcat is located to $HOME/tomcat.  This
+directory will be referred to as simply "tomcat" for the remainder of
+this document.  For example, for this installation,
+$HOME/software/jakarta-tomcat-5.0.30 will be symlinked to $HOME/tomcat
+and referred to as "tomcat".
+
+<li> Add JAVA_OPTS="-Xmx512m -Xms512m" to the begging of
+tomcat/bin/catalina.sh in order to give tomcat extra memory.
+
+<li> For tomcat 5.0.X, in tomcat/conf/server.xml, comment out the Logger that's declared
+at the end of the file.
+
+<li> In tomcat/conf/server.xml, uncomment the connector at port 8443.
+
+<li> To run a second installation of tomcat on the same machine:
+	<ul>
+	<li> 8080 to 9080 (main port for listening)
+	<li> 8005 to 9005 (shutdown port)
+	<li> 8443 to 9443 (ssl redirects go here)
+	<li> 8009 to 9009 (ajp connector)
+	<li> 8082 to 9082 (proxied http-1.1 connector)
+	</ul>
+
+<li> Delete *bat from tomcat/bin
+
+<li> Add the tomcatKeystore line to tomcat/conf/server.xml under the
+Connector on port 8443.  The line looks like this:
+<p>
+keystoreFile="/export/homes/jspacco/tomcat/conf/marmoset2Keystore"
+
+<li> After Host name="localhost", add:
+<pre>
+&lt;Context path="" docBase="submitServer" debug="0" reloadable="true"&gt;
+	  &lt;!-- JDBC Connection Pool --&gt;
+	  &lt;Resource name="jdbc/submitServerDB"
+	    auth="Container"
+	    type="javax.sql.DataSource"
+	    driverClassName="org.gjt.mm.mysql.Driver"
+	    url="jdbc:mysql://localhost/submitserver"
+	    username="root"
+	    password="blondie1980"
+	    maxActive="8" maxIdle="4"/&gt;
+&lt;/Context&gt;
+</pre>
+Note that for a production installation, you may want to set reloadable="false"
+so that war files inadvertently copied into the tomcat/webapps directory aren't
+automatically installed on the production machine.
+<p>
+
+<li> Also in tomcat/conf/server.xml:
+<p>
+
+
+<li> Copy a MySQL driver (such as the driver mysql-connector-java.jar checked into
+CVS in SubmitServer2/WebRoot/WEB-INF/lib) into tomcat/common/lib.  In general, I like
+to have all of the classes required by a web-app to be contain in the web apps war file;
+however, since tomcat needs to manage the connections when it starts up,
+then it needs access to the jarfile.
+
+<li> Add a resource ref to tomcat/conf/web.xml that defines the JNDI lookup name you're
+assigning to the database pool.
+
+<p>
+<pre>
+&lt;web-app&gt;
+  ...
+  &lt;resource-ref&gt;
+    &lt;description&gt;
+      Resource reference to a factory for java.sql.Connection
+      instances that may be used for talking to a particular
+      database that is configured in the server.xml file.
+    &lt;/description&gt;
+    &lt;res-ref-name&gt;
+      jdbc/submitServerDB
+    &lt;/res-ref-name&gt;
+    &lt;res-type&gt;
+      javax.sql.DataSource
+    &lt;/res-type&gt;
+    &lt;res-auth&gt;
+      Container
+    &lt;/res-auth&gt;
+  &lt;/resource-ref&gt;
+  ...
+&lt;/web-app&gt;
+</pre>
+
+
+<li> Add to tomcat/conf/web.xml whether this server is a demo server
+(i.e. allows use of demo.jsp to register register and use demo accounts):
+<p>
+<pre>
+&lt;web-app&gt;
+  ...
+  &lt;context-param&gt;
+    &lt;param-name&gt;demo.server&lt;/param-name&gt;
+    &lt;param-value&gt;false&lt;/param-value&gt;
+  &lt;/context-param&gt;
+  &lt;context-param&gt;
+    &lt;param-name&gt;semester&lt;/param-name&gt;
+    &lt;param-value&gt;Fall 2005&lt;/param-value&gt;
+  &lt;/context-param&gt;
+  ...
+&lt;/web-app&gt;
+</pre>
+
+
+</ul>
+
+</body>
+</html>

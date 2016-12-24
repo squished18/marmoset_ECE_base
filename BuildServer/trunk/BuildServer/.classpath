@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient.jar"/>
+	<classpathentry sourcepath="/export/home/jspacco/software/commons-logging-1.0.4/src" kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry sourcepath="/export/home/jspacco/eclipse-3.1/plugins/org.eclipse.jdt.source_3.1.0/src/org.eclipse.jdt.junit_3.1.0/junitsupportsrc.zip" kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="src" path="/SubmitServerModelClasses"/>
+	<classpathentry sourcepath="/export/home/jspacco/software/logging-log4j-1.3alpha-6/src/java" kind="lib" path="lib/log4j.jar"/>
+	<classpathentry sourcepath="/export/home/jspacco/software/bcel-5.1/src/java" kind="lib" path="lib/bcel.jar"/>
+	<classpathentry kind="lib" path="lib/clover.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j.jar"/>
+	<classpathentry kind="src" path="junit"/>
+	<classpathentry kind="lib" path="lib/findbugs.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

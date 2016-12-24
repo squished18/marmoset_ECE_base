@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ "$1" != "" ];
+    then PBS_NODEFILE=$1
+fi
+
+#
+# TODO would it be convenient to make all of this stuff into command line params?
+#
+#SEMESTER="Spring 2006"
+SEMESTER="Research"
+COURSES="spring2005-132"
+#COURSES="CMSC131,CMSC132,CMSC433"
+#COURSES="CMSC132"
+HOST=marmoset2.umiacs.umd.edu
+#HOST=noir.cs.umd.edu
+PORT="-p 7443"
+BUILDSERVER_HOME=/scratch1
+CRONTAB=$BUILDSERVER_HOME/CRONTAB.sh
+
+NUM_BUILD_SERVERS=2
+
+for bug in `cat $PBS_NODEFILE | perl -ne 's/#.*// ; print if (m/.+\n/)'`
+  do
+  ssh $bug "cd $HOME/buildServer/BuildServer && ./batch-install -b $BUILDSERVER_HOME -f $HOME/buildServer/findbugs $PORT -c $COURSES -s \"$SEMESTER\" -h $HOST $NUM_BUILD_SERVERS && cron-set -c $CRONTAB on && $CRONTAB"
+  sleep  1
+done

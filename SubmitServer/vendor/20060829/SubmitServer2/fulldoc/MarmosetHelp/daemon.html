@@ -1,0 +1,140 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 7. Running a BuildServer</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="buildserver_installation.html" title="Part III. BuildServer Installation"><link rel="prev" href="installing.html" title="Chapter 6. Installing the BuildServer"><link rel="next" href="submitserver_usersguide.html" title="Part IV. SubmitServer Users Guide"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. Running a BuildServer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="installing.html">Prev</a> </td><th width="60%" align="center">Part III. BuildServer Installation</th><td width="20%" align="right"> <a accesskey="n" href="submitserver_usersguide.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="daemon"></a>Chapter 7. Running a BuildServer</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="daemon.html#daemon_about">1. About running a BuildServer</a></span></dt><dt><span class="sect1"><a href="daemon.html#daemon_on">2. To run the BuildServer daemons</a></span></dt><dt><span class="sect1"><a href="daemon.html#daemon_off">3. To stop the BuildServer daemons</a></span></dt><dt><span class="sect1"><a href="daemon.html#command_line">4. To run the BuildServer from the command line</a></span></dt><dt><span class="sect1"><a href="daemon.html#buildserver_offline">5. To run the BuildServer Offline</a></span></dt></dl></div><p>
+				This chapter describes how to run a BuildServer. It assumes you have
+				installed the BuildServer software as described in
+				<a href="installing.html" title="Chapter 6. Installing the BuildServer">Chapter 6, <i>Installing the BuildServer</i></a>
+				.
+			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+					The build servers connect securely to the Submit Server to get
+					submissions to build. In order to this, the unsigned security
+					certificate associated with the submit server needs to be installed in
+					the JVM that will run the build server. See Section 2.4.3 "Configuring
+					SSL" of the Submit Server installation manual for more details. (If
+					you are running the build server on the same host as the submit
+					server, and you have already installed the certificate during the
+					Submit Server installation process, then you can ignore this note.)
+				</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="daemon_about"></a>1. About running a BuildServer</h2></div></div></div><p>
+					A build server is usually run as a daemon process running in the
+					background. It probes the associated SubmitServer to see if any
+					submissions need to be built -- if this is the case, it downloads and
+					builds these submissions. A Build Server can also be started from the
+					command line to download and build a submission from the submit
+					server, or to build a submission that is available offline. Starting
+					the Build Server from the command line is often useful for debugging
+					the Build Server behavior, because this arrangement prints out all its
+					output to stdout.
+				</p><p>
+					To run the build server as a daemon process, a cron job is set up to
+					periodically check that the server is still running. This ensures that
+					if the server crashes, it is restarted. However, this feature can be
+					bothersome if an administrator wants to kill the build server since it
+					will be restarted within 5 minutes unless the cron script is changed.
+					For maximum flexibility, the Build Server distribution includes a
+					"cron-set" script that influences the behavior of the cron job.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="daemon_on"></a>2. To run the BuildServer daemons</h2></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+							Enable cron processes using the "cron-set" script. From the
+							BuildServer directory, run:
+						</p><p>
+							<code class="literal">scripts/cron-set -c CRONTAB.sh on</code>
+						</p><p>
+							This command modifies the CRONTAB.sh script to ensure that it
+							periodically checks to ensure that the build servers are
+							running.
+						</p></li><li><p>
+							Run
+							<code class="literal">./CRONTAB.sh</code>
+							. This starts the build servers created during the
+							installation process. You can check for the existence
+							of these processes by using the 'ps' command to look
+							for new java processes. 
+						</p><p>
+							You can also login to the Submit Server, go to the SuperUser 
+							page, and click "BuildServerStaus" on the bread crumb. This
+							should indicate that the Build Servers have recently contacted
+							the Submit Server.
+						</p></li></ol></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="daemon_off"></a>3. To stop the BuildServer daemons</h2></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+							Disable cron processes using the "cron-set" script. From the
+							BuildServer directory, run:
+						</p><p>
+							<code class="literal">scripts/cron-set -c CRONTAB.sh off</code>
+						</p><p>
+							This command modifies the CRONTAB.sh script to ensure that it
+							does NOT restart the build server.
+						</p></li><li><p>
+							Run
+							<code class="literal">./killall</code>
+							. This stops all the build servers created during the
+							installation process.
+						</p></li></ol></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="command_line"></a>4. To run the BuildServer from the command line</h2></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+							Running the build server from the command line is often useful
+							for debugging purposes. To run a single build server from the
+							command line, first change directory (cd) into the build
+							server directory that corresponds to the build server you wish
+							to run. e.g.
+							<code class="literal">cd bs1.ourserver.ourschool.edu</code>
+						</p></li><li><p>
+							Use the runBuildServer script which has the following usage:
+						</p><p>
+							<code class="literal">
+								Usage: ./runBuildServer &lt;config file&gt; [ once ]
+							</code>
+						</p><p>
+							The config file is the "config.properties" file in the current
+							directory. Adding the literal
+							<code class="literal">once</code>
+							to the command instructs the build server to shut down after
+							it has downloaded and built a single submission from the
+							Submit Server.
+						</p></li></ol></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top">
+					The build server working directories (bs1.*, bs2.* etc) are used to
+					store submission and test-setup information retrieved from the submit
+					server, and other temporary information needed during the testing
+					process. Therefore, you should not execute a build server that is in
+					the process of testing a submission because this will interfere with
+					the active testing process. Usually, the
+					<code class="literal">runBuildServer</code>
+					script is used when no build servers are active (i.e. all were shut
+					down with the
+					<code class="literal">killall</code>
+					script) or in a seperate build server installation.
+				</td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="buildserver_offline"></a>5. To run the BuildServer Offline</h2></div></div></div><p>
+					It is also possible to run a build server offline on a particular
+					submission. To do this, you will need a copy of the submission to be
+					tested, and the associated test-setup. (Both can be downloaded from
+					the Submit Server. See
+					<a href="projects.html" title="Chapter 10. Projects">Chapter 10, <i>Projects</i></a>
+					for more info about these two files.)
+				</p><div class="orderedlist"><ol type="1"><li><p>
+							Set the BUILDSERVER_ROOT environment variable to point to the
+							'BuildServer/' directory (i.e. the main directory that
+							contains the 'scripts', 'bin' and build.xml)
+						</p><p>
+							e.g.
+							<code class="literal">
+								export BUILDSERVER_ROOT=$HOME/buildServer/BuildServer
+							</code>
+						</p></li><li><p>
+							Create a new directory that will be used temporarily for the
+							offline testing. You can create this directory anywhere except
+							in any of the existing build server working directories (i.e.
+							the ones named bs1.*, bs2.* etc.). Using any of these
+							directories may create a conflict with any existing (and
+							running) build servers.
+						</p></li><li><p>
+							Copy the zip files representing the submission to be tested,
+							and its associated test-setup into the new directory. Both can
+							be downloaded from the Submit Server.
+						</p></li><li><p>
+							The testSubmission.sh script in the 'BuildServer/scripts'
+							directory will dynamically create a build server, run it once
+							on the two zip files, and then shut it down. Example Usage:
+						</p><p>
+							<code class="literal">
+								$BUILDSERVER_ROOT/scripts/testSubmission.sh submission.zip
+								test-setup.zip
+							</code>
+						</p><p>
+							This sends the build server output to stdout so you may want
+							to pipe the output into a textfile so you can review it later.
+							You may also want to add testSubmission.sh to your path if this is
+							a task you perform often.
+						</p></li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="installing.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="buildserver_installation.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="submitserver_usersguide.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. Installing the BuildServer </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Part IV. SubmitServer Users Guide</td></tr></table></div></body></html>

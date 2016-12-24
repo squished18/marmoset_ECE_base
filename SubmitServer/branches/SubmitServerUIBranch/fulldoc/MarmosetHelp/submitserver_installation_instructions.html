@@ -1,0 +1,850 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 3. Installing the SubmitServer</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="submitserver_installation.html" title="Part II. SubmitServer Installation"><link rel="prev" href="submitserver_installation.html" title="Part II. SubmitServer Installation"><link rel="next" href="auxiliary-tools.html" title="Chapter 4. Installing and configuring phpMyAdmin"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Installing the SubmitServer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="submitserver_installation.html">Prev</a> </td><th width="60%" align="center">Part II. SubmitServer Installation</th><td width="20%" align="right"> <a accesskey="n" href="auxiliary-tools.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="submitserver_installation_instructions"></a>Chapter 3. Installing the SubmitServer</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="submitserver_installation_instructions.html#submitserver_install_prerequisites">1. Introduction and Prerequisites</a></span></dt><dt><span class="sect1"><a href="submitserver_installation_instructions.html#unpackdistribution">2. Unpack Submit Server Components</a></span></dt><dt><span class="sect1"><a href="submitserver_installation_instructions.html#mysql">3. Installing MySQL and the database for Marmoset</a></span></dt><dt><span class="sect1"><a href="submitserver_installation_instructions.html#superuser">4. Creating a SuperUser account</a></span></dt><dt><span class="sect1"><a href="submitserver_installation_instructions.html#jakarta-tomcat">5. Installing Jakarta Tomcat</a></span></dt><dt><span class="sect1"><a href="submitserver_installation_instructions.html#compile">6. Compiling and Installing the Submit Server</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="submitserver_install_prerequisites"></a>1. Introduction and Prerequisites</h2></div></div></div><p>
+					This section explains how to install the SubmitServer component of
+					Marmoset. The SubmitServer is a web application that stores
+					submissions, allows students and instructors to view submissions and
+					their outcomes, and facilitates automated testing by one or more
+					BuildServers.
+				</p><p>
+					The goals of this document are to specify how to set up and run a
+					SubmitServer instance. This includes configuration information for a
+					Tomcat installation where the SubmitServer can be deployed (typically
+					by dropping a submitServer.war file into a certain directory).
+				</p><p>To install and run the SubmitServer, you need the following:</p><div class="itemizedlist"><ul type="disc"><li><p>
+							The
+							<code class="literal">SubmitServer Module</code>
+							and
+							<code class="literal">SubmitServerModelClasses Module</code>
+							included in the installation distribution.
+						</p></li><li><p>A machine installed with Linux.</p></li><li><p>
+							JDK 1.5 (a.k.a. 5.0) or later (
+							<a href="http://java.sun.com/j2se/" target="_top">Download Java</a>
+							).
+						</p></li><li><p>
+							Ant 1.6 or later (
+							<a href="http://ant.apache.org/" target="_top">Download Ant</a>,
+							Note that ANT is included with the Eclipse IDE)
+						</p></li><li>
+						MySQL 4.1.16 or later (
+						<a href="http://dev.mysql.com/downloads" target="_top">Download MySQL</a>
+						). <a href="submitserver_installation_instructions.html#mysql" title="3. Installing MySQL and the database for Marmoset">Section 3, &#8220;Installing MySQL and the database for Marmoset&#8221;</a> will describe the MySQL installation process.
+						<p>
+							Marmoset has been tested successfully using
+							mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23 and
+							mysql-standard-5.0.22-linux-i686-glibc23.
+						</p></li><li><p>
+							Jakarta Tomcat 5.5.9 or later (
+							<a href="http://tomcat.apache.org/" target="_top">Download Tomcat</a>
+							). 							
+							<a href="submitserver_installation_instructions.html#jakarta-tomcat" title="5. Installing Jakarta Tomcat">Section 5, &#8220;Installing Jakarta Tomcat&#8221;</a> will describe the Tomcat installation 
+							process.
+							</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+								When configuring Tomcat to use SSL with a self-signed
+								certificate, you will need write access to some parts of
+								your Java (JRE) installation. See
+								<a href="submitserver_installation_instructions.html#tomcat-ssl" title="5.3. Configuring SSL">Section 5.3, &#8220;Configuring SSL&#8221;</a>
+								for more information.
+							</td></tr></table></div><p>
+						</p></li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+					You will almost certainly want to put MySQL and tomcat onto the same
+					machine because it's more secure to only allow connections to the
+					database only from localhost (than to try to deal with MySQL+SSL).
+				</td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+					The MySQL database and Tomcat can both run as any user account. For
+					security purposes, it's not a good idea in general to run either of
+					these as the root user of the unix system. Also keep in mind that the
+					'root' user of the unix host machine
+					<span class="emphasis"><em>is not the same thing</em></span>
+					as the 'root' user of a MySQL installation. These are two separate,
+					unrelated concepts that happen to have the same name. You can connect
+					to the MySQL database as the root database user using
+					<span class="emphasis"><em>any</em></span>
+					unix user account.
+				</td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+					It is NOT recommended to install either MySQL or Tomcat onto an
+					NFS-mounted volume. Doing so almost guarantees problems with stale
+					NFS-filehandles, problems locking files, and so on.
+				</td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="unpackdistribution"></a>2. Unpack Submit Server Components</h2></div></div></div><p>
+					If you have not already done so, extract the Marmoset distribution
+					from the distribution archive.
+				</p><p>
+					Extract both the <code class="literal">SubmitServer</code>
+					and <code class="literal">SubmitServerModelClasses</code> archives into the same
+					directory -- this directory will be the base for your installation. (E.g. 
+					<code class="literal">$HOME/projects/submitserver</code>.) If you are using Eclipse,
+					this directory will also be the workspace.
+				</p><p>
+					You should now have two directories:
+					</p><div class="literallayout"><p>	<br>
+						<code class="literal"><br>
+							$SUBMITDIR/SubmitServer2, and<br>
+							$SUBMITDIR/SubmitServerModelClasses<br>
+						</code><br>
+					</p></div><p>
+					where $SUBMITDIR is the directory you extracted the archives into.
+				</p><p>
+					The next few sections will describe the installation of MySQL, the
+					Submit Server Database, and Tomcat. These should be installed on the
+					host that you want to run the Submit Server. Then we will return to this 
+					directory to configure and install the Submit Server.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql"></a>3. Installing MySQL and the database for Marmoset</h2></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+							If MySQL is not already installed on the host system, simply
+							download and untar a binary distribution from
+							<a href="http://dev.mysql.com/" target="_top">http://dev.mysql.com/</a>.
+							Point the shell variable MYSQL_HOME at
+							your installation. Then put $MYSQL_HOME/bin and
+							$MYSQL_HOME/scripts on your path.
+						</p><p>
+							For example, you could untar MySQL into $HOME/software/mysql
+							and then (assuming your shell is bash) do:
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+							export MYSQL_HOME=$HOME/software/mysql export<br>
+							PATH=$MYSQL_HOME/bin:$MYSQL_HOME/scripts:$PATH<br>
+							</code><br>
+						</p></div></li><li><p>
+							Even with MYSQL_HOME clearly pointing to the MySQL
+							installation, MySQL still seems to assume that it got put into
+							/usr/local.
+						</p><p>
+							So, edit $MYSQL_HOME/bin/mysqld_safe (the daemon program that
+							starts/stops mysql) by finding the following lines (located at
+							lines 106-107 for
+							mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23):
+							</p><div class="literallayout"><p><br>
+								<code class="literal"><br>
+								MY_BASEDIR_VERSION=/usr/local/mysql<br>
+								ledir=/usr/local/mysql/bin<br>
+								</code><br>
+							</p></div><p>
+						</p><p>
+							and then replacing them with this:
+							</p><div class="literallayout"><p><br>
+								<code class="literal"><br>
+								MY_BASEDIR_VERSION=$MYSQL_HOME <br>
+								ledir=$MYSQL_HOME/bin<br>
+								</code><br>
+							</p></div><p>
+						</p><p>
+							I have no idea why this is necessary, and rather than trying
+							to figure out why, I just make this change everytime I install
+							MySQL since it works. If anyone knows a better way to do this
+							(i.e. without editing the mysqld_safe file) please send email
+							to
+							<code class="email">&lt;<a href="mailto:jspacco@cs.umd.edu">jspacco@cs.umd.edu</a>&gt;</code>
+							.
+						</p></li><li><p>
+							All of the database-related scripts for Marmoset are located
+							in SubmitServerModelClasses/dbScripts (in the Submit Server
+							directory we created in <a href="submitserver_installation_instructions.html#unpackdistribution" title="2. Unpack Submit Server Components">Section 2, &#8220;Unpack Submit Server Components&#8221;</a>. 
+							I will hereafter refer to the SubmitServerModelClasses/dbScripts/ 
+							directory as simply <span class="emphasis"><em>dbScripts</em></span>. 
+							You need to add this directory to your path.
+						</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+							You may also need to change the permissions to make
+							runsql, fresh-install, start-innodb, and stop-innodb executable. In
+							general, jarfiles (and I think zipfiles) won't preserve file
+							permissions, due to compatbility issues between file systems
+							that don't use the same types of permissions for controlling
+							access to files.
+						</td></tr></table></div></li><li><p>
+							If you're not that familiar with MySQL and are installing a
+							fresh database, don't worry, as we provide a script that will
+							create and startup a fresh database.
+						</p><p>
+							You can do this by simply going into the dbScripts directory
+							and running the following command:
+						</p><p>
+							<code class="literal">
+								./fresh-install &lt;database password&gt; &lt;directory
+								for database&gt; [ -p &lt;port&gt; ] [ -d &lt;database&gt;
+								]
+							</code>
+						</p><p>
+							The &lt;directory for database&gt; can be anywhere on the
+							local file system. It is
+							<span class="emphasis"><em>NOT A GOOD IDEA</em></span>
+							to put the directory on an NFS-mounted volume. This will
+							almost certainly cause annoying problems with stale file
+							handles and file locks.
+						</p><p>
+							The &lt;database password&gt; you pick will be for the root
+							database user. Note that the root database user account is not
+							the same thing as the root unix account on the machine you're
+							running the database. This password will allow you to access
+							the database as root using any unix user account.
+						</p><p>
+							The &lt;port&gt; is an optional parameter that will change the
+							port used by MySQL. If you don't set a parameter here, it will
+							use the default, which is port 3306.
+						</p><p>
+							The &lt;database&gt; parameter will change the name of the
+							database. The default name is
+							<span class="emphasis"><em>submitserver</em></span>
+							.
+						</p><p>
+							This will create and start a new database, and set the root
+							password to what you picked. This will also create a
+							$HOME/.my.cnf file, the hidden file MySQL uses to store
+							configuration information necessary (like username, passwords,
+							paths to the database socket file, etc) to log into the
+							database.
+						</p><p>
+							NOTE: The $HOME/.my.cnf file contains your root database
+							password so make sure the file is not visible to anyone that
+							shouldn't be able to see it. The fresh-install script will try
+							to set the file permission so that group and others can't see
+							the file (chmod og-rwx).
+						</p></li><li><p>
+							Make sure that creating and starting the database worked by
+							running the mysql command line program:
+						</p><p>mysql</p><p>
+							You should see a prompt that looks something like this:
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+								Welcome to the MySQL monitor. Commands end with ; or \g.<br>
+								Your MySQL connection id is 5 to server version: 4.1.16-standard-log<br>
+<br>
+								Type 'help;' or '\h' for help. Type '\c' to clear the buffer.<br>
+<br>
+								mysql&gt;<br>
+							</code><br>
+						</p></div><p>
+							Once you see the prompt, to quit mysql, you just type 'quit'.
+						</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+							The fresh-install script also starts the database server. If
+							the mysql command fails with error: "Can't connect to local
+							MySQL server", it is likely the database server has not been
+							started. Do this manually by running the
+							dbScripts/start-innodb script. The only required parameter is
+							the directory where the database is installed (i.e. the
+							directory used in the ./fresh-install command above):
+							<p>
+								<code class="literal">
+									./start-innodb &lt;directory for database&gt;
+								</code>
+							</p></td></tr></table></div></li><li><p>
+							Next you need to create all the tables according to the
+							Marmoset database schema. Again, go into the dbScripts
+							directory and run this command:
+						</p><p>
+							<code class="literal">./runsql marmoset-schema.sql</code>
+						</p><p>
+							The runsql script is a useful script that will run any *.sql
+							script against the database referred to in the .my.cnf file.
+						</p><p>
+							The next step is to update the basic schema using a patch
+							script located in the sql-patches directory. Use the command:
+						</p><p>
+							<code class="literal">
+								./runsql sql-patches/project-starter-file-archives.sql
+							</code>
+						</p></li><li><p>
+							Now run the mysql command line program again, and make sure
+							that the database you created exists (by running
+							'<code class="literal">show databases;</code>') and that the tables for 
+							the database also exist (use '<code class="literal">show tables;</code>'). 
+							Refer to the MySQL reference manual
+							(<a href="http://dev.mysql.com/doc/" target="_top">http://dev.mysql.com/doc/</a>)
+							for more information about querying MySQL from the command line.
+						</p></li></ol></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="superuser"></a>4. Creating a SuperUser account</h2></div></div></div><p>
+					The first thing you need to do after creating the database is create a
+					superuser account that you can use to log into the system and
+					bootstrap the rest of the installation process. You need to do this
+					directly in the database, because all operations done by Marmoset
+					require authentication against the database. It's kind of a
+					chicken-and-egg problem.
+				</p><p>
+					Find and edit the file
+					SubmitServerModelClasses/dbScripts/bootstrap.sql. The file will look
+					like this:
+					</p><div class="literallayout"><p><br>
+						<code class="literal"><br>
+							INSERT INTO students VALUES (DEFAULT, 'campus_uid',<br>
+							'employee_num', 'firstname', 'lastname', 'yes', DEFAULT,<br>
+							DEFAULT, DEFAULT, 'password');<br>
+						</code><br>
+					</p></div><p>
+					You need to set a value for each non-DEFAULT column. Each column is
+					described in the following table.
+					</p><div class="table"><a name="table_insert_superuser"></a><p class="title"><b>Table 3.1. 
+							Important values for the Marmoset super-user account
+						</b></p><div class="table-contents"><table summary="
+							Important values for the Marmoset super-user account
+						" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>column</th><th>description</th><td class="auto-generated"> </td></tr></thead><tbody><tr><td>campus_uid</td><td>
+										A campus-wide unique identifier for each account.
+										This is typically a unix login, but can anything
+										else. Values in this column
+										<span class="emphasis"><em>MUST BE UNIQUE</em></span>.
+										<p>
+											You will see the terms "directoryID" and
+											"campus_uid" used interchangably in the
+											submitServer. This is a Maryland-ism that I
+											hope to factor out at some point.
+										</p>
+									</td><td class="auto-generated"> </td></tr><tr><td>employee_num</td><td>
+										Maryland-specific database field that stores the
+										employee number (our campus-wide database uses the
+										ambiguous term "employee number" even though
+										students as well as staff and faculty are
+										identified by this number). If you are using the
+										GenericStudentPasswordAuthenticationService then
+										set the employee_num to the same value as the
+										campus_uid. The employee_num does NOT need to be
+										unique.
+									</td><td class="auto-generated"> </td></tr><tr><td>firstname, lastname</td><td>The person's firstname and lastname</td><td class="auto-generated"> </td></tr><tr><td>yes</td><td>
+										This is the super-user permissions column. Leave
+										it as 'yes' so that the superuser account has
+										superuser permissions.
+									</td><td class="auto-generated"> </td></tr><tr><td>password</td><td>
+										The password to be used by the
+										GenericStudentPasswordAuthenticationService. This
+										is the password you will use to login.
+									</td><td class="auto-generated"> </td></tr></tbody></table></div></div><p><br class="table-break">
+				</p><p>
+					Once you've finished editing the bootstrap.sql script, run it like
+					this:
+					</p><div class="literallayout"><p><br>
+						<code class="literal"><br>
+							cd SubmitServerModelClasses/dbScripts <br>
+							./runsql bootstrap.sql<br>
+						</code><br>
+					</p></div><p>
+					This will create the superuser account you can use to start creating
+					courses. You can check this by opening the database and selecting the 
+					contents of the students table in the database:
+					</p><div class="literallayout"><p><br>
+						<code class="literal"><br>
+							select * from students;<br>
+						</code><br>
+					</p></div><p>					
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jakarta-tomcat"></a>5. Installing Jakarta Tomcat</h2></div></div></div><p>How to install tomcat</p><div class="itemizedlist"><ul type="disc"><li><p>
+							Unpack Jakarta Tomcat 5.5.9 (
+							<a href="http://tomcat.apache.org/" target="_top">Download Tomcat</a>
+							) or higher into a directory on the host that will run Submit Server. 
+							Note that Tomcat should go into
+							a local part of the filesystem; it is a
+							<span class="emphasis"><em>VERY BAD IDEA</em></span>
+							to put Tomcat in a directory on an NFS-mounted volume. Doing
+							so practically guarantees problems from stale NFS-filehandles
+							and so on. We know from experience; just don't do it.
+						</p><p>
+							I always symlink $HOME/tomcat to whereever I've unpacked
+							tomcat. From this point on I will refer to this directory
+							simply as
+							<code class="literal">Tomcat</code>, or the
+							<code class="literal">Tomcat</code>
+							directory.
+						</p></li><li><p>
+							Configure
+							<a href="submitserver_installation_instructions.html#server.xml" title="5.1. Configure Tomcat/conf/server.xml">Section 5.1, &#8220;Configure Tomcat/conf/server.xml&#8221;</a>
+						</p></li><li><p>
+							Configure
+							<a href="submitserver_installation_instructions.html#web.xml" title="5.2. Configure Tomcat/conf/web.xml">Section 5.2, &#8220;Configure Tomcat/conf/web.xml&#8221;</a>
+						</p></li><li><p>
+							<a href="submitserver_installation_instructions.html#clean-up-tomcat" title="5.5. Clean up the Tomcat/webapps directory">Section 5.5, &#8220;Clean up the Tomcat/webapps directory&#8221;</a>
+						</p></li></ul></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="server.xml"></a>5.1. Configure Tomcat/conf/server.xml</h3></div></div></div><p>
+						The file Tomcat/conf/server.xml contains (among other things)
+						configuration information for the various ports Tomcat will listen
+						on for incoming connections (i.e. 8080 for http, 8443 for https,
+						etc).
+					</p><p>
+						You need to find this chunk of xml:
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+								&lt;Host name="localhost" appBase="webapps"<br>
+								unpackWARs="true" autoDeploy="true" <br>
+								xmlValidation="false" xmlNamespaceAware="false"&gt;<br>
+							</code><br>
+						</p></div><p>
+						And then add this underneath it:
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+								&lt;Context path="" docBase="submitServer" debug="0"<br>
+								reloadable="true"/&gt;<br>
+							</code><br>
+						</p></div><p>
+						This will make sure that the submitServer context is the default
+						context (thus you can simply access https://foo.cs.umd.edu:8443
+						rather than https://foo.cs.umd.edu:8443/submitServer)
+					</p><p>
+						Also,
+						<a href="http://tomcat.apache.org/tomcat-5.5-doc/" target="_top">
+							there's tons of documentation on Tomcat on the web
+						</a>
+						, so feel free to look there for more info on what all of the
+						other stuff in server.xml and web.xml are there for, I don't
+						actually know what every feature does.
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web.xml"></a>5.2. Configure Tomcat/conf/web.xml</h3></div></div></div><p>
+						The file Tomcat/conf/web.xml contains (among other things) a
+						series of
+						<code class="literal">context-param</code>
+						nodes specified as children of the root
+						<code class="literal">web-app</code>
+						element. These are initialization parameters that are passed to
+						your web application. You want to configure any resources here
+						that are specific to this particular tomcat installation (for
+						example which database this tomcat installation will be connecting
+						to). This is useful because you may have a development Marmoset
+						installation with one database, and a production installation with
+						its own database.
+					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+						You can also configure context-param resources in
+						<code class="literal">SubmitServer2/lnf/web.xml</code>. 
+						In general, I've put things
+						that are the same for all installations into
+						<code class="literal">SubmitServer2/lnf/web.xml</code> while I've put things that
+						vary in <code class="literal">Tomcat/conf/web.xml</code>. 
+						This also keeps things like database
+						passwords from being checked into CVS.
+					</td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+						During installation, the file <code class="literal">SubmitServer2/lnf/web.xml</code>
+						is copied into <code class="literal">SubmitServer2/WebRoot/WEB-INF/web.xml</code>,
+						which is later copied into the Tomcat WebRoot. Hence when setting 
+						properties for all installations, you should modify
+						<code class="literal">SubmitServer2/lnf/web.xml</code> instead of
+						<code class="literal">SubmitServer2/WebRoot/WEB-INF/web.xml</code>.
+					</td></tr></table></div><p>
+						DO NOT set the same context-param in BOTH Tomcat/conf/web.xml and
+						SubmitServer2/WebRoot/WEB-INF/web.xml. This will cause your
+						web-application to fail upon startup.
+					</p><p>
+						web.xml is (obviously) an xml file. A context-param looks like
+						this:
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+								&lt;context-param&gt;<br>
+									    &lt;param-name&gt;authentication.service&lt;/param-name&gt;<br>
+									    &lt;param-value&gt;edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService&lt;/param-value&gt;<br>
+								&lt;/context-param&gt;<br>
+							</code><br>
+						</p></div><p>
+					</p><p>
+						You need to make sure you set the following context-params in
+						Tomcat/conf/web.xml (replace PASSWORD with the database password
+						you chose when you configured MySQL, of course):
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+								&lt;context-param&gt;<br>
+									    &lt;param-name&gt;authentication.service&lt;/param-name&gt;<br>
+									    &lt;param-value&gt;edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService&lt;/param-value&gt;<br>
+								&lt;/context-param&gt; <br>
+								&lt;context-param&gt;<br>
+									    &lt;param-name&gt;database.server.jdbc.url&lt;/param-name&gt;<br>
+									    &lt;param-value&gt; jdbc:mysql://localhost/submitserver&lt;/param-value&gt; <br>
+								&lt;/context-param&gt;<br>
+								&lt;context-param&gt;<br>
+									    &lt;param-name&gt;database.user&lt;/param-name&gt;<br>
+									    &lt;param-value&gt;root&lt;/param-value&gt;<br>
+								&lt;/context-param&gt; <br>
+								&lt;context-param&gt;<br>
+									    &lt;param-name&gt;database.password&lt;/param-name&gt;<br>
+									    &lt;param-value&gt;PASSWORD&lt;/param-value&gt;<br>
+								&lt;/context-param&gt; <br>
+								&lt;context-param&gt;<br>
+									    &lt;param-name&gt;database.driver&lt;/param-name&gt;<br>
+									    &lt;param-value&gt;org.gjt.mm.mysql.Driver&lt;/param-value&gt;<br>
+								&lt;/context-param&gt;<br>
+							</code><br>
+						</p></div><p>
+					</p><p>
+						There are several other context-params than you can set in this
+						file:
+						</p><div class="table"><a name="table_context-params"></a><p class="title"><b>Table 3.2. Valid Marmoset context-params</b></p><div class="table-contents"><table summary="Valid Marmoset context-params" border="1"><colgroup><col align="left"><col align="left"><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th align="left">name</th><th align="left">values</th><th align="left">required?</th><th align="left">default</th><th align="left">description</th></tr></thead><tbody><tr><td align="left">authentication.service</td><td align="left">
+											<code class="literal">edu.umd.cs.submitServer.SERVICE</code>
+											where SERVICE is
+											<code class="literal">MarylandAuthenticationService</code>
+											or
+											<code class="literal">GenericStudentPasswordAuthenticationService</code>
+										</td><td align="left">no</td><td align="left"><code class="literal">MarylandAuthenticationService</code></td><td align="left">
+											The name of the class to be used for
+											authentication purposes. The web app will use
+											the string name given here to dynamically load
+											the class, create an instance of that class,
+											and use the class for authentication. The
+											<code class="literal">GenericStudentPasswordAuthenticationService</code>
+											authentications against the password stored in
+											'password' column of the 'students' table in
+											the database; this is suitable for most
+											environments. You could also implement your
+											own authentication service by providing an
+											implementation of
+											<code class="literal">edu.umd.cs.submitServer.IAuthenticationService</code>
+											and then providing the name of your
+											implementation.
+										</td></tr><tr><td align="left">perform.background.retesting</td><td align="left">true|false</td><td align="left">no</td><td align="left">false</td><td align="left">
+											Should Marmoset keep re-testing submissions in
+											the background in order to get more confidence
+											in the results? Useful for multi-threaded
+											code. 
+											
+										</td></tr><tr><td align="left">semester</td><td align="left">String e.g. Spring 2006</td><td align="left">no</td><td align="left">N/A</td><td align="left">
+											If this parameter is provided, the semester 
+											indicated is the default value of the
+											"semester" field in the "Create course" form.
+											<a href="configuring-marmoset.html" title="Chapter 9. Configuring Marmoset">Chapter 9, <i>Configuring Marmoset</i></a> describes
+											creating a new course.
+										</td></tr><tr><td align="left">DEBUG</td><td align="left">true|false</td><td align="left">no</td><td align="left">false</td><td align="left">
+											Indicate whether more detailed logs should be created during the
+											run of Submit Server. Logs are created in the 
+											Tomcat/logs/marmoset directory and keep track of
+											things like authentication failures and other errors.
+											The logs created when this is set to true are quite extensive,
+											so set this to false unless you want to do some debugging.
+										</td></tr></tbody></table></div></div><p><br class="table-break">
+					</p><p>
+						To prevent Tomcat from listing the contents of directories, find
+						this chunk in web.xml and make sure that "listings" is set to
+						"false", like this:
+						</p><div class="literallayout"><p><br>
+							<code class="literal"><br>
+							&lt;servlet&gt;<br>
+								    &lt;servlet-name&gt;default&lt;/servlet-name&gt;<br>
+								    &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;<br>
+								    &lt;init-param&gt; <br>
+								    	    &lt;param-name&gt;debug&lt;/param-name&gt;<br>
+								    	    &lt;param-value&gt;0&lt;/param-value&gt; <br>
+								    &lt;/init-param&gt;<br>
+								    &lt;init-param&gt;<br>
+								    	    &lt;param-name&gt;listings&lt;/param-name&gt;<br>
+								    	    &lt;param-value&gt;false&lt;/param-value&gt;<br>
+								    &lt;/init-param&gt;<br>
+								    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;<br>
+							&lt;/servlet&gt;<br>
+							</code><br>
+						</p></div><p>
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="tomcat-ssl"></a>5.3. Configuring SSL</h3></div></div></div><p>
+						You probably want to configure Tomcat to use SSL so that you can
+						transmit secure traffic between clients and the server. This is
+						especially important if you are communicating over wireless
+						connections, where sniffing packets is quite easy.
+					</p><p>
+						There are two types of certificates that you can use: a
+						<span class="emphasis"><em>signed</em></span>
+						certificate and a
+						<span class="emphasis"><em>self-signed</em></span>
+						certificate.
+					</p><p>
+						A
+						<span class="emphasis"><em>signed certificate</em></span>
+						is a certificate that has been signed by a recognized Certificate
+						Authority (CA) and will be accepted by most browsers or client
+						programs. These certificates are valid for a certain amount of
+						time, such as one year, and typically cost money.
+					</p><p>
+						A
+						<span class="emphasis"><em>self-signed certificate</em></span>
+						is a certificate that you can produce and sign yourself using Java
+						or another program.
+					</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top">
+						Self-signed certificates are not automatically accepted by client
+						programs. Browsers will typically ask the user whether they want
+						to accept the certificate or not, while some client programs such
+						as Java will simply refuse to accept an unsigned certificate
+						unless that certificate is explicitly imported by the user.
+					</td></tr></table></div><p>
+						The following section assumes that you are using a
+						<span class="emphasis"><em>self-signed certificate</em></span>
+						. The steps for using a
+						<span class="emphasis"><em>signed certificate</em></span>
+						are usually similar, but depend to some extent on which CA you get
+						to sign your certificate. Whatever CA you choose, they should have
+						instructions or documentation on how to set up your certificate.
+					</p><p>
+						</p><div class="itemizedlist"><ul type="disc"><li><p>
+									First, you need to create a self-signed certificate
+									using the "keytool" command included with Java (you
+									will need Java installed somewhere on your system and
+									$JAVA_HOME/bin on your PATH):
+								</p><p>
+									<span><strong class="command">
+										keytool -genkey -alias tomcat -keyalg RSA
+										-validity 365 -keystore marmosetKeystore
+									</strong></span>
+								</p><p>
+									This command will ask you to fill in a bunch of
+									information about your organization. I'm not sure of
+									difference this makes.
+								</p><p>
+									This will produce a "keystore" containing all of your
+									keys (currently just the one key you just created)
+									called "marmosetKeystore" stored under the alias
+									"tomcat".
+								</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top">
+									You will be asked to supply a password for the
+									keystore. Use the password "changeit", which is the
+									default passwork used by most of the examples I've
+									seen. I know that this password works, and I have
+									anecdotal evidence that using a different password, or
+									no password at all, will not work. I believe that
+									Tomcat always supplies the password "changeit" by
+									default when it needs to extract keys from a keystore.
+								</td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+									In this document, I refer to the keystore as
+									"marmosetKeystore" and choose "tomcat" for the alias
+									of the key. However, you can pick any names you'd
+									like.
+								</td></tr></table></div></li><li><p>
+									Now you need to copy your keystore somplace where
+									Tomcat can find it. To do this, first create the
+									directory Tomcat/conf/ssl (Tomcat/conf should already
+									be there), and copy marmosetKeystore into
+									Tomcat/conf/ssl.
+								</p></li><li><p>
+									Now you need to configure Tomcat to use your newly
+									create keystore. Find the XML chunk in
+									Tomcat/conf/server.xml that looks like this:
+								</p><div class="literallayout"><p><br>
+									<code class="literal"><br>
+									&lt;Connector port="8443" maxHttpHeaderSize="8192"<br>
+									maxThreads="150" minSpareThreads="25"<br>
+									maxSpareThreads="75" enableLookups="false"<br>
+									disableUploadTimeout="true" acceptCount="100"<br>
+									scheme="https" secure="true" clientAuth="false"<br>
+									sslProtocol="TLS" /&gt;<br>
+									</code><br>
+								</p></div><p>
+									(You may need to uncomment this block of XML).
+									Add the following line (replace TOMCAT_ROOT with
+									the full path to your Tomcat installation):
+								</p><p>
+									<code class="literal">keystoreFile="TOMCAT_ROOT/tomcat/conf/ssl/marmosetKeystore"</code>
+								</p><p>
+									This should yield an XML chunk that looks something
+									like this:
+								</p><div class="literallayout"><p><br>
+									<code class="literal"><br>
+									&lt;Connector port="8443" maxHttpHeaderSize="8192"<br>
+									maxThreads="150" minSpareThreads="25"<br>
+									maxSpareThreads="75" enableLookups="false"<br>
+									disableUploadTimeout="true" acceptCount="100"<br>
+									scheme="https" secure="true"<br>
+									keystoreFile="/export/homes/submit/tomcat/conf/ssl/marmosetKeystore"<br>
+									clientAuth="false" sslProtocol="TLS" /&gt;<br>
+									</code><br>
+								</p></div></li><li><p>
+									A self-signed certificate will cause most browsers to
+									prompt the user as to whether or not they want to
+									accept a given certificate. However, any client
+									programs that run under Java, such as the BuildServer,
+									will fail when trying to connect over SSL to an entity
+									identified by a self-signed keystore.
+								</p><p>
+									To allow a program running under Java to connect an
+									entity identified by a self-signed keystore, you need
+									to export a certificate from the keystore and then
+									import the certificate into the JVM.
+								</p><p>
+									To export a certificate from the marmosetKeystore:
+								</p><p>
+									<span><strong class="command">
+										keytool -export -keystore marmosetKeystore -alias
+										tomcat -file marmoset.cer
+									</strong></span>
+								</p><p>
+									This command will produce marmoset.cer, a certificate
+									that you can import into your JVM so that your Java
+									will trust your self-signed keystore.
+								</p><p>
+									To import this certificate into a JVM (assuming that
+									shell variable JAVA_HOME points to your Java
+									installation):
+									</p><p>
+										<span><strong class="command">
+											keytool -import -alias tomcat -keystore
+											$JAVA_HOME/jre/lib/security/cacerts -file
+											marmoset.cer
+										</strong></span>
+									</p><p>
+								</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+									The file $JAVA_HOME/jre/lib/security/cacerts is often
+									not writable on unix systems, so you will first need
+									to run:
+									<p>
+										<span><strong class="command">
+											chmod u+w $JAVA_HOME/jre/lib/security/cacerts
+										</strong></span>
+									</p>
+									before importing the certificate into your JVM.
+								</td></tr></table></div></li></ul></div><p>
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="tomcat-unix"></a>5.4. 
+						Starting and stopping Tomcat, and other Tomcat-related
+						Configuration Notes
+					</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li>
+							To startup Tomcat:
+							<div class="literallayout"><p><br>
+								<code class="literal"><br>
+								cd Tomcat/bin <br>
+								./startup.sh<br>
+								</code><br>
+							</p></div>
+							To shutdown Tomcat:
+							<div class="literallayout"><p><br>
+								<code class="literal"><br>
+								cd Tomcat/bin ./shutdown.sh<br>
+								</code><br>
+							</p></div></li><li><p>
+								If Tomcat does not start-up properly,
+								Tomcat/logs/catalina.out should tell you why.
+							</p></li><li><p>
+								The shutdown script doesn't always work; sometimes I have
+								to find and kill the Java process.
+							</p></li><li><p>
+								Sometimes you'll do everything right to startup Tomcat,
+								but when you try to access a page, you will get a 404
+								(page not found/not available). If this happens, shutting
+								down tomcat and then restarting it usually fixes the
+								problem.
+							</p><p>
+								However, sometimes it's necessary to stop the webapp
+								container and delete the exploded web-archive, like this:
+								</p><div class="literallayout"><p><br>
+									<code class="literal"><br>
+										cd Tomcat/bin <br>
+										./shutdown.sh <br>
+										/bin/rm -rf ../webapps/submitServer <br>
+										./startup.sh<br>
+									</code><br>
+								</p></div><p>
+								where submitServer is the web application we install
+								in <a href="submitserver_installation_instructions.html#compile" title="6. Compiling and Installing the Submit Server">Section 6, &#8220;Compiling and Installing the Submit Server&#8221;</a>.
+							</p></li><li><p>
+							It is a good idea to install and run tomcat with a normal user
+							account rather than running it as the root user of the unix
+							system.
+							</p></li><li><p>
+								We set port-forwarding from port 80 to 8080 and from 443
+								to 8443 so people can access the server using only the
+								protocol (i.e. https) rather than the protocol and the
+								port number. For example, with forwarding from 443 to 8443
+								enabled, the server can be accessed like this:
+							</p><p>https://hostname.cs.umd.edu/</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="clean-up-tomcat"></a>5.5. Clean up the Tomcat/webapps directory</h3></div></div></div><p>
+						You can delete all the examples in Tomcat/webapps except for the
+						Tomcat/webapps/balancer. These examples show how to write servlets 
+						and jsps and are neither a secure nor professional thing to have 
+						sitting around.
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="troubleshooting"></a>5.6. Troubleshooting Tomcat</h3></div></div></div><p>
+						This is a list of things that have gone wrong with Tomcat for us
+						that you might run into. Note that Tomcat is a large, evolving
+						piece of software with lots of good documentation on the web. If
+						something doesn't work, try googling whatever error message is
+						being generated.
+					</p><div class="itemizedlist"><ul type="disc"><li><p>
+								The first place to look is in Tomcat/logs/catalina.out.
+								This file will often contain useful errors that will tell
+								you what the problem is.
+							</p></li><li><p>
+								Sometimes you need to shutdown and restart Tomcat. I don't
+								know why, but sometimes that works.
+							</p></li><li><p>
+								In general, Tomcat does a good job of hot-deploying
+								whatever you copy into the Tomcat/webapps directory, and
+								will usually be able to hot-update a webapp that's already
+								running when you copy a new warfile into Tomcat/webapps.
+								But, sometimes Tomcat will not be able to hot-deploy or
+								hot-update, and you'll need to do the following:
+							</p><p>
+								Shutdown Tomcat, delete the Tomcat/webapps/submitServer
+								directory, and then restart (sometimes stopping and
+								re-starting again).
+							</p></li><li><p>
+								You can only define context parameters (context-param) in
+								ONE place at a time, either Tomcat/conf/web.xml or in
+								WEB-INF/web.xml of your warfile. If you put the same
+								parameter in both places, either the webapp will fail to
+								load or Tomcat itself will fail to load.
+							</p><p>
+								This is very annoying, it should be possible to over-ride
+								parameters in web.xml. I've written a hacked-up mechanism
+								for doing that that involves defining properties with
+								__override on the end of them and having a special
+								mechanism for doing the lookups in the web.xml file in
+								servlets. Of course this doesn't easily translate to jsps,
+								and in general this is pretty annoying. Such a far cry
+								from POJOs, or anything resembling useful programming...
+							</p></li></ul></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="compile"></a>6. Compiling and Installing the Submit Server</h2></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+						Return to the directory where you unpacked SubmitServer2 and 
+						SubmitServerModelClasses in <a href="submitserver_installation_instructions.html#unpackdistribution" title="2. Unpack Submit Server Components">Section 2, &#8220;Unpack Submit Server Components&#8221;</a>
+						</p></li><li><p>
+						Create the ANT properties file <code class="literal">SubmitServer2/local.properties</code>
+						and point the <code class="literal">production.install.location</code>
+						property to your tomcat installation.
+						For example:
+						</p><p>
+							<code class="literal">
+							production.install.location=username@foo.cs.umd.edu:/path/to/tomcat
+							</code>
+						</p><p>
+							or
+						</p><p>
+							<code class="literal">
+							production.install.location=/path/to/tomcat/on/local/machine
+							</code>
+						</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+							local.properties is the correct place to put configuration
+							parameters specific to your institution. DO NOT update
+							build.properties directly if you are checking our code out of
+							CVS because build.properties is under CVS control.
+						</td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+							local.properties and build.properties are both read by the
+							build.xml file used by ant. In ant, a property is only set the
+							FIRST time it is read. Any other attempts to set the value of
+							that property are ignored. Thus, because local.properties is
+							read before build.properties, any property set in
+							local.properties will be used instead of a property with the
+							same name in build.properties.
+						</td></tr></table></div></li><li>
+						cd into SubmitServer2 and run this command:
+						<p>
+							<code class="literal">ant production.install</code>
+						</p><p>
+							This will find and compile the SubmitServerModelClasses into
+							SubmitServer2, and then produce a SubmitServer2/dist directory
+							with submitServer.war and sharedSubmitServer.jar, and copy
+							those to the appropriate places in the tomcat installation.
+						</p><p>
+							The production.install ant task uses "scp" to copy the
+							submitServer.war and sharedSubmitServer.jar files to the
+							appropriate location. It assumes that "scp" is on your path
+							and that you're running Linux. You can always copy the two
+							files produced into the appropriate places: submitServer.war
+							goes into Tomcat/webapps and sharedSubmitServer.jar goes into
+							Tomcat/shared/lib.
+						</p><p>
+							You do not need to compile the software with any particular
+							user account or with any special privileges, so long as the
+							generated files can be copied into the Tomcat installation. I
+							always compile Marmoset on my desktop machine with my regular
+							user account and install it into tomcat using a special
+							'submit' account reserved for running the SubmitServer.
+						</p><p>
+							sharedSubmitServer.jar contains some shared code for
+							monitoring the connections with the buildServers. If you don't
+							install it, the only thing that won't work is the
+							BuildServerStatus link available to instructors.
+						</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+							Troubleshooting: You can also build the SubmitServer2 project
+							in Eclipse. The project is set up to work in Eclipse with
+							<a href="http://www.myeclipseide.com" target="_top">MyEclipse</a>
+							plugin. If you do not have this plugin, ensure that the
+							j2ee.jar is properly linked, by going to Project Properties --
+							Java Build Path -- Libraries. If j2ee.jar is not in the list,
+							add it by clicking "Add Jars..." and selecting it from
+							SubmitServer2/lib.
+							<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top">
+								You need to perform this step if you open the project in
+								Eclipse, even if you do not plan to run the ant
+								instruction through Eclipse, because Eclipse automatically
+								builds the files when you open it. When ant sees that the
+								class files are already created, it does not rebuild them.
+							</td></tr></table></div></td></tr></table></div></li><li>
+						To test the submit server, first ensure the tomcat server is
+						running:
+						<p>
+							<code class="literal">Tomcat/bin/startup.sh</code>
+						</p>
+
+						Then go to https://localhost:8443 and log in using the super user
+						account you created in
+						<a href="submitserver_installation_instructions.html#superuser" title="4. Creating a SuperUser account">Section 4, &#8220;Creating a SuperUser account&#8221;</a>
+						.
+					</li></ol></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="submitserver_installation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="submitserver_installation.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="auxiliary-tools.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Part II. SubmitServer Installation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. Installing and configuring phpMyAdmin</td></tr></table></div></body></html>

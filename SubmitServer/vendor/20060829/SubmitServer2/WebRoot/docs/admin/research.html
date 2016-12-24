@@ -1,0 +1,65 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>research.html</title>
+  </head>
+  
+  <body>
+<h3> Notes on the research infrastructure </h3>
+
+There are currently 2 database/tomcat installation pairs running on marmoset2.
+
+<ul>
+	<li> The "demo" server, which lets people from other universities create account and
+		sample out system.
+	<li> tomcat is located in $HOME/tomcat-demo and is configured to run on
+		port 8443, and it's configured to look for mysql running on	port 3306 (the default)
+	<li> The mysql database is located in /export/projects/marmoset/demo.submitServerDatabase
+	and can be started and stopped with these commands:
+	<p>
+	$HOME/dbScripts/start-innodb demo.submitServerDatabase
+	<p>
+	$HOME/dbScripts/stop-innodb demo.submitServerDatabase
+
+	<li> The research server, which serves up in the same database complete results from 
+		spring 2005 and some results from fall 2004.  Note that it's called the "spring2005 database"
+		but that's misleading because it contains all results from spring2005 plus some
+		results from fall2004.
+	<li> The research data has code coverage results for the BST project from both
+	spring and fall (pk 6 is spring, pk 13 is fall)
+	<li> The research data also has results with no coverage information for the other projects
+	from spring 2005.
+	<li> The resarch data has code coverage information for the webSpider for fall 2004 (pk 12)
+	<li> For the research data, tomcat is located in $HOME/tomcat-spring2005 and is 
+	configured to run on port 7443, and it's configured to look for mysql running on port 7306
+	<li>The mysql database is located in /export/projects/marmoset/spring2005.submitServerDatabase
+	and can be started and stopped with these commands:
+	<p>
+	$HOME/dbScripts/start-innodb spring2005.submitServerDatabase 7306
+	<p>
+	$HOME/dbScripts/stop-innodb spring2005.submitServerDatabase
+	<p>
+	<li> I had to delete the fall database because it was too big and most of the useful
+	information	is replicated in the new spring database.  The text files with the 
+	submissions and test outcomes from the old fall database are located on marmoset2
+	in ~jspacco/paste2005/data
+	<p><li> One other thing to keep in mind about the research data is that for the projects
+	that Dave is looking at, all of the files full of links are linked to a testRunPK, so that
+	when new FindBugs results are uploaded (as happened with the BST project where we ran it
+	with and without an annotation on a certain method), it is still possible to access
+	the old test runs (See the following bullet about loading new findbugs outcomes)
+	
+	<li> in /fs/pugh/p/cvs/jspacco/SubmitUtilities are the three useful utility classes:<p>
+	DatabaseUtilities (connects to the database)<p>
+	CheckSpecificWarnings<p>
+	LoadNewFindBugsOutcomes<p> (you can ignore everything else in this package)<p>
+	The LoadNewFindBugsOutcomes virtually runs a new test by creating a new test run
+	and copy the results from the previous test run over but replacing the findbugs
+	warnings with the new findbugs warnings it has been given.  Doing this too often
+	will explode the size of the database.
+	
+</ul>
+
+  </body>
+</html>

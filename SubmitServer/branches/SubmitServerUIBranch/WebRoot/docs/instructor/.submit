@@ -1,0 +1,17 @@
+#
+# The projectNumber must match exactly the projectNumber you specified when
+# creating/updating the project.  Please make sure to use the projectNumber
+# 
+projectNumber=p3
+#
+# The submitURL is below and will be the same all semester for all courses
+#
+submitURL=https://submit.cs.umd.edu:8443/eclipse/SubmitProjectViaEclipse
+#
+# The semester is below and will be the same all semester for all courses
+#
+semester=Fall 2005
+#
+# The courseName must match your courseName exactly
+#
+courseName=CMSC999

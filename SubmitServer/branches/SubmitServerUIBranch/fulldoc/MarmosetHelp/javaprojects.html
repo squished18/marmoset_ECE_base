@@ -1,0 +1,127 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 12. Creating Java Projects</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="submitserver_usersguide.html" title="Part IV. SubmitServer Users Guide"><link rel="prev" href="project_upload.html" title="Chapter 11. Preparing and Uploading Project Files"><link rel="next" href="cprojects.html" title="Chapter 13. Creating C Projects"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 12. Creating Java Projects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="project_upload.html">Prev</a> </td><th width="60%" align="center">Part IV. SubmitServer Users Guide</th><td width="20%" align="right"> <a accesskey="n" href="cprojects.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="javaprojects"></a>Chapter 12. Creating Java Projects</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="javaprojects.html#jrefsolution">1. Create the project and canonical solution</a></span></dt><dt><span class="sect1"><a href="javaprojects.html#junittests">2. Create JUnit tests</a></span></dt><dt><span class="sect1"><a href="javaprojects.html#jtestproperties">3. Create the test.properties file</a></span></dt><dt><span class="sect1"><a href="javaprojects.html#jsecuritypolicy">4. Create the security.policy file (optional)</a></span></dt><dt><span class="sect1"><a href="javaprojects.html#jpackaging">5. 
+					Package the test setup jarfile and canonical solution zipfile
+				</a></span></dt><dt><span class="sect1"><a href="javaprojects.html#jskeleton">6. 
+					Package the Starter files (Skeleton)
+				</a></span></dt></dl></div><p>
+				This chapter describes how to create a Java project that will work with
+				the BuildServer. Also see: 
+				<a href="http://www.natidea.com/projects/marmoset/" target="_top">Marmoset Movies: Setting up a project with Marmoset</a>.
+			</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jrefsolution"></a>1. Create the project and canonical solution</h2></div></div></div><p>
+					Start by creating the project and canonical solution. You can use any
+					Java development environment: for example,
+					<a href="http://www.eclipse.org/" target="_top">Eclipse</a>
+					.
+				</p><p>
+					A good way to get started is to use the JavaProjectTemplate included
+					with the Marmoset distribution. This is also available in 
+					<a href="samples/examples.jar" target="_top">examples.jar</a>.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="junittests"></a>2. Create JUnit tests</h2></div></div></div><p>
+					As you are developing the canonical solution, you can start writing
+					<a href="http://junit.org/" target="_top">JUnit</a>
+					tests for the project. Marmoset supports three kinds of tests:
+					<span class="emphasis"><em>public</em></span>, <span class="emphasis"><em>release</em></span>, and
+					<span class="emphasis"><em>secret</em></span>. Each kind of test is embodied by a class which extends
+					<code class="literal">junit.framework.TestCase</code>. 
+					A test class may contain any number of test methods: each such
+					method is considered a single test case.
+				</p><p>
+					Note that test classes are optional: you may provide or omit public,
+					release, and secret tests in any combination.
+				</p><p>Your canonical solution should pass all of the test cases.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jtestproperties"></a>3. Create the test.properties file</h2></div></div></div><p>
+					You should define whichever combination of the "test.class.public",
+					"test.class.release", "test.class.secret", "test.class.student"
+					properties are needed to define which classes represent your JUnit
+					test cases. (See <a href="project_upload.html#testproperties" title="3. Test Properties">Section 3, &#8220;Test Properties&#8221;</a>).
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jsecuritypolicy"></a>4. Create the security.policy file (optional)</h2></div></div></div><p>
+					The default security.policy file in the JavaProjectTemplate should be
+					adequate for most Java projects. Note that Clover, the code coverage
+					tool used by the BuildServer, needs permission to create and write a
+					special file in /tmp and permission to create shutdownHooks. Both of
+					these permissions are granted in the sample file. You may want to
+					selectively grant privileges to student code for certain kinds of
+					tests: for example, writing files.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jpackaging"></a>5. 
+					Package the test setup jarfile and canonical solution zipfile
+				</h2></div></div></div><p>
+					The Java Project Template provides an ANT 
+					<a href="samples/build.xml" target="_top">build.xml</a> file that can be used
+					to build the test-setup and canonical archives. It does this by selecting the
+					appropriate files from the project and archiving them in a jar file. To use
+					this file, be sure to change the properties at the top of the page to point
+					to the right files in your project.
+				</p><p>
+					You can also create the jar files manually. Here is
+					a description of what the test-setup jar file should
+					contain:
+				</p><div class="orderedlist"><ol type="1"><li><p>
+							Any classes required to build and execute a student
+							submission. These should placed in the test setup jarfile
+							according to the usual Java conventions for packages. For
+							example, if the class
+							<code class="literal">edu.umd.cs.Foobar</code>
+							is needed by submissions, the test setup jarfile should
+							contain a file
+							<code class="filename">edu/umd/cs/Foobar.class</code>.
+							
+							</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top">
+								Since we are uploading class file, make sure the version
+								of the class files is compatible with the version of
+								java running on the Build Server. E.g. If you compile your
+								test setup with Java 1.6 but the Build Server is running 
+								Java 1.5, the Build Server will fail. Check with your
+								Marmoset Administrator for information on the Build Server 
+								version.
+							</td></tr></table></div><p>
+						</p></li><li><p>
+							JUnit TestCase classes for the public, release, secret, and/or
+							student tests. These should also follow the usual Java package
+							conventions.
+						</p></li><li><p>
+							The test.properties file, and optionally a security.policy
+							file.
+						</p></li><li><p>
+							Any data files needed by the student submissions or test cases
+							at runtime.
+						</p></li><li><p>
+							You should also include the source files for your test cases. This is
+							not necessary but is recommended because the test-setup.jar file is the 
+							only record in the Submit Server database of your tests. This is useful 
+							if you or another instructor wish to review this information in a 
+							future semester.							
+						</p></li></ol></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>
+						The test setup jarfile should
+						<span class="emphasis"><em>never</em></span>
+						contain any classes from the canonical solution (i.e., any classes
+						that the student is supposed to write), because they will take
+						precedence over the student classes at runtime. Leaving them in
+						basically means that the test results will be for the canonical
+						solution, and not the student's work.
+					</p></td></tr></table></div><p>
+					The canonical solution zipfile represents what students are expected
+					to implement, and should pass all of the project tests. The zipfile
+					should contain the source files corresponding to classes that are
+					meant to be implemented by the student. The source files do not need
+					to be in any particular directory structure, although using normal
+					Java conventions is recommended. If the an Eclipse ".project" file is
+					present, that is used as the base directory for the project, and no
+					files outside that directory will be extracted. If an Eclipse
+					".classpath" file is present, it will be used to find source
+					directories in the project, and no source files outside those
+					directories will be compiled.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jskeleton"></a>6. 
+					Package the Starter files (Skeleton)
+				</h2></div></div></div><p>
+					You may optionally provide some starter files for students to use at the
+					start of their projects. These files include the methods in the specification
+					emptied of their implementation. Typically these empty methods simply throw
+					a <code class="literal">java.lang.UnsupportedOperationException</code>. The advantage of
+					this is that the skeleton will compile and fail all the tests. Also Submit Server
+					recognizes this exception and accurately indicates that a test fails because  
+					the associated functionality is not implemented.
+				</p><p>
+					The skeleton files should be packaged into a jar file that can be uploaded into
+					the submit server. You may also include a <code class="literal">.submit</code> file which
+					is used by the Eclipse Plugin and the Command Line Submission Utility to automatically
+					upload student submissions into the submit server. This file can be found in the
+					Project Utilities page on the Submit Server.
+				</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="project_upload.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="submitserver_usersguide.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="cprojects.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 11. Preparing and Uploading Project Files </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 13. Creating C Projects</td></tr></table></div></body></html>

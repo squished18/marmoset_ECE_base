@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title> TODO </title>
+</head>
+<body>
+
+TODO list for Fall 2005 semester:
+<ul>
+	<li> Refactor the authentication process so that other universities can slap in their own
+	authentication code.  Probably approach will be to create an interface called something
+	like IAuthenticationService that has a couple of methods, and then instantiate the
+	appropriate 
+	
+	
+	
+	<li> Account management:
+		<ul>
+		<li> TAs should not be able to download canonical and instructor submissions.
+		<li> Another permission level between TA and instructor for courses like 330 where
+		TAs write the projects?  Not highly important since making them full instructors
+		works fine for now.
+		<li> Store section numbers for student registrations
+		<li> Add a field for students who have dropped the course
+		<li> Instructors to fully edit student registrations
+		</ul>
+		
+	<li> BuildServer:
+		<ul>
+		<li> Future work:  process groups, chroot, some type of
+		sandbox for the buildserver?
+		<p>
+		Looks like running the actual student code with an unprivileged account
+		will take care of a bunch of the problems
+		<p> Complain to Joe that I need this account created soon
+		<li> Useful to measure how long building is taking<p>
+		Done
+		<li>
+		<li> Possible to starve CMSC433 with lots of CMSC132 submissions?  <p>
+		NOT likely, but what about re-tests?
+		<p>
+		Also fix the order of re-tests so that it starts with the newest first
+		<li> BuildServer should also log debug messages to its own private logfiles<p>
+	I know now quite a lot about logging, this is finally working.  Commons-logging, by the way
+	is useless if you're using log4j everyplace.  The latest release of log4j supports
+	trace() messages, but commons-logging doesn't know that, so it maps trace() calls to
+	debug().  I solved by expunging all traces of commons-logging from my code.  I can
+	probably now get rid of them completely.  Commons-logging is useful for
+	applications where you want to allow people to swap in their own loggers; I don't
+	even want other people to look at my code right now, so this isn't important for me.
+		<li> Deprecate the use of the ClassAccount as the identifier
+	in the .submitUser file.  Just use the DirectoryID and let
+	ClassAcct just be an extra field that's not necessary.  Find
+	some other way to disambiguate students registered for multiple
+	courses.  NOTE: These students are definitely disambiguated because there are
+	no lookups at all in the code of only the cvs_account field-- everything also looks
+	uses the the courseName of coursePK to make sure we get the correct registration.
+		<li> Make the FindBugs detectors used configurable in the test.properties
+		<li> Ruby and OCaml are leaving around extra processes
+		<li> Fix timeout for Java so that we kill the whole process instead of calling
+		Thread.stop()
+		<li> BuildServer should check the test.properties file for
+	the test.performCodeCoverage property---DONE
+		<li> Better way to administer the buildservers:
+			<ul>
+			<li> Query who's up and running
+			<li> Manage multiple servers
+			<li> Make changes to the accoung running them (adding/updating software 
+				accross multiple servers)
+			<li> 
+			</ul>
+
+		</ul>
+	
+	<li> Broken submissionPKs:
+		<ul>
+		<li> 911
+		<li> 995
+		<li> 2003
+		<li> 2038
+		<li> 2384
+		<li> 45 Jess's submission that caused ArrayIndexOOB
+		</ul>
+		
+	
+	<li> Set up a bug traq or some kind of wiki for general submitserver or CPM problems
+		<ul>
+		<li> Where to put such a thing?
+		<li> How to inform instructors of issues?
+		</ul>
+	
+	<li> Roman's issue with not having industrial programming experience as an option for
+		the background survey.
+		
+	
+	
+	<li> NOTE: Fixed by Aedan who installed a working version.
+	<br>fix the damn CPM on solaris
+		<ul>
+		<li> What the hell, I can't replicate the problem with my glue account!
+		</ul>
+
+	<li> pre-fabbed buildserver:
+	<ul>
+		<li> emacs_config/.emacs file
+		<li> set BUILDSERVER_ROOT in .bashrc
+		<li> symlink for testSubmission.sh testHere.sh
+		dumpTestOutcomes.sh (or add directory to path in
+		.bashrc)
+		<li> put jad in bin
+	</ul>
+
+
+	<li> Move the correct certificate instructions into the /docs/admin directory.
+
+	<li> Set up production server, populate with the classes
+	<ul>
+		<li> Fix SSL certificate woes---DONE
+		<li> Create separate classes for sections of CMSC102---DONE
+	</ul>
+
+	<li> Production BuildServers for the submit account
+	<ul>
+		<li> match gcc-3.4.4 on marmoset3/marmoset4 for
+		CMCSC212 buildServers---DONE
+
+		<li> Why does FindBugs freak out all the time?  Is it
+		related to having clover in the lib directory of ant?
+		CLOVER is causing this--I need a way to spec out Clover.
+		<p>
+		Definitely was related to clover-- we were running FB over
+		the bytecode <b>after</b> Clover re-wrote the source.  The build
+		process now compiles each project 2 times.
+	</ul>
+
+	
+
+	<li> Test plugin with Eclipse 3.0
+
+	<li> Give Bill access to all of the submit accounts<p>
+	Done.
+
+	<li> Command-line submit
+	<ul>
+		<li> file available to faculty---DONE
+		<li> make sure it's compiled for Java 1.4---DONE
+		<li> allow instructors to roll their own that takes
+		the course name as a command-line parameter
+	</ul>
+
+	<li> utility code that loads classes from a byte array, not
+	with the readObject() method so that I can use tomcat's
+	connection pooling features
+
+	<li> start tracking maximum number of connections being used
+
+	<li> deprecate/Get rid of "failure_in_submission" field in the
+	database and ModelClasses since it's useless
+
+	<li> Get Joe Ridge's DirectoryID/UID so I can add him
+
+	<li> Handle time parameter and skew for eclipse launch
+	events---DONE, but needs testing---TESTED
+
+	<li> isCardinalTestType() is necessary in ReportTestOutcomes
+	servlet since a getTestType() already existed
+
+	<li> /view/instructor/submission.jsp doesn't display secret
+	tests properly
+
+	<li> Probably change the EclipseLaunchEvent model class---DONE,
+	but needs testing---TESTED
+	
+	<li> Default semester at buildserver and submitserver
+
+	<li> Be tolerant of "Fall 2005" and "Fall2005"
+
+	<li> Cannot remove permissions from superuser account---DONE,
+	effectively by blocking permission removal for instructor accounts
+
+	<li> Either zip or disallow all non-zipped submissions.
+
+	<li> Preserving the file types for submissions (is this even
+	really possible?)
+
+	<li> Sanity checks for project jarfiles: (this would be really sweet)
+	<ul>
+		<li> build.language must be supported
+		<li> add a buld_language field to the projectJarfile
+		model class
+		<li> make sure that the classes exist and match what's
+		listed in test.properties
+		<li> maybe stick this information into the manifest?
+		<li> 
+	</ul>
+
+	<li> instructors should be able to view "student" tests and
+	students should be able to see their own test coverage
+	<p>
+	This works
+
+	<li> Extraction process is blowing up the StudentWrittenTests
+	file; this should not be the case---DONE
+
+	<li> Instructor plugin that lets them run essentially the BS
+	on their code?  Probably easier to just perform the checking
+	on the server.
+
+	<li> Servlet to register instructors for a course that's only
+	available to superUsers (i.e. me)
+
+	<li> BuildServer should respond to multicast requests with
+	what classes and semester it's building
+
+	<li> Would be nice to have a way to get the 
+
+	<li> WTF is up with the /submitServer context?  I hate tomcat.
+	Tell the instructors not to use it---Fixed
+
+	<li> ldap is periodically refusing my connections---catch this
+	specific exception and tell students to try again
+
+	<li> Make sure clover still works correctly---DONE
+
+	<li> tomcat-5.5.9-- make it so that I can just unzip it and go
+
+	<li> BuildServers should identify themselves to the
+	SubmitServer with their full name when sending log messages
+	to differentiate multiple buildServers on the same physical
+	machine---DONE
+
+	<li> Use log4j for ServletAppender to log to a file especially
+	for the BuildServer---DONE
+
+	<li> Clean up logging in RequestSubmission to use log4j to a
+	general log file for the SubmitServer---DONE
+
+	<li> list the DirectoryID and CVS account when registering
+	students-- DONE
+
+	<li> Explain LDAP lookups to the faculty in the FAQ
+
+	<li> better message for "add" TA permissions to yourself
+
+	<li> Set up mailing lists for submitserver issues-- for
+	reboots, etc and for maintenance
+
+	<li> Disallow changing of canonical-account---DONE
+
+
+	<li> FUCKING CLASSLOADING ISSUES!  Can't find stuff in the
+	WEB-INF/lib even though I could with tomcat 5.0.30
+
+	<li> Piss and moan about the inability to use
+	container-managed datasources that read serialized objects
+	that need to be loaded with a different classloader-- the JDBC
+	driver is in common/lib and finds a serialized object whose
+	jarfile is in your webapp in WEB-INF/lib and isn't already
+	loaded.  Tomcat has to use the classloader for common/lib and
+	can't use the classloaders for the different web apps.  This
+	is not obvious at first. See <a
+	href="http://issues.apache.org/bugzilla/show_bug.cgi?id=32428">
+	http://issues.apache.org/bugzilla/show_bug.cgi?id=32428</a>
+	for more details.
+
+	<li> Stick the code coverage information into the "details"
+	field and avoid the public-coverage stuff---DONE
+
+	<li> Clean up the BuildServer more
+		<ul>
+		<li> Make sure that lacking a code coverage
+		result--probably because we've got something
+		doesn't break anything
+		<li> In the model classes, TestOutcome should have a
+		method "isCodeCoverageResult()" that currently tells
+		us whether we have anything in the details field but
+		in the future could have a new field in the DB.
+		<li> Check all the calls to code coverage-related
+		methods, make sure they get cleaned up
+		<li> delete unused coverage-realted code
+		<li> Look into failing early if we lack the
+		permissions to read/write /tmp/*
+		<li> Check if we can restrict specific filename
+		patterns in /tmp
+		<li> 
+		</ul>
+
+	<li> Someplace document that clover.lib and clover.license
+	must be in the version of ant that's visible to the
+	BuildServer--This is annoying but should clearly be documented
+	somewhere
+
+	<li> In general, I need to clean up all my docs--javadoc
+	especially for things related to coverage that were changed
+
+	<li> Why are we not getting the actual coverage?---DONE
+
+	<li> Define a class for student tests---DONE
+
+	<li> Put the student tests in the test.properties file of the
+	BuildServer, run them and then send them back---DONE, needs a
+	little more testing to see if it handles students who write no
+	tests at all
+
+	<li> Tuning FindBugs with the test.properties file; doesn't
+	seem to be possible
+
+	<li> Don't show code coverage to students---DONE
+
+	<li> StringFileReader that is iterable
+
+	<li> Should I be allowed to throw DocumentException when no
+	part of the code should know about XML?  Creates an extra
+	dependence on yet another library for clients of the
+	ModelClasses.  The DocumentException should probably be
+	re-packaged as an IOException---DONE
+
+</ul>
+
+Other TODO stuff from earlier:
+<ul>
+	<li> SubmitServer should only accept buildServer queries from *.cs.umd.edu 
+		and *.umiacs.umd.edu hosts (if possible).
+	<li> increase column sizes: exception_class_name, course_name
+	<li> foreign keys with cascade deletes for:
+	 submissions =&gt; test_runs, test_outcomes and submission_archives
+	<li> startup scripts for the database need to be re-worked, they are starting to creak!
+	<li> high time for a separate table to represent static analysis results
+		<br> I can send test_outcomes from the BuildServer back to the submitServer but
+		then put the static analysis results into a separate table
+	<li> get rid of the 40+ GB old research database!
+	<li> talk to staff about getting 2 of the surviving boo nodes made a permanent part of
+		the marmoset infrastructure <font color=red> done </font>
+	<p>
+	<p>
+	<p>
+
+	<li> Demographic data
+	<li> Consent forms
+	<li> move release data into research DB
+	<li> clean up research DB
+	<li> foreign key constraints (with cascading deletes) in research DB
+	<li> for the buildserver, 'ant install' is picking the jre rather than java, which
+		is not good because then javac isn't visible.
+	<li> BuildServer shouldn't necessarily trust .classpath (will help web submissions work)
+		<font color=red> done </font>
+	<li> section should be stored with student_registration table
+	<li> Not possible to give an extension to someone who has not submitted anything
+	<li> Interface for adding TA privileges
+	<li> Clean up model classes (remove legacy code from Fall)
+		<br> This is happening slowly and incrementally
+	<li> finish refactoring so that the only collection model class that is a separate entity
+		is TestOutcomeCollection.  The others should all be Lists.
+	<li> dbScripts/install doesn't properly backup existing submitServerDatabase directory (though it works otherwise)		
+	<li> Special character for adding test accounts
+		<ul>
+		<li> Canonical account naming conventions would also be useful
+		</ul>
+	<li> Config parameter for LDAP authentication with SSL
+	<li> Discuss database backup procedures with Umiacs
+		<ul>
+		<li> Dump and scp elsewhere for tape backups
+		<li> Keep a week of snapshots
+		</ul>
+
+	<li> Init scripts
+	<li> Better scripts for installing httpd with openssl and php/phpMyAdmin
+
+</ul>
+
+<font color=blue> all of this is done </font>
+<ul>		
+	<li>  BuildServer to communicate exceptions to the submitserver for logging
+	<li>  SubmitMonitor (check that server is running every 5 mins) is ready, needs a crontab entry
+	<li>  BuildServer should be permanent on marmoset2.umiacs.umd.edu
+	<li>  checkDaemon.sh crontab on boo3
+	<li>  Start database backups on new machines
+	<li>  formatting, use filter for error.jsp  Logging from JSPs to get request and request string
+	<li>  can inactivate projects, but can't activate inactive ones  Toggle visibility for projects so instructors can deactivate a project
+	<li>  Instructors should be able to make web submissions to invisible projects
+	<li>  Check failed test run links for test setups
+	<li>  Shell scripts for setting up a new database from a backup file
+	<li> BuildServer should send the semester, and if the semester hasn't been sent, then
+	it should the semester set in web.xml.  Allows snapshots and normal submissions to co-exist better.
+	Snapshots and normal submissions should be completely different to the submitServer.
+	I should add another field to the DB and to the model classes and make the buildServer
+	aware of what type of submission (snapshot or normal) it's compiling.
+	<br>
+	Also better terminology for all of this is needed!
+	<li>  Edit project link
+		<ul>
+		<li> A general mechanism for filling out a form from a bean would be supremely useful
+		</ul>
+	<li> Late penalties and extensions
+	
+		
+</ul>
+
+Really long-term list:
+<ul>
+	<li> Integrate HackyStat with CourseProjectManager
+	<li> Use Hibernate to implement the model classes
+</ul>
+</body>
+</html>

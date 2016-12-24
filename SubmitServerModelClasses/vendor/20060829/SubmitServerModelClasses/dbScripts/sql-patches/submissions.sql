@@ -1,0 +1,1 @@
+ALTER TABLE `submissions` ADD `previous_submission_pk` INT( 20 ) UNSIGNED AFTER `previous_md5sum_sourcefiles` ;

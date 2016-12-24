@@ -1,0 +1,10 @@
+#  The .submit file is used by the "Eclipse Plugin" and the "Command Line
+#  Submission Utility". It contains information that these utilities use
+#  to decide where to submit the project.
+#
+#  To generate the contents of this file, click the "Create .submit file"
+#  link in the "Utilities" page of the corresponding Project on Submit Server.
+projectNumber=0
+courseName=CS 101
+semester=Spring 2006
+submitURL=https://oursubmitserver.ourschool.edu:8443/eclipse/SubmitProjectViaEclipse

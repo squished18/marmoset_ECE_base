@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry path="src" kind="src"/>
+	<classpathentry path="junit" kind="src"/>
+	<classpathentry path="com.genuitec.eclipse.j2eedt.core.J2EE14_CONTAINER" kind="con"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry sourcepath="/export/home/jspacco/software/commons-fileupload/src" path="WebRoot/WEB-INF/lib/commons-fileupload.jar" kind="lib"/>
+	<classpathentry sourcepath="/export/home/jspacco/software/commons-logging-1.0.4" path="WebRoot/WEB-INF/lib/commons-logging.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/jstl.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/mysql-connector-java.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/standard.jar" kind="lib"/>
+	<classpathentry sourcepath="/homes/jspacco/software/logging-log4j-1.2.9/src" path="WebRoot/WEB-INF/lib/log4j.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/taglibs-log.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/bcel.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/findbugs.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/commons-io.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/dom4j-full.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/activation.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/imap.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/mailapi.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/pop3.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/smtp.jar" kind="lib"/>
+	<classpathentry sourcepath="ECLIPSE_HOME/plugins/org.eclipse.jdt.source_3.0.0/src/org.junit_3.8.1/junitsrc.zip" path="JUNIT_HOME/junit.jar" kind="var"/>
+	<classpathentry path="/SubmitServerModelClasses" combineaccessrules="false" kind="src"/>
+	<classpathentry path="lib/annotations.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/ffident.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/lib/cos.jar" kind="lib"/>
+	<classpathentry path="lib/j2ee.jar" kind="lib"/>
+	<classpathentry path="WebRoot/WEB-INF/classes" kind="output"/>
+</classpath>

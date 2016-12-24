@@ -1,0 +1,96 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 1. Introduction</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="about_marmoset.html" title="Part I. About Marmoset"><link rel="prev" href="about_marmoset.html" title="Part I. About Marmoset"><link rel="next" href="marmoset_distribution.html" title="Chapter 2. The Marmoset Distribution"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Introduction</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="about_marmoset.html">Prev</a> </td><th width="60%" align="center">Part I. About Marmoset</th><td width="20%" align="right"> <a accesskey="n" href="marmoset_distribution.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="marmoset_introduction"></a>Chapter 1. Introduction</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="marmoset_introduction.html#marmoset_features">1. Features of Marmoset</a></span></dt><dt><span class="sect1"><a href="marmoset_introduction.html#marmoset_references">2. References and Publications</a></span></dt></dl></div><p>
+				Marmoset is an automated snapshot, submission and testing system developed
+				at the University of Maryland. It provides a web-based framework that
+				supports computer science programming courses. Instructors can post
+				projects and test cases while students can make submissions and receive
+				immediate feedback about their grades. Marmoset also keeps a record of
+				submissions and other useful statistics that can be used by researchers to
+				study the way students program.
+			</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="marmoset_features"></a>1. Features of Marmoset</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+							Allows instructors to post projects and test cases on the web.
+							Students can also submit their implementations over the web
+							and Marmoset automatically compiles and runs these
+							implementations against the test cases.
+						</p></li><li><p>
+							Gives students early feedback information about their
+							submissions. This includes their grades, some of the tests
+							they are failing, and the bugs found in their code by
+							<a href="http://www.findbugs.net/" target="_top">FindBugs.</a>
+						</p></li><li><p>
+							Uses "Release Tests" to give students limited access to the
+							test cases used to grade their projects. To perform a release
+							test, students consume a release token -- they have just 3
+							tokens which regenerate after 24 hours. This encourages
+							students to start early.
+						</p></li><li><p>
+							Gives instructors an overview of the performance of all
+							students before the project deadline.
+						</p></li><li><p>
+							Allows instructors to change the testing setup after the
+							project has been posted to correct errors in the setup or the
+							specification.
+						</p></li><li><p>
+							Retests submissions to catch inconsistent results due to
+							threads, hash codes, system failures etc.
+						</p></li><li><p>
+							Allows researchers to non-intrusively study the software
+							development process for novice programmers.
+						</p></li><li><p>
+							Provides detailed code evolution history of student projects.
+							This allows researchers to non-intrusively study the software
+							development process for novice programmers.
+						</p></li><li><p>
+							Allows researchers to identify bug patterns that may also
+							occur in production code.
+						</p></li><li><p>
+							Supports projects in Java, C/C++, Ruby and OCaml, and provides
+							security and timeouts. It can be configured to support
+							projects in other languages.
+						</p></li></ul></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="marmoset_references"></a>2. References and Publications</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+							Marmoset Website:
+							<a href="http://marmoset.cs.umd.edu" target="_top">http://marmoset.cs.umd.edu</a>
+						</p></li><li><p>
+							Marmoset Demo Server:
+							<a href="http://marmoset-demo.cs.umd.edu" target="_top">http://marmoset-demo.cs.umd.edu</a>
+							(use this to try out the Marmoset system).
+						</p></li><li><p>
+							Jaime Spacco, David Hovemeyer, and William Pugh. An
+							eclipse-based course project snapshot and submission system.
+							In
+							<span class="emphasis"><em>
+								3rd Eclipse Technology Exchange Workshop (eTX),
+							</em></span>
+							Vancouver, BC, October 24, 2004.
+						</p></li><li><p>
+							Jaime Spacco, Jaymie Strecker, David Hovemeyer, and William
+							Pugh. Software repository mining with Marmoset: An automated
+							programming project snapshot and testing system. In
+							<span class="emphasis"><em>
+								Proceedings of the Mining Software Repositories Workshop
+								(MSR 2005),
+							</em></span>
+							St. Louis, Missouri, USA, May 2005.
+						</p></li><li><p>
+							David Hovemeyer, Jaime Spacco, and Bill Pugh. Evaluating and
+							tuning a static analysis to find null pointer bugs. Lisbon,
+							Portugal, September 5-6, 2005. ACM.
+						</p></li><li><p>
+							Jaime Spacco, David Hovemeyer, Bill Pugh, Jeff Hollingsworth,
+							Nelson Padua-Perez, and Fawzi Emad. Experiences with marmoset.
+							Technical report, 2006.
+						</p></li><li><p>
+							Jaime Spacco, David Hovemeyer, William Pugh, Jeff
+							Hollingsworth, Nelson Padua-Perez, and Fawzi Emad. Experiences
+							with marmoset: Designing and using an advanced submission and
+							testing system for programming courses. In
+							<span class="emphasis"><em>
+								ITiCSE '06: Proceedings of the 11th annual conference on
+								Innovation and technology in computer science education.
+							</em></span>
+							ACM Press, 2006.
+						</p></li><li><p>
+							Jaime Spacco, Titus Winters, and Tom Payne. Inferring use
+							cases from unit testing. In
+							<span class="emphasis"><em>AAAI Workshop on Educational Data Mining,</em></span>
+							New York, NY, USA, July 2006. ACM Press.
+						</p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="about_marmoset.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="about_marmoset.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="marmoset_distribution.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Part I. About Marmoset </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. The Marmoset Distribution</td></tr></table></div></body></html>

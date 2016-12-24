@@ -1,0 +1,1 @@
+INSERT INTO USER VALUES('host','root','password','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','','','','',0,0,0);

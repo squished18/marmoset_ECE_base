@@ -1,0 +1,65 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title>HOWTO set up a new BuildServer </title>
+	<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+</head>
+  
+<body>
+
+<h2> HOWTO set up a new BuildServer </h2>
+
+<ol>
+
+<li> Create a fresh directory.  I will refer to this directory as 'buildserver' in this
+document but you may name the directory anything you'd like.
+
+<li> Checkout from with CVSROOT=/fs/pugh/p/cvs into the freshly created buildserver directory
+the following modules:
+	<ul>
+	<li> BuildServer
+	<li> SubmitServerModelClasses
+	</ul>
+
+<li> cd into BuildServer
+
+<li> run 'ant install' <br>
+(ant is like make but for Java.  It is available from 
+<a href="http://apache.ant.org"> http://apache.ant.org </a>.)
+<b> NOTE: </b> This works with apache-ant-1.6.1 and apache-ant-1.6.2 but definitely
+does not work with apache-ant-1.5.3.  I don't know about the versions between 1.5.3 and 1.6.1
+so if it doesn't work then upgrade to 1.6.2 (which is the latest).
+<br>
+That should compile with no problems.
+
+<li> cd into buildserver/BuildServer/run<br>
+There will be two files, runBuildServer and config.properties<br>
+make runBuildServer executable
+
+<li> edit the 'supported.courses' property of the config.properties
+to reflect the name of the course.  You should be able to uncomment one of the two lines.
+
+<li> make sure the java.home property does not have 'jre' as the final part of the path,
+e.g. /home/user/jdk1.5/jre.<p>
+If this is the case, simply delete the final 'jre' part of the path.  This is a problem
+because the jre directory does not contain javac which we need to build student projects.
+I'm not sure why ant's notion of java's home directory is the jre directory.
+
+<li> Also in config.properties, change the hostname property to reflect the hostname where
+you'll be running a buildserver.
+
+<li> Also in config.properties, edit the submit.server.hostname property if necessary.  Usefulb
+values for this are 'submit.cs.umd.edu' (Production server) and 'marmoset2.umiacs.umd.edu' 
+(Playground server).
+
+<li> In the buildserver/BuildServer/run directory, do this:<br>
+runBuildServer config.properties
+
+<li> By default, the BuildServer is configured to handle one request and stop.
+You can make the BuildServer test submissions in a loop by setting debug.donotloop to "false"
+in the config.properties file.
+
+</ol>
+</body>
+</html>

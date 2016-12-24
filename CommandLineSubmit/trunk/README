@@ -1,0 +1,6 @@
+Configuration parameters
+------------------------
+
+src/submit.properties:	marmoset server url
+marmoset_submit.c:	java path, jar file
+Makefile:		command name, installation path

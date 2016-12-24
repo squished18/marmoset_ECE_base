@@ -1,0 +1,13 @@
+Please very that you've given me your University ID (UID)
+
+Note that your UID is *NOT* your Student ID (SID), which up until this
+year was usually your social security number.
+                                                                                                     
+You can look up your UID using your Directory ID from the campus LDAP
+page:
+                                                                                                     
+www.ldap.umd.edu
+                                                                                                     
+Let me know your UID if we had it wrong before or if you can't figure
+out the problem.
+	-Jaime

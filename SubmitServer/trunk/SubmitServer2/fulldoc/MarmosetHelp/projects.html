@@ -1,0 +1,158 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 10. Projects</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="submitserver_usersguide.html" title="Part IV. SubmitServer Users Guide"><link rel="prev" href="configuring-marmoset.html" title="Chapter 9. Configuring Marmoset"><link rel="next" href="project_upload.html" title="Chapter 11. Preparing and Uploading Project Files"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. Projects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="configuring-marmoset.html">Prev</a> </td><th width="60%" align="center">Part IV. SubmitServer Users Guide</th><td width="20%" align="right"> <a accesskey="n" href="project_upload.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="projects"></a>Chapter 10. Projects</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="projects.html#create-project">1. Creating a project</a></span></dt><dt><span class="sect1"><a href="projects.html#stack-trace-policy">2. 
+					Stack Trace Policy: How much information to reveal when students use a
+					release-test
+				</a></span></dt><dt><span class="sect1"><a href="projects.html#best-submission-policy">3. The policy for computing the "best" score</a></span></dt><dt><span class="sect1"><a href="projects.html#late-penalties">4. Explanation of late penalties</a></span></dt><dt><span class="sect1"><a href="projects.html#update-project">5. Updating a project</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="create-project"></a>1. Creating a project</h2></div></div></div><p>
+					When projects are first created they are marked "invisible to
+					students". This means that students cannot see the project when they
+					log in to the SubmitServer.
+				</p><p>
+					Instructors and TAs
+					<span class="emphasis"><em>can</em></span>
+					see invisible projects. Thus you can create a project and let your TAs
+					try it out for a couple of days before officially making it "visible"
+					to your students.
+				</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top">
+					Once a project is made visible, there's no way to make it invisible
+					again (without changing the value of the field in the database).
+				</td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+					An Invisible project is only invisible when a student logs into the
+					server, but the project still exists and will accept submissions.
+					Thus, students can submit to an invisible project using either the
+					command-line submission tool or the Course Project Manager Eclipse
+					plugin. This can happen if student CVS repositories or project
+					skeletons are made available before the project is made visible. These
+					submissions will be tested normally and should not present any
+					problems except for potential confusion to the students that they are
+					submitting but can't find the project on the server.
+				</td></tr></table></div><p>
+					To create a project, select the "create new project" link from the course
+					main page. The following sections describe some of the fields in this form.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stack-trace-policy"></a>2. 
+					Stack Trace Policy: How much information to reveal when students use a
+					release-test
+				</h2></div></div></div><p>
+					The default when students use a release test is to reveal simply the
+					names of some number of tests failed (the number of release tests to
+					reveal information about is of course configurable).
+				</p><p>
+					After using this policy for several semesters, it became clear that
+					there are situations where students need or deserve more information
+					to help them learn about their code. For example, if a student
+					submission fails many release tests because of run-time exceptions,
+					then it will be useful for them to know the type of exception and
+					perhaps the line number in their code where the exception is
+					generated.
+				</p><p>
+					Similarly, there are many situations where the test-drivers used for
+					Makefile-based projects (C/C++, Ruby, etc) generate output that the
+					students could greatly benefit from seeing. Thus we have created some
+					new policies regarding how much information to reveal that are
+					detailed in the following table.
+				</p><div class="table"><a name="table_stack_trace_policies"></a><p class="title"><b>Table 10.1. 
+						Stack Trace Policies: How much information to reveal when students
+						request a release test
+					</b></p><div class="table-contents"><table summary="
+						Stack Trace Policies: How much information to reveal when students
+						request a release test
+					" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>policy</th><th>language(s)</th><th>description</th></tr></thead><tbody><tr><td>test name only (default)</td><td>any</td><td>Reveals only the name of the test case</td></tr><tr><td>line number of exception</td><td>Java only</td><td>
+									Reveals a partial stack trace including the name of
+									the exception and the line in the student code that
+									generates the exception. Will hot-link the line that
+									generates the exception, if possible. Does not reveal
+									all methods called in student-written code leading up
+									to the exception.
+								</td></tr><tr><td>
+									line number of exception, if covered by
+									public/student-written test
+								</td><td>Java only</td><td>
+									Reveals the partial stack trace as described by the
+									"line-number of exception" policy, but only if there
+									is a public or student-written test case that covers
+									the source of the exception. This rewards students
+									that are writing their own test cases to achieve
+									better coverage.
+								</td></tr><tr><td>full stack trace</td><td>any</td><td>
+									Reveals the full stack trace for Java or everything
+									that was printed to stdout and stderr for other
+									languages.
+								</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="best-submission-policy"></a>3. The policy for computing the "best" score</h2></div></div></div><p>
+
+					</p><div class="table"><a name="table_submission_policies"></a><p class="title"><b>Table 10.2. Best submission policies</b></p><div class="table-contents"><table summary="Best submission policies" border="1"><colgroup><col><col></colgroup><thead><tr><th>policy</th><th>description</th></tr></thead><tbody><tr><td>Last Submission (Default)</td><td>
+										The best submission for a category (on-time or
+										late) is the last submission that compiles in this
+										category.
+									</td></tr><tr><td>Release Test Aware</td><td>
+										Best submission for a category (on-time or late)
+										is the max of the last submission that compiles
+										and the highest-scoring release tested submission.
+									</td></tr></tbody></table></div></div><p><br class="table-break">
+					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+							The best submission policy takes into account extensions
+							granted to individual students, as well as late penalties.
+						</p></td></tr></table></div><p>
+					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+							We don't simply pick the highest scoring submission overall to
+							prevent students from taking the "shotgun" approach of
+							submitting 200 versions of a program knowing that we'll pick
+							the best one. By choosing to release test a submission
+							students are (hopefully) telling us something about the
+							quality of a submission.
+						</p></td></tr></table></div><p>
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="late-penalties"></a>4. Explanation of late penalties</h2></div></div></div><p>
+					When creating a project, you have the choice between two types of late
+					penalties:
+				</p><div class="itemizedlist"><ul type="disc"><li>
+						Late Constant: The value specified will be subtracted from the
+						score of each submission. For example, a Late Constant penalty of
+						20 means that a late submission worth 85 points would be adjusted
+						to 65 points.
+					</li><li>
+						Late Multiplier: The value specified will be multiplied by the
+						score of each submission. For example, a Late Multiplier penalty
+						of 0.8 means that a late submission worth 85 points would be
+						adjusted to 68 points.
+						<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>
+								The Late Muliplier will be multiplied by the score, so to
+								subtract 20%, be sure to set the Late Multiplier value to
+								0.8!
+							</p></td></tr></table></div></li></ul></div><p>
+					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+							To have a project without a late deadline (i.e. where late
+							submissions are worth zero credit), make the on-time and late
+							deadlines the same.
+						</p></td></tr></table></div><p>
+				</p><p>
+					Whether a submission is ontime, late or very-late is computed
+					dynamically for each student based on the deadline for the project and
+					any extension granted to that student. Thus it is possible for a
+					submission to change from late to ontime when an extension is granted
+					or if the deadline is changed by the instructor.
+				</p><p>
+					Only the on-time and late submissions are used when determining the
+					"best" score for a project. Very-late submissions are kept for a
+					variety of reasons:
+					</p><div class="itemizedlist"><ul type="disc"><li><p>
+								some classes have a policy that students must make a "good
+								faith" attempt to implement each project before the
+								semester ends,
+							</p></li><li><p>
+								students are somtimes granted extensions retroactively.
+							</p></li></ul></div><p>
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="update-project"></a>5. Updating a project</h2></div></div></div><p>
+					Instructors and Superusers can update all the parameters that were
+					specified for a project when it was created including the project
+					deadlines and release token rules.
+					</p><div class="itemizedlist"><ul type="disc"><li><p>
+								From the main course page, go to the project page by
+								selecting the <code class="literal">view</code> link next to the 
+								project in question.
+							</p></li><li><p>
+								From the project page, select the <code class="literal">Utilities</code>
+								link.
+							</p></li><li><p>
+								In the Utilities page, select the 
+								<code class="literal">Update this Project</code> link and make any 
+								desired changes in the project update form. Click
+								<code class="literal">Update Project</code> to save changes.
+							</p></li></ul></div><p>
+				</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="configuring-marmoset.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="submitserver_usersguide.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="project_upload.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. Configuring Marmoset </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. Preparing and Uploading Project Files</td></tr></table></div></body></html>

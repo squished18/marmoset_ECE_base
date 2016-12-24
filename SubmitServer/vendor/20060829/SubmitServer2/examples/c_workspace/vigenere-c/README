@@ -1,0 +1,95 @@
+
+- - - - - - - - - - - - - - -
+F O R   I N S T R U C T O R S
+- - - - - - - - - - - - - - -
+
+The Vigenere project is provided as an example of a C project 
+that can be used with Marmoset's Submit Server. In this project
+students will implement the functions indicated in vigenere.h 
+which perform Vigenere encryption and decryption.
+
+This directory contains all the files an instructor has prepared
+to support this project. This includes files for testing, files 
+for students, the correct (canonical) solution and a Makefile.
+
+
+USING THIS PROJECT
+
+Perform the following steps to upload this project to the Submit
+Server and distribute to students:
+
+-- (optional) Edit test.properties. This specifies what files to
+   execute for testing etc.
+
+-- Create the test setup jar file:
+
+	make setup
+	
+-- Create the canonical jar file:
+
+	make canonical
+
+-- Create a jar file containing starter files for students:
+
+	make starterfiles
+
+-- Go to the Project utilities page on the submit server and 
+   upload the test-setup, canonical and starter files to the 
+   appropriate location.
+   
+-- To delete the jar files, directories and executables created
+   by make and restore the project to its initial format:
+   
+   	make clean   	
+
+
+PROJECT FILES   
+
+The files that make up this project are:   
+
+-- The specification header file
+
+	vigenere.h
+	
+-- The canonical solution
+
+	vigenere.c
+	
+-- The student's starter file which is a compilable solution but
+   does not yield the correct results
+
+	Student.vigenere.c
+
+-- A java properties file that is included in the test setup for 
+   configuring the Submit Server
+   
+   	test.properties
+   	
+-- The test cases that return "passed" or "failed". This is a set
+   of executable python scripts and a pair of c programs that
+   support these scripts
+   
+   	encrypt.c 
+   	decrypt.c
+   	
+	testSimpleEncrypt.py 
+	testSimpleDecrypt.py
+	testWraparoundEncrypt.py 
+	testWraparoundDecrypt.py
+	testEncryptInvalidChar.py 
+	testInversion.py 
+	testKeyLongerThanPlainText.py
+	testEncryptWithInvalidKey.py
+	
+-- A makefile for creating the jar files, and compiling the project 
+   files. The Marmoset Build Server uses this make file to compile 
+   the test setup and solution before running the tests specified in
+   test.properties
+   
+   	Makefile
+   	
+-- A make file for students that is included with the starter files   	
+
+	Student.Makefile
+   
+	

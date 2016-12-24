@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function usage() {
+    echo "Usage: $0 [ <database data dir> ] "
+    exit
+}
+
+case $1 in 
+    -h | -help | --help )
+	usage;;
+esac
+
+
+if [ "$1" != "" ]; then
+    DIR=$1
+else
+    DIR=$HOME/submitServerDatabase
+fi
+
+echo "Shutting down database at $DIR"
+
+mysqladmin \
+--socket=$DIR/submitserver.sock \
+shutdown
+
+

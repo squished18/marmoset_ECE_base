@@ -1,0 +1,4060 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY Marmoset "<application>SubmitServer</application>">
+<!ENTITY nbsp "&#160;">
+]>
+
+<book lang="en" id="marmoset-help">
+
+	<bookinfo>
+		<title>Marmoset Help Pages</title>
+		<subtitle>
+			Manuals for installing and using the Marmoset SubmitServer and BuildServer.
+		</subtitle>
+
+		<authorgroup>
+			<author>
+				<firstname>Jaime</firstname>
+				<surname>Spacco</surname>
+			</author>
+			<author>
+				<firstname>David</firstname>
+				<surname>Hovemeyer</surname>
+			</author>
+			<author>
+				<firstname>Nat</firstname>
+				<surname>Ayewah</surname>
+			</author>
+			<author>
+				<firstname>Bill</firstname>
+				<surname>Pugh</surname>
+			</author>
+		</authorgroup>
+
+		<copyright>
+			<year>2005</year>
+			<year>2006</year>
+			<holder>University of Maryland</holder>
+		</copyright>
+
+		<legalnotice>
+			<!--
+				This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike License.
+				To view a copy of this license, visit
+				<ulink url="http://creativecommons.org/licenses/by-nc-sa/1.0/">http://creativecommons.org/licenses/by-nc-sa/1.0/</ulink>
+				or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+			-->
+			<para>All Rights Reserved</para>
+		</legalnotice>
+
+	</bookinfo>
+
+	<part id="about_marmoset">
+		<title>About Marmoset</title>
+
+		<chapter id="marmoset_introduction">
+			<title>Introduction</title>
+
+			<para>
+				Marmoset is an automated snapshot, submission and testing system developed
+				at the University of Maryland. It provides a web-based framework that
+				supports computer science programming courses. Instructors can post
+				projects and test cases while students can make submissions and receive
+				immediate feedback about their grades. Marmoset also keeps a record of
+				submissions and other useful statistics that can be used by researchers to
+				study the way students program.
+			</para>
+
+			<sect1 id="marmoset_features">
+				<title>Features of Marmoset</title>
+				<itemizedlist>
+					<listitem>
+						<para>
+							Allows instructors to post projects and test cases on the web.
+							Students can also submit their implementations over the web
+							and Marmoset automatically compiles and runs these
+							implementations against the test cases.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Gives students early feedback information about their
+							submissions. This includes their grades, some of the tests
+							they are failing, and the bugs found in their code by
+							<ulink url="http://www.findbugs.net/">FindBugs.</ulink>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Uses "Release Tests" to give students limited access to the
+							test cases used to grade their projects. To perform a release
+							test, students consume a release token -- they have just 3
+							tokens which regenerate after 24 hours. This encourages
+							students to start early.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Gives instructors an overview of the performance of all
+							students before the project deadline.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Allows instructors to change the testing setup after the
+							project has been posted to correct errors in the setup or the
+							specification.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Retests submissions to catch inconsistent results due to
+							threads, hash codes, system failures etc.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Allows researchers to non-intrusively study the software
+							development process for novice programmers.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Provides detailed code evolution history of student projects.
+							This allows researchers to non-intrusively study the software
+							development process for novice programmers.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Allows researchers to identify bug patterns that may also
+							occur in production code.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Supports projects in Java, C/C++, Ruby and OCaml, and provides
+							security and timeouts. It can be configured to support
+							projects in other languages.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</sect1>
+
+			<sect1 id="marmoset_references">
+				<title>References and Publications</title>
+				<itemizedlist>
+					<listitem>
+						<para>
+							Marmoset Website:
+							<ulink url="http://marmoset.cs.umd.edu" />
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Marmoset Demo Server:
+							<ulink url="http://marmoset-demo.cs.umd.edu" />
+							(use this to try out the Marmoset system).
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jaime Spacco, David Hovemeyer, and William Pugh. An
+							eclipse-based course project snapshot and submission system.
+							In
+							<emphasis>
+								3rd Eclipse Technology Exchange Workshop (eTX),
+							</emphasis>
+							Vancouver, BC, October 24, 2004.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jaime Spacco, Jaymie Strecker, David Hovemeyer, and William
+							Pugh. Software repository mining with Marmoset: An automated
+							programming project snapshot and testing system. In
+							<emphasis>
+								Proceedings of the Mining Software Repositories Workshop
+								(MSR 2005),
+							</emphasis>
+							St. Louis, Missouri, USA, May 2005.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							David Hovemeyer, Jaime Spacco, and Bill Pugh. Evaluating and
+							tuning a static analysis to find null pointer bugs. Lisbon,
+							Portugal, September 5-6, 2005. ACM.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jaime Spacco, David Hovemeyer, Bill Pugh, Jeff Hollingsworth,
+							Nelson Padua-Perez, and Fawzi Emad. Experiences with marmoset.
+							Technical report, 2006.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jaime Spacco, David Hovemeyer, William Pugh, Jeff
+							Hollingsworth, Nelson Padua-Perez, and Fawzi Emad. Experiences
+							with marmoset: Designing and using an advanced submission and
+							testing system for programming courses. In
+							<emphasis>
+								ITiCSE '06: Proceedings of the 11th annual conference on
+								Innovation and technology in computer science education.
+							</emphasis>
+							ACM Press, 2006.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jaime Spacco, Titus Winters, and Tom Payne. Inferring use
+							cases from unit testing. In
+							<emphasis>AAAI Workshop on Educational Data Mining,</emphasis>
+							New York, NY, USA, July 2006. ACM Press.
+						</para>
+					</listitem>
+				</itemizedlist>
+
+
+			</sect1>
+
+		</chapter>
+
+		<chapter id="marmoset_distribution">
+			<title>The Marmoset Distribution</title>
+
+			<sect1 id="distribution_files">
+				<title>Files in the Marmoset Distribution</title>
+				<para>
+					Marmoset has two major components: the SubmitServer is a Java based
+					web application that supports the efforts of instructors and students,
+					and the BuildServer is the backend process that compiles submissions
+					and tests them against a corresponding test setup. SubmitServer should
+					be installed on one machine that can be access via http(s), while
+					BuildServers can be installed on multiple machines. Both applications
+					can also be installed on the same machine.
+				</para>
+				<para>
+					Other optional Marmoset components including a submission plugin for
+					the
+					<ulink url="http://www.eclipse.org">Eclipse IDE</ulink>
+					and a command-line submission utility are available from the
+					University of Maryland.
+				</para>
+				<table id="table_distribution_files">
+					<title>Parts of the Marmoset Distribution</title>
+					<tgroup cols="2">
+						<thead>
+							<row>
+								<entry>Files/Folders</entry>
+								<entry>Description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>SubmitServer.jar</entry>
+								<entry>
+									Source for the SubmitServer component. The contents of
+									this archive will be referred to in this manual as the
+									<literal>SubmitServer Module.</literal>
+									This module is also available for checkout from a
+									University of Maryland CVS repository.
+								</entry>
+							</row>
+							<row>
+								<entry>BuildServer.jar</entry>
+								<entry>
+									Source for the BuildServer component. The contents of
+									this archive will be referred to in this manual as the
+									<literal>BuildServer Module.</literal>
+									This module is also available for checkout from a
+									University of Maryland CVS repository.
+								</entry>
+							</row>
+							<row>
+								<entry>SubmitServerModelClasses.jar</entry>
+								<entry>
+									Source for SubmitServer utility classes and database
+									interaction components. This package is used in both
+									the SubmitServer and the BuildServer installations.
+									The contents of this archive will be referred to in
+									this manual as the
+									<literal>SubmitServerModelClasses Module.</literal>
+									This module is also available for checkout from a
+									University of Maryland CVS repository.
+								</entry>
+							</row>
+							<row>
+								<entry>doc/</entry>
+								<entry>
+									Directory containing this help manual and any other
+									documentation. The entire doc will also be available 
+									through the submit server once it is installed.
+								</entry>
+							</row>
+							<row>
+								<entry>doc/samples/</entry>
+								<entry>
+									Directory containing sample configuration and archive files
+									useful to administrators and instructors.
+								</entry>
+							</row>
+							<row>
+								<entry>examples/</entry>
+								<entry>
+									Directory containing source for some sample Java and C projects.
+								</entry>
+							</row>
+						</tbody>
+					</tgroup>
+
+				</table>
+			</sect1>
+
+			<sect1 id="installation_requirements">
+				<title>Installation Requirements</title>
+				<para>
+					Marmoset was designed for use on Linux machines and has not been
+					tested on Windows, Mac, or Unix OS. For more info, please contact the
+					engineers by email: submit-help [at] cs.umd.edu.
+				</para>
+				<para>Other software requirements are:</para>
+
+				<itemizedlist>
+					<listitem>
+						<para>
+							JDK 1.5 (a.k.a. 5.0) or later (
+							<ulink url="http://java.sun.com/j2se/">Download Java</ulink>
+							).
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Ant 1.6 or later (
+							<ulink url="http://ant.apache.org/">Download Ant</ulink>
+							)
+						</para>
+					</listitem>
+
+					<listitem>
+						MySQL 4.1.16 or later (
+						<ulink url="http://dev.mysql.com/downloads">Download MySQL</ulink>
+						). <xref linkend="mysql" /> will describe the MySQL installation process.
+						<para>
+							Marmoset has been tested successfully using
+							mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23 and
+							mysql-standard-5.0.22-linux-i686-glibc23.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jakarta Tomcat 5.5.9 or later (
+							<ulink url="http://tomcat.apache.org/">Download Tomcat</ulink>
+							). 
+							<!-- Marmoset has not been tested with any more recent versions of Tomcat. -->
+							<xref linkend="jakarta-tomcat" /> will describe the 
+							Tomcat installation and configuration process.
+							<note>
+								When configuring Tomcat to use SSL with a self-signed
+								certificate, you will need write access to some parts of
+								your Java (JRE) installation. See
+								<xref linkend="tomcat-ssl" />
+								for more information.
+							</note>
+						</para>
+					</listitem>
+					<listitem>
+						Perl 5 or later (
+						<ulink url="http://www.perl.org/">Download Perl</ulink>
+						)
+					</listitem>
+
+				</itemizedlist>
+
+				<para>
+					The next two sections describe the installation process for the
+					SubmitServer (
+					<xref linkend="submitserver_installation" />
+					) and the BuildServer (
+					<xref linkend="buildserver_installation" />
+					) respectively. The next section describes how to configure and use
+					SubmitServer to manage courses and projects (
+					<xref linkend="submitserver_usersguide" />
+					).
+				</para>
+				<note>
+					SubmitServer and BuildServer can be installed and run independently.
+					However, if your goal is to create projects with submissions that are
+					compiled and tested by the BuildServer, you should install the
+					SubmitServer first and then install one or more BuildServers to
+					connect to this SubmitServer.
+				</note>
+			</sect1>
+
+		</chapter>
+	</part>
+
+	<part id="submitserver_installation">
+		<title>SubmitServer Installation</title>
+
+		<chapter id="submitserver_installation_instructions">
+			<title>Installing the SubmitServer</title>
+
+			<sect1 id="submitserver_install_prerequisites">
+				<title>Introduction and Prerequisites</title>
+
+				<para>
+					This section explains how to install the SubmitServer component of
+					Marmoset. The SubmitServer is a web application that stores
+					submissions, allows students and instructors to view submissions and
+					their outcomes, and facilitates automated testing by one or more
+					BuildServers.
+				</para>
+
+				<para>
+					The goals of this document are to specify how to set up and run a
+					SubmitServer instance. This includes configuration information for a
+					Tomcat installation where the SubmitServer can be deployed (typically
+					by dropping a submitServer.war file into a certain directory).
+				</para>
+
+				<para>To install and run the SubmitServer, you need the following:</para>
+
+				<itemizedlist>
+					<listitem>
+						<para>
+							The
+							<literal>SubmitServer Module</literal>
+							and
+							<literal>SubmitServerModelClasses Module</literal>
+							included in the installation distribution.
+						</para>
+					</listitem>
+					<listitem>
+						<para>A machine installed with Linux.</para>
+					</listitem>
+					<listitem>
+						<para>
+							JDK 1.5 (a.k.a. 5.0) or later (
+							<ulink url="http://java.sun.com/j2se/">Download Java</ulink>
+							).
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Ant 1.6 or later (
+							<ulink url="http://ant.apache.org/">Download Ant</ulink>,
+							Note that ANT is included with the Eclipse IDE)
+						</para>
+					</listitem>
+
+					<listitem>
+						MySQL 4.1.16 or later (
+						<ulink url="http://dev.mysql.com/downloads">Download MySQL</ulink>
+						). <xref linkend="mysql" /> will describe the MySQL installation process.
+						<para>
+							Marmoset has been tested successfully using
+							mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23 and
+							mysql-standard-5.0.22-linux-i686-glibc23.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Jakarta Tomcat 5.5.9 or later (
+							<ulink url="http://tomcat.apache.org/">Download Tomcat</ulink>
+							). 							
+							<xref linkend="jakarta-tomcat" /> will describe the Tomcat installation 
+							process.
+							<note>
+								When configuring Tomcat to use SSL with a self-signed
+								certificate, you will need write access to some parts of
+								your Java (JRE) installation. See
+								<xref linkend="tomcat-ssl" />
+								for more information.
+							</note>
+						</para>
+					</listitem>
+
+				</itemizedlist>
+
+				<note>
+					You will almost certainly want to put MySQL and tomcat onto the same
+					machine because it's more secure to only allow connections to the
+					database only from localhost (than to try to deal with MySQL+SSL).
+				</note>
+				<note>
+					The MySQL database and Tomcat can both run as any user account. For
+					security purposes, it's not a good idea in general to run either of
+					these as the root user of the unix system. Also keep in mind that the
+					'root' user of the unix host machine
+					<emphasis>is not the same thing</emphasis>
+					as the 'root' user of a MySQL installation. These are two separate,
+					unrelated concepts that happen to have the same name. You can connect
+					to the MySQL database as the root database user using
+					<emphasis>any</emphasis>
+					unix user account.
+				</note>
+				<note>
+					It is NOT recommended to install either MySQL or Tomcat onto an
+					NFS-mounted volume. Doing so almost guarantees problems with stale
+					NFS-filehandles, problems locking files, and so on.
+				</note>
+			</sect1>
+
+			<sect1 id="unpackdistribution">
+				<title>Unpack Submit Server Components</title>
+				<para>
+					If you have not already done so, extract the Marmoset distribution
+					from the distribution archive.
+				</para>
+				<para>
+					Extract both the <literal>SubmitServer</literal>
+					and <literal>SubmitServerModelClasses</literal> archives into the same
+					directory -- this directory will be the base for your installation. (E.g. 
+					<literal>$HOME/projects/submitserver</literal>.) If you are using Eclipse,
+					this directory will also be the workspace.
+				</para>
+				<para>
+					You should now have two directories:
+					<literallayout>	
+						<literal>
+							$SUBMITDIR/SubmitServer2, and
+							$SUBMITDIR/SubmitServerModelClasses
+						</literal>
+					</literallayout>
+					where $SUBMITDIR is the directory you extracted the archives into.
+				</para>
+				<para>
+					The next few sections will describe the installation of MySQL, the
+					Submit Server Database, and Tomcat. These should be installed on the
+					host that you want to run the Submit Server. Then we will return to this 
+					directory to configure and install the Submit Server.
+				</para>
+			</sect1>
+			<sect1 id="mysql">
+				<title>Installing MySQL and the database for Marmoset</title>
+
+				<orderedlist numeration="arabic">
+					<listitem>
+						<para>
+							If MySQL is not already installed on the host system, simply
+							download and untar a binary distribution from
+							<ulink url="http://dev.mysql.com/">http://dev.mysql.com/</ulink>.
+							Point the shell variable MYSQL_HOME at
+							your installation. Then put $MYSQL_HOME/bin and
+							$MYSQL_HOME/scripts on your path.
+						</para>
+
+						<para>
+							For example, you could untar MySQL into $HOME/software/mysql
+							and then (assuming your shell is bash) do:
+						</para>
+
+						<literallayout>
+							<literal>
+							export MYSQL_HOME=$HOME/software/mysql export
+							PATH=$MYSQL_HOME/bin:$MYSQL_HOME/scripts:$PATH
+							</literal>
+						</literallayout>
+
+					</listitem>
+
+					<listitem>
+						<para>
+							Even with MYSQL_HOME clearly pointing to the MySQL
+							installation, MySQL still seems to assume that it got put into
+							/usr/local.
+						</para>
+						<para>
+							So, edit $MYSQL_HOME/bin/mysqld_safe (the daemon program that
+							starts/stops mysql) by finding the following lines (located at
+							lines 106-107 for
+							mysql-standard-4.1.16-pc-linux-gnu-i686-glibc23):
+							<literallayout>
+								<literal>
+								MY_BASEDIR_VERSION=/usr/local/mysql
+								ledir=/usr/local/mysql/bin
+								</literal>
+							</literallayout>
+						</para>
+						<para>
+							and then replacing them with this:
+							<literallayout>
+								<literal>
+								MY_BASEDIR_VERSION=$MYSQL_HOME 
+								ledir=$MYSQL_HOME/bin
+								</literal>
+							</literallayout>
+						</para>
+						<para>
+							I have no idea why this is necessary, and rather than trying
+							to figure out why, I just make this change everytime I install
+							MySQL since it works. If anyone knows a better way to do this
+							(i.e. without editing the mysqld_safe file) please send email
+							to
+							<email>jspacco@cs.umd.edu</email>
+							.
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							All of the database-related scripts for Marmoset are located
+							in SubmitServerModelClasses/dbScripts (in the Submit Server
+							directory we created in <xref linkend="unpackdistribution"/>. 
+							I will hereafter refer to the SubmitServerModelClasses/dbScripts/ 
+							directory as simply <emphasis>dbScripts</emphasis>. 
+							You need to add this directory to your path.
+						</para>
+						<note>
+							You may also need to change the permissions to make
+							runsql, fresh-install, start-innodb, and stop-innodb executable. In
+							general, jarfiles (and I think zipfiles) won't preserve file
+							permissions, due to compatbility issues between file systems
+							that don't use the same types of permissions for controlling
+							access to files.
+						</note>
+					</listitem>
+
+					<listitem>
+						<para>
+							If you're not that familiar with MySQL and are installing a
+							fresh database, don't worry, as we provide a script that will
+							create and startup a fresh database.
+						</para>
+						<para>
+							You can do this by simply going into the dbScripts directory
+							and running the following command:
+						</para>
+						<para>
+							<literal>
+								./fresh-install &lt;database password&gt; &lt;directory
+								for database&gt; [ -p &lt;port&gt; ] [ -d &lt;database&gt;
+								]
+							</literal>
+						</para>
+						<para>
+							The &lt;directory for database&gt; can be anywhere on the
+							local file system. It is
+							<emphasis>NOT A GOOD IDEA</emphasis>
+							to put the directory on an NFS-mounted volume. This will
+							almost certainly cause annoying problems with stale file
+							handles and file locks.
+						</para>
+						<para>
+							The &lt;database password&gt; you pick will be for the root
+							database user. Note that the root database user account is not
+							the same thing as the root unix account on the machine you're
+							running the database. This password will allow you to access
+							the database as root using any unix user account.
+						</para>
+						<para>
+							The &lt;port&gt; is an optional parameter that will change the
+							port used by MySQL. If you don't set a parameter here, it will
+							use the default, which is port 3306.
+						</para>
+						<para>
+							The &lt;database&gt; parameter will change the name of the
+							database. The default name is
+							<emphasis>submitserver</emphasis>
+							.
+						</para>
+						<para>
+							This will create and start a new database, and set the root
+							password to what you picked. This will also create a
+							$HOME/.my.cnf file, the hidden file MySQL uses to store
+							configuration information necessary (like username, passwords,
+							paths to the database socket file, etc) to log into the
+							database.
+						</para>
+						<para>
+							NOTE: The $HOME/.my.cnf file contains your root database
+							password so make sure the file is not visible to anyone that
+							shouldn't be able to see it. The fresh-install script will try
+							to set the file permission so that group and others can't see
+							the file (chmod og-rwx).
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							Make sure that creating and starting the database worked by
+							running the mysql command line program:
+						</para>
+						<para>mysql</para>
+						<para>
+							You should see a prompt that looks something like this:
+						</para>
+						<literallayout>
+							<literal>
+								Welcome to the MySQL monitor. Commands end with ; or \g.
+								Your MySQL connection id is 5 to server version: 4.1.16-standard-log
+
+								Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+								mysql&gt;
+							</literal>
+						</literallayout>
+						<para>
+							Once you see the prompt, to quit mysql, you just type 'quit'.
+						</para>
+						<note>
+							The fresh-install script also starts the database server. If
+							the mysql command fails with error: "Can't connect to local
+							MySQL server", it is likely the database server has not been
+							started. Do this manually by running the
+							dbScripts/start-innodb script. The only required parameter is
+							the directory where the database is installed (i.e. the
+							directory used in the ./fresh-install command above):
+							<para>
+								<literal>
+									./start-innodb &lt;directory for database&gt;
+								</literal>
+							</para>
+						</note>
+					</listitem>
+
+					<listitem>
+						<para>
+							Next you need to create all the tables according to the
+							Marmoset database schema. Again, go into the dbScripts
+							directory and run this command:
+						</para>
+						<para>
+							<literal>./runsql marmoset-schema.sql</literal>
+						</para>
+						<para>
+							The runsql script is a useful script that will run any *.sql
+							script against the database referred to in the .my.cnf file.
+						</para>
+						<para>
+							The next step is to update the basic schema using a patch
+							script located in the sql-patches directory. Use the command:
+						</para>
+						<para>
+							<literal>
+								./runsql sql-patches/project-starter-file-archives.sql
+							</literal>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Now run the mysql command line program again, and make sure
+							that the database you created exists (by running
+							'<literal>show databases;</literal>') and that the tables for 
+							the database also exist (use '<literal>show tables;</literal>'). 
+							Refer to the MySQL reference manual
+							(<ulink url="http://dev.mysql.com/doc/">http://dev.mysql.com/doc/</ulink>)
+							for more information about querying MySQL from the command line.
+						</para>
+					</listitem>
+				</orderedlist>
+			</sect1>
+
+			<sect1 id="superuser">
+				<title>Creating a SuperUser account</title>
+
+				<para>
+					The first thing you need to do after creating the database is create a
+					superuser account that you can use to log into the system and
+					bootstrap the rest of the installation process. You need to do this
+					directly in the database, because all operations done by Marmoset
+					require authentication against the database. It's kind of a
+					chicken-and-egg problem.
+				</para>
+
+				<para>
+					Find and edit the file
+					SubmitServerModelClasses/dbScripts/bootstrap.sql. The file will look
+					like this:
+					<literallayout>
+						<literal>
+							INSERT INTO students VALUES (DEFAULT, 'campus_uid',
+							'employee_num', 'firstname', 'lastname', 'yes', DEFAULT,
+							DEFAULT, DEFAULT, 'password');
+						</literal>
+					</literallayout>
+					You need to set a value for each non-DEFAULT column. Each column is
+					described in the following table.
+					<table id="table_insert_superuser">
+						<title>
+							Important values for the Marmoset super-user account
+						</title>
+						<tgroup cols="3">
+							<thead>
+								<row>
+									<entry>column</entry>
+									<entry>description</entry>
+								</row>
+							</thead>
+							<tbody>
+								<row>
+									<entry>campus_uid</entry>
+									<entry>
+										A campus-wide unique identifier for each account.
+										This is typically a unix login, but can anything
+										else. Values in this column
+										<emphasis>MUST BE UNIQUE</emphasis>.
+										<para>
+											You will see the terms "directoryID" and
+											"campus_uid" used interchangably in the
+											submitServer. This is a Maryland-ism that I
+											hope to factor out at some point.
+										</para>
+									</entry>
+								</row>
+								<row>
+									<entry>employee_num</entry>
+									<entry>
+										Maryland-specific database field that stores the
+										employee number (our campus-wide database uses the
+										ambiguous term "employee number" even though
+										students as well as staff and faculty are
+										identified by this number). If you are using the
+										GenericStudentPasswordAuthenticationService then
+										set the employee_num to the same value as the
+										campus_uid. The employee_num does NOT need to be
+										unique.
+									</entry>
+								</row>
+								<row>
+									<entry>firstname, lastname</entry>
+									<entry>The person's firstname and lastname</entry>
+								</row>
+								<row>
+									<entry>yes</entry>
+									<entry>
+										This is the super-user permissions column. Leave
+										it as 'yes' so that the superuser account has
+										superuser permissions.
+									</entry>
+								</row>
+								<row>
+									<entry>password</entry>
+									<entry>
+										The password to be used by the
+										GenericStudentPasswordAuthenticationService. This
+										is the password you will use to login.
+									</entry>
+								</row>
+							</tbody>
+						</tgroup>
+					</table>
+				</para>
+				<para>
+					Once you've finished editing the bootstrap.sql script, run it like
+					this:
+					<literallayout>
+						<literal>
+							cd SubmitServerModelClasses/dbScripts 
+							./runsql bootstrap.sql
+						</literal>
+					</literallayout>
+					This will create the superuser account you can use to start creating
+					courses. You can check this by opening the database and selecting the 
+					contents of the students table in the database:
+					<literallayout>
+						<literal>
+							select * from students;
+						</literal>
+					</literallayout>					
+				</para>
+
+			</sect1>
+			<sect1 id="jakarta-tomcat">
+				<title>Installing Jakarta Tomcat</title>
+				<para>How to install tomcat</para>
+				<itemizedlist>
+					<listitem>
+						<para>
+							Unpack Jakarta Tomcat 5.5.9 (
+							<ulink url="http://tomcat.apache.org/">Download Tomcat</ulink>
+							) or higher into a directory on the host that will run Submit Server. 
+							Note that Tomcat should go into
+							a local part of the filesystem; it is a
+							<emphasis>VERY BAD IDEA</emphasis>
+							to put Tomcat in a directory on an NFS-mounted volume. Doing
+							so practically guarantees problems from stale NFS-filehandles
+							and so on. We know from experience; just don't do it.
+						</para>
+						<para>
+							I always symlink $HOME/tomcat to whereever I've unpacked
+							tomcat. From this point on I will refer to this directory
+							simply as
+							<literal>Tomcat</literal>, or the
+							<literal>Tomcat</literal>
+							directory.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Configure
+							<xref linkend="server.xml">Tomcat/conf/server.xml</xref>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Configure
+							<xref linkend="web.xml">Tomcat/conf/web.xml</xref>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<xref linkend="clean-up-tomcat">
+								Optionally clean up the Tomcat/webapps directory
+							</xref>
+						</para>
+					</listitem>
+				</itemizedlist>
+
+				<sect2 id="server.xml">
+					<title>Configure Tomcat/conf/server.xml</title>
+					<para>
+						The file Tomcat/conf/server.xml contains (among other things)
+						configuration information for the various ports Tomcat will listen
+						on for incoming connections (i.e. 8080 for http, 8443 for https,
+						etc).
+					</para>
+					<para>
+						You need to find this chunk of xml:
+						<literallayout>
+							<literal>
+								&lt;Host name="localhost" appBase="webapps"
+								unpackWARs="true" autoDeploy="true" 
+								xmlValidation="false" xmlNamespaceAware="false"&gt;
+							</literal>
+						</literallayout>
+						And then add this underneath it:
+						<literallayout>
+							<literal>
+								&lt;Context path="" docBase="submitServer" debug="0"
+								reloadable="true"/&gt;
+							</literal>
+						</literallayout>
+						This will make sure that the submitServer context is the default
+						context (thus you can simply access https://foo.cs.umd.edu:8443
+						rather than https://foo.cs.umd.edu:8443/submitServer)
+					</para>
+					<para>
+						Also,
+						<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/">
+							there's tons of documentation on Tomcat on the web
+						</ulink>
+						, so feel free to look there for more info on what all of the
+						other stuff in server.xml and web.xml are there for, I don't
+						actually know what every feature does.
+					</para>
+				</sect2>
+
+				<sect2 id="web.xml">
+					<title>Configure Tomcat/conf/web.xml</title>
+					<para>
+						The file Tomcat/conf/web.xml contains (among other things) a
+						series of
+						<literal>context-param</literal>
+						nodes specified as children of the root
+						<literal>web-app</literal>
+						element. These are initialization parameters that are passed to
+						your web application. You want to configure any resources here
+						that are specific to this particular tomcat installation (for
+						example which database this tomcat installation will be connecting
+						to). This is useful because you may have a development Marmoset
+						installation with one database, and a production installation with
+						its own database.
+					</para>
+					<note>
+						You can also configure context-param resources in
+						<literal>SubmitServer2/lnf/web.xml</literal>. 
+						In general, I've put things
+						that are the same for all installations into
+						<literal>SubmitServer2/lnf/web.xml</literal> while I've put things that
+						vary in <literal>Tomcat/conf/web.xml</literal>. 
+						This also keeps things like database
+						passwords from being checked into CVS.
+					</note>
+					<note>
+						During installation, the file <literal>SubmitServer2/lnf/web.xml</literal>
+						is copied into <literal>SubmitServer2/WebRoot/WEB-INF/web.xml</literal>,
+						which is later copied into the Tomcat WebRoot. Hence when setting 
+						properties for all installations, you should modify
+						<literal>SubmitServer2/lnf/web.xml</literal> instead of
+						<literal>SubmitServer2/WebRoot/WEB-INF/web.xml</literal>.
+					</note>
+					<para>
+						DO NOT set the same context-param in BOTH Tomcat/conf/web.xml and
+						SubmitServer2/WebRoot/WEB-INF/web.xml. This will cause your
+						web-application to fail upon startup.
+					</para>
+
+					<para>
+						web.xml is (obviously) an xml file. A context-param looks like
+						this:
+						<literallayout>
+							<literal>
+								&lt;context-param&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-name&gt;authentication.service&lt;/param-name&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-value&gt;edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService&lt;/param-value&gt;
+								&lt;/context-param&gt;
+							</literal>
+						</literallayout>
+					</para>
+
+					<para>
+						You need to make sure you set the following context-params in
+						Tomcat/conf/web.xml (replace PASSWORD with the database password
+						you chose when you configured MySQL, of course):
+						<literallayout>
+							<literal>
+								&lt;context-param&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-name&gt;authentication.service&lt;/param-name&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-value&gt;edu.umd.cs.submitServer.GenericStudentPasswordAuthenticationService&lt;/param-value&gt;
+								&lt;/context-param&gt; 
+								&lt;context-param&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-name&gt;database.server.jdbc.url&lt;/param-name&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-value&gt; jdbc:mysql://localhost/submitserver&lt;/param-value&gt; 
+								&lt;/context-param&gt;
+								&lt;context-param&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-name&gt;database.user&lt;/param-name&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-value&gt;root&lt;/param-value&gt;
+								&lt;/context-param&gt; 
+								&lt;context-param&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-name&gt;database.password&lt;/param-name&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-value&gt;PASSWORD&lt;/param-value&gt;
+								&lt;/context-param&gt; 
+								&lt;context-param&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-name&gt;database.driver&lt;/param-name&gt;
+									&nbsp;&nbsp;&nbsp; &lt;param-value&gt;org.gjt.mm.mysql.Driver&lt;/param-value&gt;
+								&lt;/context-param&gt;
+							</literal>
+						</literallayout>
+					</para>
+					<para>
+						There are several other context-params than you can set in this
+						file:
+						<table id="table_context-params">
+							<title>Valid Marmoset context-params</title>
+							<tgroup cols='5' align='left' colsep='1' rowsep='1'>
+								<colspec colname='name' />
+								<colspec colname='values' />
+								<colspec colname='required' />
+								<colspec colname='default' />
+								<colspec colname='descsription' />
+								<thead>
+									<row>
+										<entry>name</entry>
+										<entry>values</entry>
+										<entry>required?</entry>
+										<entry>default</entry>
+										<entry>description</entry>
+									</row>
+								</thead>
+								<tbody>
+									<row>
+										<entry>authentication.service</entry>
+										<entry>
+											<literal>edu.umd.cs.submitServer.SERVICE</literal>
+											where SERVICE is
+											<literal>MarylandAuthenticationService</literal>
+											or
+											<literal>GenericStudentPasswordAuthenticationService</literal>
+										</entry>
+										<entry>no</entry>
+										<entry><literal>MarylandAuthenticationService</literal></entry>
+										<entry>
+											The name of the class to be used for
+											authentication purposes. The web app will use
+											the string name given here to dynamically load
+											the class, create an instance of that class,
+											and use the class for authentication. The
+											<literal>GenericStudentPasswordAuthenticationService</literal>
+											authentications against the password stored in
+											'password' column of the 'students' table in
+											the database; this is suitable for most
+											environments. You could also implement your
+											own authentication service by providing an
+											implementation of
+											<literal>edu.umd.cs.submitServer.IAuthenticationService</literal>
+											and then providing the name of your
+											implementation.
+										</entry>
+									</row>
+									<row>
+										<entry>perform.background.retesting</entry>
+										<entry>true|false</entry>
+										<entry>no</entry>
+										<entry>false</entry>
+										<entry>
+											Should Marmoset keep re-testing submissions in
+											the background in order to get more confidence
+											in the results? Useful for multi-threaded
+											code. 
+											<!-- TODO: Link to the section describing bg
+											retests once it's written. -->
+										</entry>
+									</row>
+									<row>
+										<entry>semester</entry>
+										<entry>String e.g. Spring 2006</entry>
+										<entry>no</entry>
+										<entry>N/A</entry>
+										<entry>
+											If this parameter is provided, the semester 
+											indicated is the default value of the
+											"semester" field in the "Create course" form.
+											<xref linkend="configuring-marmoset"/> describes
+											creating a new course.
+										</entry>
+									</row>
+									<row>
+										<entry>DEBUG</entry>
+										<entry>true|false</entry>
+										<entry>no</entry>
+										<entry>false</entry>
+										<entry>
+											Indicate whether more detailed logs should be created during the
+											run of Submit Server. Logs are created in the 
+											Tomcat/logs/marmoset directory and keep track of
+											things like authentication failures and other errors.
+											The logs created when this is set to true are quite extensive,
+											so set this to false unless you want to do some debugging.
+										</entry>
+									</row>
+								</tbody>
+							</tgroup>
+						</table>
+					</para>
+					<para>
+						To prevent Tomcat from listing the contents of directories, find
+						this chunk in web.xml and make sure that "listings" is set to
+						"false", like this:
+						<literallayout>
+							<literal>
+							&lt;servlet&gt;
+								&nbsp;&nbsp;&nbsp; &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+								&nbsp;&nbsp;&nbsp; &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
+								&nbsp;&nbsp;&nbsp; &lt;init-param&gt; 
+								&nbsp;&nbsp;&nbsp; 	&nbsp;&nbsp;&nbsp; &lt;param-name&gt;debug&lt;/param-name&gt;
+								&nbsp;&nbsp;&nbsp; 	&nbsp;&nbsp;&nbsp; &lt;param-value&gt;0&lt;/param-value&gt; 
+								&nbsp;&nbsp;&nbsp; &lt;/init-param&gt;
+								&nbsp;&nbsp;&nbsp; &lt;init-param&gt;
+								&nbsp;&nbsp;&nbsp; 	&nbsp;&nbsp;&nbsp; &lt;param-name&gt;listings&lt;/param-name&gt;
+								&nbsp;&nbsp;&nbsp; 	&nbsp;&nbsp;&nbsp; &lt;param-value&gt;false&lt;/param-value&gt;
+								&nbsp;&nbsp;&nbsp; &lt;/init-param&gt;
+								&nbsp;&nbsp;&nbsp; &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+							&lt;/servlet&gt;
+							</literal>
+						</literallayout>
+					</para>
+				</sect2>
+
+				<sect2 id="tomcat-ssl">
+					<title>Configuring SSL</title>
+					<para>
+						You probably want to configure Tomcat to use SSL so that you can
+						transmit secure traffic between clients and the server. This is
+						especially important if you are communicating over wireless
+						connections, where sniffing packets is quite easy.
+					</para>
+					<para>
+						There are two types of certificates that you can use: a
+						<emphasis>signed</emphasis>
+						certificate and a
+						<emphasis>self-signed</emphasis>
+						certificate.
+					</para>
+					<para>
+						A
+						<emphasis>signed certificate</emphasis>
+						is a certificate that has been signed by a recognized Certificate
+						Authority (CA) and will be accepted by most browsers or client
+						programs. These certificates are valid for a certain amount of
+						time, such as one year, and typically cost money.
+					</para>
+					<para>
+						A
+						<emphasis>self-signed certificate</emphasis>
+						is a certificate that you can produce and sign yourself using Java
+						or another program.
+					</para>
+					<warning>
+						Self-signed certificates are not automatically accepted by client
+						programs. Browsers will typically ask the user whether they want
+						to accept the certificate or not, while some client programs such
+						as Java will simply refuse to accept an unsigned certificate
+						unless that certificate is explicitly imported by the user.
+					</warning>
+					<para>
+						The following section assumes that you are using a
+						<emphasis>self-signed certificate</emphasis>
+						. The steps for using a
+						<emphasis>signed certificate</emphasis>
+						are usually similar, but depend to some extent on which CA you get
+						to sign your certificate. Whatever CA you choose, they should have
+						instructions or documentation on how to set up your certificate.
+					</para>
+					<para>
+						<itemizedlist>
+							<listitem>
+								<para>
+									First, you need to create a self-signed certificate
+									using the "keytool" command included with Java (you
+									will need Java installed somewhere on your system and
+									$JAVA_HOME/bin on your PATH):
+								</para>
+								<para>
+									<command>
+										keytool -genkey -alias tomcat -keyalg RSA
+										-validity 365 -keystore marmosetKeystore
+									</command>
+								</para>
+								<para>
+									This command will ask you to fill in a bunch of
+									information about your organization. I'm not sure of
+									difference this makes.
+								</para>
+								<para>
+									This will produce a "keystore" containing all of your
+									keys (currently just the one key you just created)
+									called "marmosetKeystore" stored under the alias
+									"tomcat".
+								</para>
+								<warning>
+									You will be asked to supply a password for the
+									keystore. Use the password "changeit", which is the
+									default passwork used by most of the examples I've
+									seen. I know that this password works, and I have
+									anecdotal evidence that using a different password, or
+									no password at all, will not work. I believe that
+									Tomcat always supplies the password "changeit" by
+									default when it needs to extract keys from a keystore.
+								</warning>
+								<note>
+									In this document, I refer to the keystore as
+									"marmosetKeystore" and choose "tomcat" for the alias
+									of the key. However, you can pick any names you'd
+									like.
+								</note>
+							</listitem>
+
+							<listitem>
+								<para>
+									Now you need to copy your keystore somplace where
+									Tomcat can find it. To do this, first create the
+									directory Tomcat/conf/ssl (Tomcat/conf should already
+									be there), and copy marmosetKeystore into
+									Tomcat/conf/ssl.
+								</para>
+							</listitem>
+
+							<listitem>
+								<para>
+									Now you need to configure Tomcat to use your newly
+									create keystore. Find the XML chunk in
+									Tomcat/conf/server.xml that looks like this:
+								</para>
+								<literallayout>
+									<literal>
+									&lt;Connector port="8443" maxHttpHeaderSize="8192"
+									maxThreads="150" minSpareThreads="25"
+									maxSpareThreads="75" enableLookups="false"
+									disableUploadTimeout="true" acceptCount="100"
+									scheme="https" secure="true" clientAuth="false"
+									sslProtocol="TLS" /&gt;
+									</literal>
+								</literallayout>
+								<para>
+									(You may need to uncomment this block of XML).
+									Add the following line (replace TOMCAT_ROOT with
+									the full path to your Tomcat installation):
+								</para>
+								<para>
+									<literal>keystoreFile="TOMCAT_ROOT/tomcat/conf/ssl/marmosetKeystore"</literal>
+								</para>
+								<para>
+									This should yield an XML chunk that looks something
+									like this:
+								</para>
+								<literallayout>
+									<literal>
+									&lt;Connector port="8443" maxHttpHeaderSize="8192"
+									maxThreads="150" minSpareThreads="25"
+									maxSpareThreads="75" enableLookups="false"
+									disableUploadTimeout="true" acceptCount="100"
+									scheme="https" secure="true"
+									keystoreFile="/export/homes/submit/tomcat/conf/ssl/marmosetKeystore"
+									clientAuth="false" sslProtocol="TLS" /&gt;
+									</literal>
+								</literallayout>
+							</listitem>
+
+							<listitem>
+								<para>
+									A self-signed certificate will cause most browsers to
+									prompt the user as to whether or not they want to
+									accept a given certificate. However, any client
+									programs that run under Java, such as the BuildServer,
+									will fail when trying to connect over SSL to an entity
+									identified by a self-signed keystore.
+								</para>
+								<para>
+									To allow a program running under Java to connect an
+									entity identified by a self-signed keystore, you need
+									to export a certificate from the keystore and then
+									import the certificate into the JVM.
+								</para>
+								<para>
+									To export a certificate from the marmosetKeystore:
+								</para>
+								<para>
+									<command>
+										keytool -export -keystore marmosetKeystore -alias
+										tomcat -file marmoset.cer
+									</command>
+								</para>
+								<para>
+									This command will produce marmoset.cer, a certificate
+									that you can import into your JVM so that your Java
+									will trust your self-signed keystore.
+								</para>
+								<para>
+									To import this certificate into a JVM (assuming that
+									shell variable JAVA_HOME points to your Java
+									installation):
+									<para>
+										<command>
+											keytool -import -alias tomcat -keystore
+											$JAVA_HOME/jre/lib/security/cacerts -file
+											marmoset.cer
+										</command>
+									</para>
+								</para>
+								<note>
+									The file $JAVA_HOME/jre/lib/security/cacerts is often
+									not writable on unix systems, so you will first need
+									to run:
+									<para>
+										<command>
+											chmod u+w $JAVA_HOME/jre/lib/security/cacerts
+										</command>
+									</para>
+									before importing the certificate into your JVM.
+								</note>
+							</listitem>
+
+						</itemizedlist>
+					</para>
+				</sect2>
+
+				<sect2 id="tomcat-unix">
+					<title>
+						Starting and stopping Tomcat, and other Tomcat-related
+						Configuration Notes
+					</title>
+					<itemizedlist>
+						<listitem>
+							To startup Tomcat:
+							<literallayout>
+								<literal>
+								cd Tomcat/bin 
+								./startup.sh
+								</literal>
+							</literallayout>
+							To shutdown Tomcat:
+							<literallayout>
+								<literal>
+								cd Tomcat/bin ./shutdown.sh
+								</literal>
+							</literallayout>
+						</listitem>
+
+						<listitem>
+							<para>
+								If Tomcat does not start-up properly,
+								Tomcat/logs/catalina.out should tell you why.
+							</para>
+						</listitem>
+
+						<listitem>
+							<para>
+								The shutdown script doesn't always work; sometimes I have
+								to find and kill the Java process.
+							</para>
+						</listitem>
+
+						<listitem>
+							<para>
+								Sometimes you'll do everything right to startup Tomcat,
+								but when you try to access a page, you will get a 404
+								(page not found/not available). If this happens, shutting
+								down tomcat and then restarting it usually fixes the
+								problem.
+							</para>
+							<para>
+								However, sometimes it's necessary to stop the webapp
+								container and delete the exploded web-archive, like this:
+								<literallayout>
+									<literal>
+										cd Tomcat/bin 
+										./shutdown.sh 
+										/bin/rm -rf ../webapps/submitServer 
+										./startup.sh
+									</literal>
+								</literallayout>
+								where submitServer is the web application we install
+								in <xref linkend="compile"/>.
+							</para>
+						</listitem>
+
+						<listitem>
+							<para>
+							It is a good idea to install and run tomcat with a normal user
+							account rather than running it as the root user of the unix
+							system.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								We set port-forwarding from port 80 to 8080 and from 443
+								to 8443 so people can access the server using only the
+								protocol (i.e. https) rather than the protocol and the
+								port number. For example, with forwarding from 443 to 8443
+								enabled, the server can be accessed like this:
+							</para>
+							<para>https://hostname.cs.umd.edu/</para>
+						</listitem>
+					</itemizedlist>
+				</sect2>
+				<sect2 id="clean-up-tomcat">
+					<title>Clean up the Tomcat/webapps directory</title>
+					<para>
+						You can delete all the examples in Tomcat/webapps except for the
+						Tomcat/webapps/balancer. These examples show how to write servlets 
+						and jsps and are neither a secure nor professional thing to have 
+						sitting around.
+					</para>
+				</sect2>
+
+				<sect2 id="troubleshooting">
+					<title>Troubleshooting Tomcat</title>
+					<para>
+						This is a list of things that have gone wrong with Tomcat for us
+						that you might run into. Note that Tomcat is a large, evolving
+						piece of software with lots of good documentation on the web. If
+						something doesn't work, try googling whatever error message is
+						being generated.
+					</para>
+					<itemizedlist>
+						<listitem>
+							<para>
+								The first place to look is in Tomcat/logs/catalina.out.
+								This file will often contain useful errors that will tell
+								you what the problem is.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Sometimes you need to shutdown and restart Tomcat. I don't
+								know why, but sometimes that works.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								In general, Tomcat does a good job of hot-deploying
+								whatever you copy into the Tomcat/webapps directory, and
+								will usually be able to hot-update a webapp that's already
+								running when you copy a new warfile into Tomcat/webapps.
+								But, sometimes Tomcat will not be able to hot-deploy or
+								hot-update, and you'll need to do the following:
+							</para>
+							<para>
+								Shutdown Tomcat, delete the Tomcat/webapps/submitServer
+								directory, and then restart (sometimes stopping and
+								re-starting again).
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								You can only define context parameters (context-param) in
+								ONE place at a time, either Tomcat/conf/web.xml or in
+								WEB-INF/web.xml of your warfile. If you put the same
+								parameter in both places, either the webapp will fail to
+								load or Tomcat itself will fail to load.
+							</para>
+							<para>
+								This is very annoying, it should be possible to over-ride
+								parameters in web.xml. I've written a hacked-up mechanism
+								for doing that that involves defining properties with
+								__override on the end of them and having a special
+								mechanism for doing the lookups in the web.xml file in
+								servlets. Of course this doesn't easily translate to jsps,
+								and in general this is pretty annoying. Such a far cry
+								from POJOs, or anything resembling useful programming...
+							</para>
+						</listitem>
+					</itemizedlist>
+				</sect2>
+
+			</sect1>
+
+			<sect1 id="compile">
+				<title>Compiling and Installing the Submit Server</title>
+				<orderedlist numeration="arabic">
+					<listitem>
+						<para>
+						Return to the directory where you unpacked SubmitServer2 and 
+						SubmitServerModelClasses in <xref linkend="unpackdistribution"/>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+						Create the ANT properties file <literal>SubmitServer2/local.properties</literal>
+						and point the <literal>production.install.location</literal>
+						property to your tomcat installation.
+						For example:
+						</para>
+						<para>
+							<literal>
+							production.install.location=username@foo.cs.umd.edu:/path/to/tomcat
+							</literal>
+						</para>
+						<para>
+							or
+						</para>
+						<para>
+							<literal>
+							production.install.location=/path/to/tomcat/on/local/machine
+							</literal>
+						</para>
+						<note>
+							local.properties is the correct place to put configuration
+							parameters specific to your institution. DO NOT update
+							build.properties directly if you are checking our code out of
+							CVS because build.properties is under CVS control.
+						</note>
+						<note>
+							local.properties and build.properties are both read by the
+							build.xml file used by ant. In ant, a property is only set the
+							FIRST time it is read. Any other attempts to set the value of
+							that property are ignored. Thus, because local.properties is
+							read before build.properties, any property set in
+							local.properties will be used instead of a property with the
+							same name in build.properties.
+						</note>
+					</listitem>
+					<listitem>
+						cd into SubmitServer2 and run this command:
+						<para>
+							<literal>ant production.install</literal>
+						</para>
+						<para>
+							This will find and compile the SubmitServerModelClasses into
+							SubmitServer2, and then produce a SubmitServer2/dist directory
+							with submitServer.war and sharedSubmitServer.jar, and copy
+							those to the appropriate places in the tomcat installation.
+						</para>
+						<para>
+							The production.install ant task uses "scp" to copy the
+							submitServer.war and sharedSubmitServer.jar files to the
+							appropriate location. It assumes that "scp" is on your path
+							and that you're running Linux. You can always copy the two
+							files produced into the appropriate places: submitServer.war
+							goes into Tomcat/webapps and sharedSubmitServer.jar goes into
+							Tomcat/shared/lib.
+						</para>
+						<para>
+							You do not need to compile the software with any particular
+							user account or with any special privileges, so long as the
+							generated files can be copied into the Tomcat installation. I
+							always compile Marmoset on my desktop machine with my regular
+							user account and install it into tomcat using a special
+							'submit' account reserved for running the SubmitServer.
+						</para>
+						<para>
+							sharedSubmitServer.jar contains some shared code for
+							monitoring the connections with the buildServers. If you don't
+							install it, the only thing that won't work is the
+							BuildServerStatus link available to instructors.
+						</para>
+						<note>
+							Troubleshooting: You can also build the SubmitServer2 project
+							in Eclipse. The project is set up to work in Eclipse with
+							<ulink url="http://www.myeclipseide.com">MyEclipse</ulink>
+							plugin. If you do not have this plugin, ensure that the
+							j2ee.jar is properly linked, by going to Project Properties --
+							Java Build Path -- Libraries. If j2ee.jar is not in the list,
+							add it by clicking "Add Jars..." and selecting it from
+							SubmitServer2/lib.
+							<important>
+								You need to perform this step if you open the project in
+								Eclipse, even if you do not plan to run the ant
+								instruction through Eclipse, because Eclipse automatically
+								builds the files when you open it. When ant sees that the
+								class files are already created, it does not rebuild them.
+							</important>
+						</note>
+					</listitem>
+					<listitem>
+						To test the submit server, first ensure the tomcat server is
+						running:
+						<para>
+							<literal>Tomcat/bin/startup.sh</literal>
+						</para>
+
+						Then go to https://localhost:8443 and log in using the super user
+						account you created in
+						<xref linkend="superuser" />
+						.
+					</listitem>
+				</orderedlist>
+			</sect1>
+
+
+		</chapter>
+
+		<chapter id="auxiliary-tools">
+			<title>Installing and configuring phpMyAdmin</title>
+			<para>
+				<ulink url="http://www.phpmyadmin.net/home_page/">PhpMyAdmin</ulink>
+				is a MySQL database administration tool written in php. PhpMyAdmin is
+				useful because Marmoset is an active research project that is sometimes
+				unstable, so it is often necessary to view or update the raw data in the
+				database directly with another tool.
+			</para>
+			<para>
+				<emphasis>This chapter is not necessary for the correct functioning of 
+				Submit Server.</emphasis>
+			</para>
+			<sect1 id="prerequsites">
+				<title>Prerequisites</title>
+				<itemizedlist>
+					<listitem>
+						<ulink url="http://httpd.apache.org/">
+							Apache httpd-2.0.55 (not tested with the 2.2 httpd series)
+						</ulink>
+					</listitem>
+					<listitem>
+						<ulink url="http://www.php.net/downloads.php">
+							PHP-4.4.2 (not tested with PHP-5.0 or higher)
+						</ulink>
+					</listitem>
+					<listitem>
+						<ulink url="">
+							openSSL-0.9.7e (optional but strongly recommended)
+						</ulink>
+					</listitem>
+					<listitem>
+						<ulink url="http://www.phpmyadmin.net/home_page/">
+							PhpMyAdmin 2.8.0.2 or above
+						</ulink>
+					</listitem>
+				</itemizedlist>
+			</sect1>
+
+			<sect1 id="php">
+				<title>Installing PHP</title>
+				<para>To Do</para>
+			</sect1>
+			<sect1 id="configure-phpmyadmin">
+				<title>Configuring phpMyAdmin</title>
+				<para>To Do</para>
+			</sect1>
+			<sect1 id="openssl">
+				<title>Installing OpenSSL</title>
+				<para>
+					Use the openssl_install script to compile and install openssl (openSSL
+					might already be installed on your system; I always compile it myself
+					anyway).
+					<itemizedlist>
+						<listitem>
+							I always put everything into $HOME/software and create
+							symlinks, for example:
+							<para>ln -s software/openssl-0.9.7e openssl</para>
+						</listitem>
+						<listitem>Edit $HOME/www/conf/ssl.conf</listitem>
+						<para>
+							change all occurrences of port 443 (default SSL port) to
+							something else (I always 3006)
+						</para>
+						<para>
+							Create $HOME/www/conf/ssl.key and $HOME/www/conf/ssl.crt and
+							copy in a key and a certificate. TODO link the key and cert
+						</para>
+						<para>
+							In ssl.conf, change "Listen 443" to "Listen 3006" (or some
+							other port)
+						</para>
+						<listitem>
+							Edit $HOME/www/conf/httpd.conf:
+							<para>
+								Add: AddType application/x-httpd-php .php AddType
+								application/x-httpd-php-source .phps To the "AddType"
+								section of httpd.conf
+							</para>
+							<para>
+								Comment out the "Listen 80" line, we're using a
+								VirtualHost created by the ssl.conf file instead so
+								there's no need for http to listen (since https will be
+								listening).
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</sect1>
+
+			<sect1 id="apache-ssl">
+				<title>Installing and Configuring Apache with SSL</title>
+				<para>
+					<itemizedlist>
+						<listitem>unpack httpd-2.0.55 into $HOME/software</listitem>
+						<listitem>
+							Make sure that there's nothing installed in $HOME/www
+						</listitem>
+						<listitem>
+							run the apache_install script inside the
+							$HOME/software/httpd-2.0.55 directory. This will install
+							apache httpd into $HOME/www.
+						</listitem>
+					</itemizedlist>
+				</para>
+			</sect1>
+		</chapter>
+
+
+	</part>
+
+	<part id="buildserver_installation">
+		<title>BuildServer Installation</title>
+
+		<chapter id="buildserver_install_prerequisites">
+			<title>Introduction and Prerequisites</title>
+
+			<para>
+				This section explains how to install and use the BuildServer component of
+				Marmoset. The BuildServer automatically builds and tests student project
+				submissions, and reports the test results back to the SubmitServer
+				database. The intended audience is administrators setting up the Marmoset
+				system and instructors who may want to use the build server to manually
+				test submissions.
+			</para>
+
+			<para>To install and run the BuildServer, you need the following:</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						The
+						<literal>BuildServer Module</literal>
+						and
+						<literal>SubmitServerModelClasses Module</literal>
+						included in the installation distribution.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						JDK 1.5 (a.k.a. 5.0) or later (
+						<ulink url="http://java.sun.com/j2se/">Download Java</ulink>
+						)
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Ant 1.6 or later (
+						<ulink url="http://ant.apache.org/">Download Ant</ulink>
+						)
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Perl 5 or later (
+						<ulink url="http://www.perl.org/">Download Perl</ulink>
+						)
+					</para>
+				</listitem>
+			</itemizedlist>
+
+			<para>
+				You also need an existing Submit Server installation and database (unless
+				you plan to use the BuildServer offline). If you are installing this at
+				your university, you need to complete the Submit Server installation
+				according to
+				<xref linkend="submitserver_installation" />
+				.
+			</para>
+
+			<para>
+				<xref linkend="buildserver_offline" />
+				explains how to run the BuildServer offline from the command line for
+				debugging purposes. This is very useful for developing and debugging your
+				project and canonical solution, and also for debugging particular student
+				submissions that don't behave as expected when built and tested by the
+				BuildServer in production.
+			</para>
+		</chapter>
+
+		<chapter id="installing">
+			<title>Installing the BuildServer</title>
+			<para>
+				This chapter describes how to install the BuildServer software. After
+				installing it, you may choose to run it as a daemon process that interacts
+				with a submit server installation ( see
+				<xref linkend="daemon" />
+				), or you may choose to run it offline to test individual submissions and
+				test setups ( see
+				<xref linkend="buildserver_offline" />
+				).
+			</para>
+
+			<sect1 id="install_steps">
+				<title>Installation Steps</title>
+
+				<orderedlist numeration="arabic">
+					<listitem>
+						<para>
+							Create a fresh directory. I will refer to this directory as
+							'buildserver' in this chapter but you may name the directory
+							anything you'd like. Unpack the
+							<literal>BuildServer Module</literal>
+							and
+							<literal>SubmitServerModelClasses Module</literal>
+							into this directory
+						</para>
+					</listitem>
+					<listitem>
+						<para>Change directory into the 'BuildServer' directory.</para>
+					</listitem>
+					<listitem>
+						<para>
+							Make the batch-install and killall scripts executable 
+							(chmod u+x). Also make all the scripts in the 'scripts' 
+							directory executable.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Run
+							<literal>ant</literal>
+							. The code should compile with no errors. (You may see
+							warnings about deprecated code; they are normal. The ant build
+							script expects SubmitServerModelClasses to be next to tbe
+							BuildServer, and will find and compile it as appropriate).
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Run the
+							<literal>batch-install</literal>
+							from inside the BuildServer directory. Here is a sample call
+							to this script:
+						</para>
+						<para>
+							<literal>
+								./batch-install -h oursubmitserver.ourschool.edu -c
+								CSE101,"CSE 202" -s "Spring 2006" 4
+							</literal>
+						</para>
+
+						<para>
+							The courses and semester should correspond to the names you use
+							when you create courses in <xref linkend="configuring-marmoset"/>.
+							The full usage of this script is:
+						</para>
+
+						<literallayout>
+							<literal>
+								Usage: ./batch-install 
+								[ -b &lt;buildServerWorkDir&gt; ]
+									&nbsp;&nbsp;&nbsp; Where to put BuildServer work directories and logfiles; defaults to the current directory (i.e. BuildServer) 
+								[ -f &lt;findbugsDir&gt; ] 
+									&nbsp;&nbsp;&nbsp; If empty then FindBugs won't be used
+								[ -p &lt;port&gt; ] 
+									&nbsp;&nbsp;&nbsp; Defaults to 8443 
+								[ -u &lt;unprivilegedAccount&gt; ] 
+									&nbsp;&nbsp;&nbsp; Default is to use the same account running the BuildServer (less secure but perfectly functional) 
+								-h &lt;serverHost&gt; 
+									&nbsp;&nbsp;&nbsp; REQUIRED: The hostname of the SubmitServer to connect to 
+								-c &lt;course1,...,courseN&gt; 
+									&nbsp;&nbsp;&nbsp; REQUIRED: Comma-separated list of courses this BuildServer supports 
+								-s &lt;semester&gt;
+									&nbsp;&nbsp;&nbsp; REQUIRED: The semester for which this BuildServer can build submissions 
+								&lt;numBuildServers&gt; 
+									&nbsp;&nbsp;&nbsp; REQUIRED: The number of BuildServers to create
+								<!-- 
+									Usage: ./batch-install 
+									[ -b &lt;buildServerWorkDir&gt; (where to put the bs1 directories and logfiles) ]
+									[ -f &lt;findbugsDir&gt; ]
+									[ -p &lt;port&gt; ]
+									[ -u &lt;unprivilegedAccount&gt; ]
+									[ -p &lt;port&gt; ]
+									-h &lt;serverHost&gt;
+									-c &lt;course1,...,courseN&gt;
+									-s &lt;semester&gt;
+									&lt;numBuildServers&gt;
+								-->
+							</literal>
+						</literallayout>
+
+
+
+						<table id="table_buildserver-install-script">
+							<title>Test properties</title>
+							<tgroup cols="3" align="left">
+								<thead>
+									<row>
+										<entry>Parameter</entry>
+										<entry>Required?</entry>
+										<entry>Default</entry>
+										<entry>Meaning</entry>
+									</row>
+								</thead>
+								<tbody>
+									<row>
+										<entry>-b [buildServerWorkDir]</entry>
+										<entry>no</entry>
+										<entry>
+											The current directory (the batch-install
+											script must be run from the BuildServer
+											directory).
+										</entry>
+										<entry>
+											Where to put the work directories for the
+											BuildServers this script creates. The work
+											directories are where the BuildServer stores
+											downloaded submissions and test-setups, and
+											stores its logfiles. These directories will
+											typically be named something like
+											bs2.&lt;hostname&gt;
+										</entry>
+									</row>
+
+
+									<row>
+										<entry>-f [FindBugsDir]</entry>
+										<entry>no</entry>
+										<entry>don't use FindBugs</entry>
+										<entry>
+											If a FindBugs installation is specified, then
+											this BuildServer will run FindBugs on all
+											Java-based submissions, and report the results
+											back to the SubmitServer (which will display
+											them to students and instructors). If no
+											FindBugs installation is specified, then this
+											BuildServer will not use FindBugs.
+										</entry>
+									</row>
+
+									<row>
+										<entry>-u [unprivilegedAccount]</entry>
+										<entry>no</entry>
+										<entry>don't use an unprivileged account</entry>
+										<entry>
+											If an unprivileged account is specified, the
+											BuildServer will 'su' to this account before
+											executing student code for Makefile-based
+											projects. (Note that this implies that the
+											account running the BuildServer can 'su' to
+											the unprivileged account with no password.)
+											This provides additional security in that
+											student-written code will not be able to
+											delete anything from the file system. If no
+											unprivileged account is specified, then
+											student-written code will run under the same
+											account that is running the BuildServer. This
+											is somewhat less secure, but perfectly
+											functional.
+										</entry>
+									</row>
+
+									<row>
+										<entry>port</entry>
+										<entry>no</entry>
+										<entry>8443</entry>
+										<entry>
+											The port on the server where the SubmitServer
+											is running.
+										</entry>
+									</row>
+
+									<row>
+										<entry>-h [submitserverHost]</entry>
+										<entry>yes</entry>
+										<entry>N/A</entry>
+										<entry>
+											The hostname of the SubmitServer for
+											BuildServers to connect to.
+										</entry>
+									</row>
+
+									<row>
+										<entry>-c &lt;course1,...,courseN&gt;</entry>
+										<entry>yes</entry>
+										<entry>N/A</entry>
+										<entry>
+											A comma-separated list of the courses that
+											this BuildServer can compile and test. For
+											example:
+											<literallayout>
+												-c CMSC131,CMSC132,CMSC433
+											</literallayout>
+										</entry>
+									</row>
+
+									<row>
+										<entry>-s [semester]</entry>
+										<entry>yes</entry>
+										<entry>N/A</entry>
+										<entry>
+											The semester for which this BuildServer can
+											build and test submissions. For example:
+											<literallayout>
+												-s "Spring 2006"
+											</literallayout>
+										</entry>
+									</row>
+
+									<row>
+										<entry>num_build_servers</entry>
+										<entry>yes</entry>
+										<entry>N/A</entry>
+										<entry>
+											The number of BuildServers to create.
+											BuildServers will be put into
+											&lt;buildServerWorkDir&gt;, and will be named:
+											<literallayout>
+												bs1.&lt;hostname&gt; ...
+												bsN.&lt;hostname&gt;
+											</literallayout>
+										</entry>
+									</row>
+									<!--
+										<row>
+										<entry></entry>
+										<entry></entry>
+										<entry></entry>
+										<entry></entry>
+										</row>
+									-->
+
+								</tbody>
+							</tgroup>
+						</table>
+
+					</listitem>
+				</orderedlist>
+			</sect1>
+		</chapter>
+
+		<chapter id="daemon">
+			<title>Running a BuildServer</title>
+			<para>
+				This chapter describes how to run a BuildServer. It assumes you have
+				installed the BuildServer software as described in
+				<xref linkend="installing" />
+				.
+			</para>
+
+			<note>
+				<para>
+					The build servers connect securely to the Submit Server to get
+					submissions to build. In order to this, the unsigned security
+					certificate associated with the submit server needs to be installed in
+					the JVM that will run the build server. See Section 2.4.3 "Configuring
+					SSL" of the Submit Server installation manual for more details. (If
+					you are running the build server on the same host as the submit
+					server, and you have already installed the certificate during the
+					Submit Server installation process, then you can ignore this note.)
+				</para>
+			</note>
+
+			<sect1 id="daemon_about">
+				<title>About running a BuildServer</title>
+
+				<para>
+					A build server is usually run as a daemon process running in the
+					background. It probes the associated SubmitServer to see if any
+					submissions need to be built -- if this is the case, it downloads and
+					builds these submissions. A Build Server can also be started from the
+					command line to download and build a submission from the submit
+					server, or to build a submission that is available offline. Starting
+					the Build Server from the command line is often useful for debugging
+					the Build Server behavior, because this arrangement prints out all its
+					output to stdout.
+				</para>
+				<para>
+					To run the build server as a daemon process, a cron job is set up to
+					periodically check that the server is still running. This ensures that
+					if the server crashes, it is restarted. However, this feature can be
+					bothersome if an administrator wants to kill the build server since it
+					will be restarted within 5 minutes unless the cron script is changed.
+					For maximum flexibility, the Build Server distribution includes a
+					"cron-set" script that influences the behavior of the cron job.
+				</para>
+			</sect1>
+
+			<sect1 id="daemon_on">
+				<title>To run the BuildServer daemons</title>
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Enable cron processes using the "cron-set" script. From the
+							BuildServer directory, run:
+						</para>
+						<para>
+							<literal>scripts/cron-set -c CRONTAB.sh on</literal>
+						</para>
+						<para>
+							This command modifies the CRONTAB.sh script to ensure that it
+							periodically checks to ensure that the build servers are
+							running.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Run
+							<literal>./CRONTAB.sh</literal>
+							. This starts the build servers created during the
+							installation process. You can check for the existence
+							of these processes by using the 'ps' command to look
+							for new java processes. 
+						</para>
+						<para>
+							You can also login to the Submit Server, go to the SuperUser 
+							page, and click "BuildServerStaus" on the bread crumb. This
+							should indicate that the Build Servers have recently contacted
+							the Submit Server.
+						</para>
+					</listitem>
+				</orderedlist>
+			</sect1>
+
+			<sect1 id="daemon_off">
+				<title>To stop the BuildServer daemons</title>
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Disable cron processes using the "cron-set" script. From the
+							BuildServer directory, run:
+						</para>
+						<para>
+							<literal>scripts/cron-set -c CRONTAB.sh off</literal>
+						</para>
+						<para>
+							This command modifies the CRONTAB.sh script to ensure that it
+							does NOT restart the build server.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Run
+							<literal>./killall</literal>
+							. This stops all the build servers created during the
+							installation process.
+						</para>
+					</listitem>
+				</orderedlist>
+			</sect1>
+
+			<sect1 id="command_line">
+				<title>To run the BuildServer from the command line</title>
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Running the build server from the command line is often useful
+							for debugging purposes. To run a single build server from the
+							command line, first change directory (cd) into the build
+							server directory that corresponds to the build server you wish
+							to run. e.g.
+							<literal>cd bs1.ourserver.ourschool.edu</literal>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Use the runBuildServer script which has the following usage:
+						</para>
+						<para>
+							<literal>
+								Usage: ./runBuildServer &lt;config file&gt; [ once ]
+							</literal>
+						</para>
+						<para>
+							The config file is the "config.properties" file in the current
+							directory. Adding the literal
+							<literal>once</literal>
+							to the command instructs the build server to shut down after
+							it has downloaded and built a single submission from the
+							Submit Server.
+						</para>
+					</listitem>
+				</orderedlist>
+
+				<warning>
+					The build server working directories (bs1.*, bs2.* etc) are used to
+					store submission and test-setup information retrieved from the submit
+					server, and other temporary information needed during the testing
+					process. Therefore, you should not execute a build server that is in
+					the process of testing a submission because this will interfere with
+					the active testing process. Usually, the
+					<literal>runBuildServer</literal>
+					script is used when no build servers are active (i.e. all were shut
+					down with the
+					<literal>killall</literal>
+					script) or in a seperate build server installation.
+				</warning>
+			</sect1>
+
+			<sect1 id="buildserver_offline">
+				<title>To run the BuildServer Offline</title>
+
+				<para>
+					It is also possible to run a build server offline on a particular
+					submission. To do this, you will need a copy of the submission to be
+					tested, and the associated test-setup. (Both can be downloaded from
+					the Submit Server. See
+					<xref linkend="projects" />
+					for more info about these two files.)
+				</para>
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Set the BUILDSERVER_ROOT environment variable to point to the
+							'BuildServer/' directory (i.e. the main directory that
+							contains the 'scripts', 'bin' and build.xml)
+						</para>
+						<para>
+							e.g.
+							<literal>
+								export BUILDSERVER_ROOT=$HOME/buildServer/BuildServer
+							</literal>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Create a new directory that will be used temporarily for the
+							offline testing. You can create this directory anywhere except
+							in any of the existing build server working directories (i.e.
+							the ones named bs1.*, bs2.* etc.). Using any of these
+							directories may create a conflict with any existing (and
+							running) build servers.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Copy the zip files representing the submission to be tested,
+							and its associated test-setup into the new directory. Both can
+							be downloaded from the Submit Server.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							The testSubmission.sh script in the 'BuildServer/scripts'
+							directory will dynamically create a build server, run it once
+							on the two zip files, and then shut it down. Example Usage:
+						</para>
+						<para>
+							<literal>
+								$BUILDSERVER_ROOT/scripts/testSubmission.sh submission.zip
+								test-setup.zip
+							</literal>
+						</para>
+						<para>
+							This sends the build server output to stdout so you may want
+							to pipe the output into a textfile so you can review it later.
+							You may also want to add testSubmission.sh to your path if this is
+							a task you perform often.
+						</para>
+					</listitem>
+				</orderedlist>
+			</sect1>
+
+		</chapter>
+
+	</part>
+
+	<part id="submitserver_usersguide">
+		<title>SubmitServer Users Guide</title>
+
+		<chapter id="instructor_quicklinks">
+			<title>Quick Links for Instructors</title>
+			
+			<sect1 id="quicklink_submitserver">
+				<title>Using the Submit Server</title>
+				<itemizedlist>
+					<listitem><para>
+						<ulink url="http://www.natidea.com/projects/marmoset/">Marmoset Movies: 
+						Setting up a project with Marmoset</ulink>.
+					</para></listitem>
+					<listitem><para>
+						An archive containing several example Java and C projects: 
+						<ulink url="samples/examples.jar">examples.jar</ulink>
+					</para></listitem>
+					<listitem><para>
+						Sample Jar files to upload on the Project Utilities page for the 
+						test-setup, canonical solution, and starter files respectively:
+						<ulink url="samples/test-setup.jar">test-setup.jar</ulink>,
+						<ulink url="samples/canonical.jar">canonical.jar</ulink>, and
+						<ulink url="samples/skeleton.jar">skeleton.jar</ulink>
+					</para></listitem>
+					<listitem><para>
+						<xref linkend="instructorfaq"/>
+					</para></listitem>
+				</itemizedlist>	
+			</sect1>		
+
+			<sect1 id="quicklink_javaprojects">
+				<title>Java Projects</title>
+				<itemizedlist>
+					<listitem><para>
+						A Template for Java Projects:
+						<ulink url="samples/JavaTemplate.jar">JavaTemplate.jar</ulink>.
+					</para></listitem>
+					<listitem><para>
+						Sample ANT build file for building test-setup, canonical and skeleton 
+						archives for Java projects:
+						<ulink url="samples/build.xml">build.xml</ulink>.
+					</para></listitem>
+					<listitem><para>
+						<ulink url="samples/java.test.properties">Sample Java test.properties file</ulink>
+					</para></listitem>
+					<listitem><para>
+						<ulink url="samples/security.policy">Sample Java security.policy file</ulink>
+					</para></listitem>
+					<listitem><para>
+						<xref linkend="javaprojects"/>
+					</para></listitem>
+				</itemizedlist>	
+			</sect1>		
+
+			<sect1 id="quicklink_otherlanguages">
+				<title>Projects in Other Languages</title>
+				<itemizedlist>
+					<listitem><para>
+						<ulink url="samples/c.test.properties">Sample C test.properties file</ulink>
+					</para></listitem>
+					<listitem><para>
+						<xref linkend="cprojects"/>
+					</para></listitem>
+				</itemizedlist>	
+			</sect1>		
+
+			<sect1 id="quicklink_utilities">
+				<title>Useful Utilities</title>
+				<itemizedlist>
+					<listitem><para>
+						Utilities for exploring and extracting zip and jar archives:
+						<ulink url="http://www.7-zip.org/">7-zip</ulink>.
+					</para></listitem>
+					<listitem><para>
+						<ulink url="http://www.eclipse.org/">Eclipse IDE</ulink>.
+					</para></listitem>
+				</itemizedlist>	
+			</sect1>		
+
+		</chapter>
+
+		<chapter id="configuring-marmoset">
+			<title>Configuring Marmoset</title>
+
+			<sect1 id="create-course">
+				<title>Creating a new course</title>
+				<para>Only an account with SuperUser privileges can create classes.</para>
+				<para>
+					The first item on the left of the "breadcrumb" bar at the top of the
+					screen should be the SuperUser menu. Clicking this will bring up the
+					form for creating a new course.
+				</para>
+				<warning>
+					<para>
+						When creating a new course, make sure to get the spacing exactly
+						correct (i.e. "Spring 2006" is not the same as "Spring2006" and
+						"CMSC 456" is not the same as "CMSC456"). It's a good idea to
+						establish a convention and stick with it, because when creating
+						BuildServers to build and test student submissions you will need
+						to enter the exact courseName and semester.
+					</para>
+				</warning>
+				<!-- 
+					<note>
+					<para>
+					TODO item: Sloppy-matching for string values going into and out of
+					the database, so that "Spring 2006" == "Spring2006".
+					</para>
+					</note>
+				-->
+				<para>
+					Creating a course automatically registers the SuperUser account that
+					created the course as an instructor in that course. This account can
+					then be used to register the instructor(s) for the course, who can in
+					turn register their TAs and students. For more information on types of
+					accounts, see
+					<xref linkend="account-types" />
+					.
+				</para>
+				<warning>
+					<para>
+						It's possible for a system to have multiple SuperUser accounts.
+						Keep in mind that any SuperUser accounts that did not create a
+						course will not be registered for the course and therefore will
+						not be able to see the course. Currently it is impossible for a
+						SuperUser to register themselves for a course created by a
+						different SuperUser. This is somewhat counter-intuitive. The
+						current solution is that SuperUsers usually have direct access to
+						the database and can register themselves for courses directly in
+						the database.
+					</para>
+				</warning>
+			</sect1>
+			<sect1 id="create-instructor-accounts">
+				<title>Creating instructor accounts</title>
+				<para>
+					The link labeled "Register an Instructor for this course using a web
+					interface" available from /view/instructor/course.jsp will bring up
+					the webform to register a new instructor account. Fill in the fields
+					with appropriate registration information. The DirectoryID is the name
+					the user will use to login to the Submit Server. (The name DirectoryID
+					comes from the University of Maryland's authentication service.) This
+					can be different from the "Class Account" used to log in to a CVS
+					repository associated with this course. The Employee number is a field
+					used by the University of Maryland authentication service. Replace
+					this with the DirectoryID if it is not relevant to your default
+					authentication service.
+				</para>
+				<sect2 id="choose-authentication-service">
+					<title>Choosing an authentication service</title>
+					<para>
+						Marmoset currently supports two authentication services (see
+						<xref linkend="web.xml" />
+						in the Installation Instructions). The default authentication
+						service was specified in Tomcat/conf/web.xml. Marmoset now allows
+						individual users to authenticate using the generic service instead
+						of the default. (The generic authentication service stores
+						passwords in the submitServer database).
+					</para>
+					<para>
+						To register a user to use the generic service, select the "Use
+						generic marmoset authentication" radio box. (This is not available
+						if the generic service is already the default.) If the Generic
+						service is the default service, an additional field is displayed
+						giving you the option of creating a password. Leave this field
+						blank to have the system generate a password.
+					</para>
+					<para>
+						When a user is registered to authenticate with the generic
+						service, a password is generated and displayed on the next screen.
+						<emphasis>
+							Save this password and deliver it to the user.
+						</emphasis>
+					</para>
+				</sect2>
+
+				<sect2 id="instructor-accounts">
+					<title>Instructor Accounts</title>
+					<para>
+						Either a SuperUser or an Instructor is allowed to register
+						instructors. Registering an instructor account actually creates
+						three different accounts (for a description of account types, see
+						<xref linkend="account-types" />
+						):
+					</para>
+					<itemizedlist>
+						<listitem>
+							<para>
+								An instructor account: Instructor's account with 'modify'
+								privilege.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								A canonical account: Account for submitting canonical
+								project solutions.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								An instructor's student-test account. The student-test
+								account is an unprivileged student account. The instructor
+								account has a "student-view" mode for many pages; however,
+								sometimes it is useful to see
+								<emphasis>exactly</emphasis>
+								what a student is seeing, especailly if there is some kind
+								of problem or discrepency with the server.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</sect2>
+				<para></para>
+			</sect1>
+			<sect1 id="register-students-bulk">
+				<title>Registering students from a textfile</title>
+				<para>
+					Students can be registered by either instructors or superusers. To
+					register many students at once use the file upload utility. From the
+					main course link, select "Register students for this course by
+					uploading a text file". Then browse to the text file and upload. The
+					format for each line in the file is:
+				</para>
+				<para>
+					<literal>
+						Last name, First name, University ID, Section, ClassAcct,
+						DirectoryID,...
+					</literal>
+				</para>
+				<para>
+					This format is based on the output format from the
+					<ulink url="http://grades.cs.umd.edu">Grades Server</ulink>
+					used at the
+					<ulink url="http://www.cs.umd.edu">University of Maryland</ulink>
+					and so contains some redundant fields. The University ID is the same
+					as the Employee number in
+					<xref linkend="instructor-accounts" />
+					. ClassAcct should be the same as DirectoryID if no separate CVS
+					accounts are used for the course. The Section field is a legacy field
+					from the Grades Server and is not used by the Submit Server -- it
+					should nevertheless be present to provide the correct number of
+					delimiters.
+				</para>
+				<para>
+					As with instructors, you can select an authentication service to be
+					applied to all students specified in the text file. (See
+					<xref linkend="choose-authentication-service" />
+					)
+				</para>
+			</sect1>
+			<sect1 id="register-one-student">
+				<title>Registering a student or TA one at a time</title>
+				<para>
+					Students and TAs can be registered by either instructors or
+					superusers. To register one student or TA, select " Register one
+					student or TA for this course using a web interface". Much of the
+					information required for instructors is also required here (Employee
+					number is typically a University ID) -- see
+					<xref linkend="instructor-accounts" />
+					.
+				</para>
+				<para>
+					As with instructors, you can select an authentication service to be
+					used by the student being registered. (See
+					<xref linkend="choose-authentication-service" />
+					.) If you select the generic authentication service, a password will
+					be generated and presented on the next screen. If the Generic service
+					is the default service, an additional field is displayed giving you
+					the option of creating a password. Leave this field blank to have the
+					system generate a password.
+				</para>
+			</sect1>
+			<sect1 id="adding-ta-permissions">
+				<title>Adding/removing TA permissions</title>
+				<para>
+					Submit Server allows super users and instructors to modify the
+					privileges of any students registered for a course. The students can
+					receive TA privileges, which allows them to access all information in
+					the course (including all student submissions), but not to change the
+					course or its projects.
+				</para>
+				<para>
+					To give a student TA privileges, select "add" in the "Add TA
+					Permission" column next to the student. This will move the student up
+					in the sort order to the group that includes all registrants with some
+					level of instructor rights (indicated by an asterisk next to the
+					name). To remove TA privileges, select "remove" in the "Remove TA
+					Permission" column next to the student.
+				</para>
+			</sect1>
+			<sect1 id="editing-student-registrations">
+				<title>Editing student registrations</title>
+				<para>
+					Submit Server allows super users and instructors to modify student
+					registration information for all students registered in a course. To
+					edit a student's registration, select "edit" in the "Edit Student
+					Registration" column next to the student. The next screen allows you
+					to change the name, directory id, employee number and class account
+					for the student (but not the password, even for accounts registering
+					under the Generic authentication service).
+				</para>
+			</sect1>
+			<sect1 id="account-types">
+				<title>Types of accounts</title>
+				<table id="table_account-types-table">
+					<title>Types of Accounts</title>
+					<para>
+						The following table briefly describes the different types of
+						accounts, their functions, and the corresponding
+						'instructor_capability' value in the database.
+					</para>
+					<tgroup cols="3" align="left">
+						<thead>
+							<row>
+								<entry>type</entry>
+								<entry>instructor_capability in database</entry>
+								<entry>description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>student</entry>
+								<entry>NULL</entry>
+								<entry>
+									A student account. Can see pages in /view/* but not
+									/view/instructor/*, /view/admin/*, or research/*. Can
+									perform download operations with servlets mapped to
+									/data/* or /action/* but not /data/instructor/* or
+									/action/instructor/*. This is a fancy way of saying
+									that the a student account can download its own
+									submissions and submit new submissions, but cannot
+									download other students' submissions or test-setups,
+									or perform any actions reserved for instructors.
+								</entry>
+							</row>
+							<row>
+								<entry>TA</entry>
+								<entry>read-only</entry>
+								<entry>
+									a TA account. Can see pages in /view/*,
+									/view/instructor/*, and servlets mapped to /data/*,
+									/action/*, /data/instructor/*. Cannot access servlets
+									mapped to /action/instructor/*. A TA account cannot
+									create new projects, update existing projects, upload
+									new canonical solutions or test-setups, or register
+									students or TAs or instructors.
+								</entry>
+							</row>
+							<row>
+								<entry>Instructor</entry>
+								<entry>modify</entry>
+								<entry>
+									An Instructor account. Instructors can do basically
+									anything, such as create projects, register students,
+									TAs and other instructors, update projects, and upload
+									new canonical solutions or new test-setups.
+								</entry>
+							</row>
+							<row>
+								<entry>Canonical</entry>
+								<entry>canonical</entry>
+								<entry>
+									Each instructor has a canonical account. It should
+									never be necessary to log into the system directly
+									using the canonical account. In fact it will
+									eventually become impossible to log into the system
+									using the canonical account. The only reason that
+									there are multiple canonical accounts is so that
+									instructors using Eclipse can submit canonical
+									solutions using the Course Project Manager plugin. Any
+									instructor can upload a new canonical solution through
+									the web interface at
+									/view/instructor/projectUtilities.jsp
+								</entry>
+							</row>
+							<!--
+								<row>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								</row>
+							-->
+
+						</tbody>
+					</tgroup>
+				</table>
+			</sect1>
+
+		</chapter>
+
+		<chapter id="projects">
+			<title>Projects</title>
+			<sect1 id="create-project">
+				<title>Creating a project</title>
+				<para>
+					When projects are first created they are marked "invisible to
+					students". This means that students cannot see the project when they
+					log in to the SubmitServer.
+				</para>
+				<para>
+					Instructors and TAs
+					<emphasis>can</emphasis>
+					see invisible projects. Thus you can create a project and let your TAs
+					try it out for a couple of days before officially making it "visible"
+					to your students.
+				</para>
+				<warning>
+					Once a project is made visible, there's no way to make it invisible
+					again (without changing the value of the field in the database).
+				</warning>
+				<note>
+					An Invisible project is only invisible when a student logs into the
+					server, but the project still exists and will accept submissions.
+					Thus, students can submit to an invisible project using either the
+					command-line submission tool or the Course Project Manager Eclipse
+					plugin. This can happen if student CVS repositories or project
+					skeletons are made available before the project is made visible. These
+					submissions will be tested normally and should not present any
+					problems except for potential confusion to the students that they are
+					submitting but can't find the project on the server.
+				</note>
+				<para>
+					To create a project, select the "create new project" link from the course
+					main page. The following sections describe some of the fields in this form.
+				</para>
+			</sect1>
+
+			<sect1 id="stack-trace-policy">
+				<title>
+					Stack Trace Policy: How much information to reveal when students use a
+					release-test
+				</title>
+				<para>
+					The default when students use a release test is to reveal simply the
+					names of some number of tests failed (the number of release tests to
+					reveal information about is of course configurable).
+				</para>
+				<para>
+					After using this policy for several semesters, it became clear that
+					there are situations where students need or deserve more information
+					to help them learn about their code. For example, if a student
+					submission fails many release tests because of run-time exceptions,
+					then it will be useful for them to know the type of exception and
+					perhaps the line number in their code where the exception is
+					generated.
+				</para>
+				<para>
+					Similarly, there are many situations where the test-drivers used for
+					Makefile-based projects (C/C++, Ruby, etc) generate output that the
+					students could greatly benefit from seeing. Thus we have created some
+					new policies regarding how much information to reveal that are
+					detailed in the following table.
+				</para>
+				<table id="table_stack_trace_policies">
+					<title>
+						Stack Trace Policies: How much information to reveal when students
+						request a release test
+					</title>
+					<tgroup cols="3">
+						<thead>
+							<row>
+								<entry>policy</entry>
+								<entry>language(s)</entry>
+								<entry>description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>test name only (default)</entry>
+								<entry>any</entry>
+								<entry>Reveals only the name of the test case</entry>
+							</row>
+							<row>
+								<entry>line number of exception</entry>
+								<entry>Java only</entry>
+								<entry>
+									Reveals a partial stack trace including the name of
+									the exception and the line in the student code that
+									generates the exception. Will hot-link the line that
+									generates the exception, if possible. Does not reveal
+									all methods called in student-written code leading up
+									to the exception.
+								</entry>
+							</row>
+							<row>
+								<entry>
+									line number of exception, if covered by
+									public/student-written test
+								</entry>
+								<entry>Java only</entry>
+								<entry>
+									Reveals the partial stack trace as described by the
+									"line-number of exception" policy, but only if there
+									is a public or student-written test case that covers
+									the source of the exception. This rewards students
+									that are writing their own test cases to achieve
+									better coverage.
+								</entry>
+							</row>
+							<row>
+								<entry>full stack trace</entry>
+								<entry>any</entry>
+								<entry>
+									Reveals the full stack trace for Java or everything
+									that was printed to stdout and stderr for other
+									languages.
+								</entry>
+							</row>
+
+							<!-- 
+								<row>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								</row>
+							-->
+						</tbody>
+					</tgroup>
+				</table>
+			</sect1>
+			<sect1 id="best-submission-policy">
+				<title>The policy for computing the "best" score</title>
+				<para>
+
+					<table id="table_submission_policies">
+						<title>Best submission policies</title>
+						<tgroup cols="2">
+							<thead>
+								<row>
+									<entry>policy</entry>
+									<entry>description</entry>
+								</row>
+							</thead>
+							<tbody>
+								<row>
+									<entry>Last Submission (Default)</entry>
+									<entry>
+										The best submission for a category (on-time or
+										late) is the last submission that compiles in this
+										category.
+									</entry>
+								</row>
+								<row>
+									<entry>Release Test Aware</entry>
+									<entry>
+										Best submission for a category (on-time or late)
+										is the max of the last submission that compiles
+										and the highest-scoring release tested submission.
+									</entry>
+								</row>
+								<!-- 
+									<row>
+									<entry>
+									</entry>
+									<entry>
+									</entry>
+									</row>
+								-->
+							</tbody>
+						</tgroup>
+					</table>
+					<note>
+						<para>
+							The best submission policy takes into account extensions
+							granted to individual students, as well as late penalties.
+						</para>
+					</note>
+					<note>
+						<para>
+							We don't simply pick the highest scoring submission overall to
+							prevent students from taking the "shotgun" approach of
+							submitting 200 versions of a program knowing that we'll pick
+							the best one. By choosing to release test a submission
+							students are (hopefully) telling us something about the
+							quality of a submission.
+						</para>
+					</note>
+				</para>
+			</sect1>
+			<sect1 id="late-penalties">
+				<title>Explanation of late penalties</title>
+				<para>
+					When creating a project, you have the choice between two types of late
+					penalties:
+				</para>
+				<itemizedlist>
+					<listitem>
+						Late Constant: The value specified will be subtracted from the
+						score of each submission. For example, a Late Constant penalty of
+						20 means that a late submission worth 85 points would be adjusted
+						to 65 points.
+					</listitem>
+					<listitem>
+						Late Multiplier: The value specified will be multiplied by the
+						score of each submission. For example, a Late Multiplier penalty
+						of 0.8 means that a late submission worth 85 points would be
+						adjusted to 68 points.
+						<warning>
+							<para>
+								The Late Muliplier will be multiplied by the score, so to
+								subtract 20%, be sure to set the Late Multiplier value to
+								0.8!
+							</para>
+						</warning>
+					</listitem>
+				</itemizedlist>
+				<para>
+					<note>
+						<para>
+							To have a project without a late deadline (i.e. where late
+							submissions are worth zero credit), make the on-time and late
+							deadlines the same.
+						</para>
+					</note>
+				</para>
+				<para>
+					Whether a submission is ontime, late or very-late is computed
+					dynamically for each student based on the deadline for the project and
+					any extension granted to that student. Thus it is possible for a
+					submission to change from late to ontime when an extension is granted
+					or if the deadline is changed by the instructor.
+				</para>
+				<para>
+					Only the on-time and late submissions are used when determining the
+					"best" score for a project. Very-late submissions are kept for a
+					variety of reasons:
+					<itemizedlist>
+						<listitem>
+							<para>
+								some classes have a policy that students must make a "good
+								faith" attempt to implement each project before the
+								semester ends,
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								students are somtimes granted extensions retroactively.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</sect1>
+
+			<sect1 id="update-project">
+				<title>Updating a project</title>
+				<para>
+					Instructors and Superusers can update all the parameters that were
+					specified for a project when it was created including the project
+					deadlines and release token rules.
+					<itemizedlist>
+						<listitem>
+							<para>
+								From the main course page, go to the project page by
+								selecting the <literal>view</literal> link next to the 
+								project in question.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								From the project page, select the <literal>Utilities</literal>
+								link.
+							</para>
+						</listitem>	
+						<listitem>
+							<para>
+								In the Utilities page, select the 
+								<literal>Update this Project</literal> link and make any 
+								desired changes in the project update form. Click
+								<literal>Update Project</literal> to save changes.
+							</para>
+						</listitem>											
+					</itemizedlist>
+				</para>
+			</sect1>
+		</chapter>
+
+		<chapter id="project_upload">
+			<title>Preparing and Uploading Project Files</title>
+
+			<para>
+				The next few chapters describe the process of preparing and uploading 
+				project files through the Submit Server, which are then used by the 
+				Build Server to compile and grade student submissions. This chapter 
+				describes the files that make up this process and process of uploading 
+				them into the Submit Server.
+			</para>
+			<para>
+				The process of building and testing one submission requires two files: 
+				a <emphasis>submission archive</emphasis> containing an implementation of
+				the specification and a	<emphasis>test setup archive</emphasis> containing
+				test cases that either pass or fail when run against a submission. 
+				Both of these files can be in the
+				<ulink url="http://www.info-zip.org/">zip</ulink> format or the Java jar
+				format.
+			</para>
+			<para>
+				Some sample files are provided with the Marmoset Distribution and linked here:
+				<itemizedlist>
+					<listitem><para>
+						<ulink url="samples/test-setup.jar">test-setup.jar</ulink>: Test cases
+						for an example specification.
+					</para></listitem>
+					<listitem><para>
+						<ulink url="samples/canonical.jar">canonical.jar</ulink>: A submission 
+						that completely implements the example specification.
+					</para></listitem>
+					<listitem><para>
+						<ulink url="samples/skeleton.jar">skeleton.jar</ulink>: The initial project
+						files given to students. This is essentially an incomplete implementation
+						of the specification.
+					</para></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				For the full set of examples and templates provided with the marmoset distribution,
+				download <ulink url="samples/examples.jar">examples.jar</ulink>.
+			</para>
+			<para>
+				The next two chapters: <xref linkend="javaprojects"/> and 
+				<xref linkend="cprojects"/> provide step by step instructions for creating
+				the necessary files for Java and C projects respectively. The model used for
+				C projects can also be used for other languages such as C++, OCaml and Ruby
+				(see <xref linkend="other_supported_languages"/>).
+			</para>
+
+			<sect1 id="submissionarchive">
+				<title>The Submission Archive</title>
+
+				<para>
+					Student submissions are stored in zip/jar files, referred to as
+					<emphasis>submission archives</emphasis>. They contain the source code 
+					files for the student's project. They may also contain other files: for 
+					example, test cases provided to the students, the student's own test 
+					cases, image or data files, etc.
+				</para>
+
+				<para>
+					When setting up a project, an instructor must make a submission that
+					passes all the tests. This submission archive is referred to as the 
+					canonical solution. An example of a canonical solution is 
+					<ulink url="samples/canonical.jar">canonical.jar</ulink>.
+				</para>
+				<para>
+					Submission archives are usually created by archiving the entire
+					student folder. Marmoset then looks for the source files and compiles
+					them. This process is quite robust but sometimes problems can occur if
+					files are in unusual places. The following rules are helpful to avoid
+					any problems:
+					<itemizedlist>
+						<listitem>
+							<para>
+								In java projects, source files should be in a
+								<literal>src</literal> directory and should be arranged in
+								the standard directory structure. E.g. the class
+								cs101.project1.HelloWorld should be located in 
+								<literal>src/cs101/project1/HelloWorld.java</literal>.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								In C projects, source and make files should be at the top 
+								level.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Any non-source files referenced using relative paths should
+								be in a directory structure that starts at the top level.
+								This is because the programs are run from the top level. So
+								if a program references <literal>examples/input.txt</literal>,
+								then the directory <literal>examples</literal> should be at
+								the top level of the archive.
+							</para>
+							<note>
+								When student programs access non-source files, the
+								<literal>test.runInInstructorDir</literal>
+								property (in the test.properties file) determines which
+								files are visible. If this property is true, then files
+								the student's submission are not visible because the
+								program is run from the instructor's directory, not the
+								student's directory. See <xref linkend="testsetuparchive" />
+								for more information about the test.properties file and
+								see <xref linkend="testproperties" /> for more information 
+								about the <literal>test.runInInstructorDir</literal> property.
+							</note>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+					If the project is done using the 
+					<ulink url="http://www.eclipse.org">Eclipse IDE</ulink>, the student
+					can simply archive the entire project directory and submit this. 
+					Marmoset uses Eclipse's <literal>.classpath</literal> file to figure
+					out where all the source files are. There is also an Eclipse plugin
+					provided by the University of Maryland that can be configured to
+					allow students to submit from within Eclipse (see 
+					<xref linkend="eclipseplugin"/>).
+				</para>
+			</sect1>
+
+			<sect1 id="testsetuparchive">
+				<title>The Test Setup Archive</title>
+
+				<para>
+					All of the information about how to build and test submissions for a
+					particular course project is contained in the
+					<emphasis>test setup archive</emphasis>. This archive is a zip or jar 
+					file containing several elements:
+				</para>
+
+				<variablelist>
+					<varlistentry>
+						<term>The test.properties file</term>
+						<listitem>
+							<para>
+								This is a Java properties file defining metadata about how
+								to build and test a submission for the particular project.
+								This file must be in the root directory of the test setup
+								archive. For a detailed description of the test.properties file,
+								see	<xref linkend="testproperties" />.
+							</para>
+						</listitem>
+					</varlistentry>
+
+					<varlistentry>
+						<term>Test Cases and Supporting Source or Object Files</term>
+						<listitem>
+							<para>
+								The test setup archive contains source and/or object files
+								needed to compile and test the student source code.
+							</para>
+							<para>
+								For Java projects, only .class files need to be provided in
+								the test setup archive. (However, we recommend including
+								source files in the test setup because this is often the only
+								record of the test cases in the Marmoset database. Instructors
+								and researchers that review your course in the future often
+								want to see the source of the test cases.) 
+							</para>
+							<para>
+								The test setup jarfile is provided on the compile-time and
+								runtime classpath for building/executing the student's
+								code. For testing student code,
+								<ulink url="http://junit.org/">JUnit</ulink>
+								test cases should be provided. More information is in
+								<xref linkend="javaprojects" />.
+							</para>
+							<para>
+								For C projects, either C source files or object files may
+								be provided. (Again we recommend including the source
+								files.) The individual test cases must be standalone
+								executables linked against the student's modules. More
+								information is in <xref linkend="cprojects" />.
+							</para>
+						</listitem>
+					</varlistentry>
+
+					<varlistentry>
+						<term>Files needed by Test Cases at Runtime</term>
+						<listitem>
+							<para>
+								If the test cases require files when they are executed,
+								the files should be stored in the test setup jarfile.
+								These files will be extracted into the
+								<emphasis>testfiles directory</emphasis>, and will be 
+								available to the tests at testing time.
+							</para>
+						</listitem>
+					</varlistentry>
+
+					<varlistentry>
+						<term>The security.policy file (optional, Java-only)</term>
+						<listitem>
+							<para>
+								For Java projects, a security policy file may be provided,
+								specifying what privileges are granted to student code. It
+								is important to prevent untrusted student code from
+								forging test outcomes, sending secret test information
+								over the network, etc. This file, if present, must be
+								located in the root directory of the test setup jarfile.
+							</para>
+							<para>
+								If no security policy file is specified, a restrictive
+								default security policy is used.
+							</para>
+						</listitem>
+					</varlistentry>
+
+					<varlistentry>
+						<term>Makefile (C-only)</term>
+						<listitem>
+							<para>
+								Test setup jarfiles for C projects must include a Makefile
+								capable of compiling the executables that will serve as
+								the test cases. The Makefile must be in the root directory
+								of the test setup jarfile.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+
+				<para>
+					<xref linkend="javaprojects" />
+					and
+					<xref linkend="cprojects" />
+					provide more details on what needs to be in the test setup jarfile for
+					Java projects and C projects.
+				</para>
+
+			</sect1>
+
+			<sect1 id="testproperties">
+				<title>Test Properties</title>
+
+				<para>
+					This chapter describes how to define a test.properties file for a
+					project. As noted in
+					<xref linkend="projects" />
+					, this file must be placed in the root directory of the test setup
+					jarfile.
+				</para>
+
+				<para>
+					The format of the test properties file is described in the Java API
+					documentation for the load() and store() methods of the
+					<ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html">
+						java.util.Properties class
+					</ulink>
+					.
+				</para>
+
+				<table id="table_test_properties">
+					<title>Test properties</title>
+					<tgroup cols="4" align="left">
+						<thead>
+							<row>
+								<entry>Property Name</entry>
+								<entry>Value</entry>
+								<entry>Language</entry>
+								<entry>Meaning</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>build.language</entry>
+								<entry>"c","java","ruby", or "ocaml"</entry>
+								<entry>Any</entry>
+								<entry>
+									Specifies the source language of the project. Case is
+									ignored, so "Java", "java", and "JAVA" are all
+									equivalent. Currently C, Java, Ruby and OCaml projects
+									are supported. If this property is not specified, it
+									defaults to "Java".
+								</entry>
+							</row>
+							<row>
+								<entry>build.sourceVersion</entry>
+								<entry>"1.4", "1.5", etc.</entry>
+								<entry>Java</entry>
+								<entry>
+									Specifies the value of the "-source" command line
+									option used when invoking
+									<command>javac</command>
+									. If not specified, defaults to "1.5".
+								</entry>
+							</row>
+							<row>
+								<entry>build.make.command</entry>
+								<entry>Path of make command</entry>
+								<entry>C</entry>
+								<entry>
+									Specifies the full path of the make command used to
+									build student submissions. If not specified, defaults
+									to "/usr/bin/make". Instructors should not need to set
+									this property unless they are administering their own
+									buildserver.
+								</entry>
+							</row>
+							<row>
+								<entry>build.make.file</entry>
+								<entry>Filename of makefile</entry>
+								<entry>C</entry>
+								<entry>
+									Specifies the filename of the makefile. If not
+									specified, the makefile is left implicit, meaning that
+									the make utility will decide which one to use. If this
+									property is specified, it will be passed as part of
+									the "-f" option to the make command.
+								</entry>
+							</row>
+							<row>
+								<entry>test.class.{public,release,secret,student}</entry>
+								<entry>
+									Name of JUnit TestCase class (Java), or
+									comma-separated list of test executables (C)
+								</entry>
+								<entry>Java or C</entry>
+								<entry>
+									For Java projects, specifies the full classname of a
+									JUnit TestCase class which performs the public,
+									release, secret or student tests. For C/Ruby/OCaml
+									projects, specifies the names of the executables which
+									represent the public, release, or secret tests. Note
+									that C projects do not support student-written tests
+									that are executed by the BuildServer, as this would be
+									insecure and complicated. This property must NOT be
+									left blank; i.e. if a project has no secret tests,
+									then this property must be omitted.
+								</entry>
+							</row>
+							<row>
+								<entry>test.timeout.testCase</entry>
+								<entry>Timeout in seconds</entry>
+								<entry>Java</entry>
+								<entry>
+									Specifies the amount of time a single test method is
+									allowed to execute before considering the test failed.
+									If not specified, defaults to 30 seconds.
+								</entry>
+							</row>
+							<row>
+								<entry>test.timeout.process</entry>
+								<entry>
+									DEPRECATED: This field is ignored (Used to be Timeout
+									in seconds)
+								</entry>
+								<entry>Java or C</entry>
+								<entry>
+									deprecated
+									<!-- 
+										Specifies the maximum number of seconds a test process
+										is allowed to run before considering all of the tests performed
+										by that process failed.  For Java, the public, release, and secret
+										tests are each performed in a separate process.  For C, each
+										test case is performed in a separate process.  The default is
+										60 seconds.  (For Java projects, you will probably want to
+										increase this.)
+									-->
+								</entry>
+							</row>
+							<row>
+								<entry>test.output.maxBytes</entry>
+								<entry>Number of bytes</entry>
+								<entry>Java or C</entry>
+								<entry>
+									Specifies the maximum number of bytes of output that
+									will be captured from a test process. If not
+									specified, defaults to 1 MB.
+								</entry>
+							</row>
+							<row>
+								<entry>test.runInInstructorDir</entry>
+								<entry>true or false</entry>
+								<entry>Java</entry>
+								<entry>
+									If true, test processes are run in the directory
+									containing the extracted test setup jarfile (the
+									<emphasis>test files directory</emphasis>
+									containing instructor-provided files), rather than the
+									<emphasis>build directory</emphasis>
+									(containing student submission files). The default is
+									to run in the build directory.
+								</entry>
+							</row>
+
+							<row>
+								<entry>test.performCodeCoverage</entry>
+								<entry>true or false</entry>
+								<entry>Java</entry>
+								<entry>
+									Should the buildServer try to perform code coverage?
+									The BuildServer has Clover, a code-coverage tools,
+									installed into it and can collect code coverage
+									results for each test case. This is especially useful
+									when combined with student-written tests because you
+									can download the code-coverage stats from the server
+									and use them for grading purposes to support
+									test-driven development for students. Note that it is
+									possible for students to submit a zip archive through
+									the web interface in a format such that it can be
+									built and tested but the code coverage tool will not
+									work properly.
+								</entry>
+							</row>
+							<!--
+								<row>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								<entry></entry>
+								</row>
+							-->
+						</tbody>
+					</tgroup>
+				</table>
+			</sect1>
+
+			<sect1 id="uploadarchives">
+				<title>
+					Upload Archives into Submit Server
+				</title>
+				<para>
+					Once you have created the three archives, you are ready to initialize your project
+					on the Submit Server by uploading these files. Go to the Project Utilities page to 
+					upload all three archives. The test-setup and canonical archives can be uploaded
+					at the bottom of this page. The skeleton is uploaded by selecting 
+					"Upload new project starter files" in the Project Maintenance section.
+				</para>
+				<para>
+					Submit Server sends the test-setup and canonical archives to a Build Server for 
+					testing. While this is happening, the state of your test setup should be set to 
+					pending. If this is not the case, contact your Marmoset administrator to ensure 
+					that the Build Servers have been activated. If any of the tests fail, the test-setup
+					status will be set to "failed". Check to make sure the format of your archives is 
+					correct.
+				</para>
+				<para>
+					Once all the tests in your test-setup pass on the canonical solution, the test-setup
+					status is upgraded to "tested". This may take a few minutes. You can now assign points 
+					to each of the tests by clicking the "Assign Points" link. When you assign points to a
+					test-setup, it becomes the active test setup, meaning that all student submissions
+					will be tested against this setup.
+				</para>
+				<para>
+					Once all this is done, you can make the project visible to students by selecting the
+					"Make Visible" button at the top of the page.
+				</para>
+			</sect1>
+			
+			
+			<sect1 id="aboutbuildserverforinstructors">
+				<title>About the Build Server</title>
+				
+				<para>
+					This section describes how the build server uses the test setup to test
+					the submissions.				
+				</para>
+			
+			<sect2 id="directories">
+				<title>Directories</title>
+
+				<para>
+					Two directories are used by the BuildServer at runtime. The
+					<emphasis>build directory</emphasis>
+					is where the student submission is extracted. The
+					<emphasis>test files directory</emphasis>
+					is where the test setup jarfile is extracted.
+				</para>
+
+				<para>
+					The idea behind keeping these two directories separate is that it
+					prevents commingling of student and instructor files. However, for C
+					projects, a single directory is used as both the build directory and
+					the test files directory.
+				</para>
+
+			</sect2>
+
+			<sect2 id="steps">
+				<title>Building and Testing Steps</title>
+
+				<para>
+					The following steps are used when building and testing a student
+					submission.
+				</para>
+
+				<orderedlist numeration="arabic">
+					<listitem>
+						<para>
+							The submission zipfile is extracted into the build directory.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							The test setup jarfile is extracted into the test files
+							directory.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							The submission is built: either by issuing a command to build
+							all of the source files in the submission (for Java projects)
+							or by invoking a make command (for C projects). If the build
+							fails, the compiler error messages are recorded and a failed
+							build test outcome is recorded.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							The public, release, secret and student tests specified in the
+							test setup jarfile's test.properties file are executed and
+							test outcomes recorded.
+						</para>
+					</listitem>
+				</orderedlist>
+
+			</sect2>
+			</sect1>
+			<sect1 id="other_supported_languages">
+				<title>Applying The C Model to Other Languages</title>
+				<para>
+					The buildServer supports two categories of programming languages: Java
+					projects (which use a security manager and JUnit) and C or C-like
+					projects (which use the
+					<literal>make</literal>
+					utility to create executable files which are then run run by the
+					BuildServer.
+				</para>
+				<para>
+					The mechanism used for C projects is flexible enough that we've used
+					it for Ruby and OCaml projects as well. Other langauges, such as C++
+					or Python, will also work using the same mechanism.
+				</para>
+				<para>
+					Thus when we write "C project", keep in mind that this mechanism is
+					extremely flexible and is not certainly not limited to projects
+					written in the C language.
+				</para>
+			</sect1>
+			<!-- 
+				<chapter id="submitting">
+				<title>Support for automated submissions</title>
+				<para> There are two mechanisms that automatically create 
+				zip archives of student source files and upload these to the SubmitServer:
+				The "submit" button available through the CourseProjectManager Eclipse plugin, 
+				and the command-line submission tool.
+				</para>
+				<para>
+				Both of these mechanisms require a <xref link="dot-submit-file">.submit file</xref>
+				be place inside the student project.
+				</para>
+				<sect1 id="dot-submit-file">
+				<title>The .submit file</title>
+				<para>
+				Projects should contain a .submit file inside the project root directory
+				</para>
+				</sect1>
+				</chapter>
+			-->
+			
+		</chapter>
+		<chapter id="javaprojects">
+			<title>Creating Java Projects</title>
+			<para>
+				This chapter describes how to create a Java project that will work with
+				the BuildServer. Also see: 
+				<ulink url="http://www.natidea.com/projects/marmoset/">Marmoset Movies: Setting up a project with Marmoset</ulink>.
+			</para>
+
+			<sect1 id="jrefsolution">
+				<title>Create the project and canonical solution</title>
+
+				<para>
+					Start by creating the project and canonical solution. You can use any
+					Java development environment: for example,
+					<ulink url="http://www.eclipse.org/">Eclipse</ulink>
+					.
+				</para>
+
+				<para>
+					A good way to get started is to use the JavaProjectTemplate included
+					with the Marmoset distribution. This is also available in 
+					<ulink url="samples/examples.jar">examples.jar</ulink>.
+				</para>
+			</sect1>
+
+			<sect1 id="junittests">
+				<title>Create JUnit tests</title>
+				<para>
+					As you are developing the canonical solution, you can start writing
+					<ulink url="http://junit.org/">JUnit</ulink>
+					tests for the project. Marmoset supports three kinds of tests:
+					<emphasis>public</emphasis>, <emphasis>release</emphasis>, and
+					<emphasis>secret</emphasis>. Each kind of test is embodied by a class which extends
+					<literal>junit.framework.TestCase</literal>. 
+					A test class may contain any number of test methods: each such
+					method is considered a single test case.
+				</para>
+
+				<para>
+					Note that test classes are optional: you may provide or omit public,
+					release, and secret tests in any combination.
+				</para>
+
+				<para>Your canonical solution should pass all of the test cases.</para>
+			</sect1>
+
+			<sect1 id="jtestproperties">
+				<title>Create the test.properties file</title>
+
+				<para>
+					You should define whichever combination of the "test.class.public",
+					"test.class.release", "test.class.secret", "test.class.student"
+					properties are needed to define which classes represent your JUnit
+					test cases. (See <xref linkend="testproperties" />).
+				</para>
+
+				<!-- 
+					<para>
+					You may want to increase the value of the "test.timeout.process"
+					property so it is long enough to allow a test process
+					to complete even if several of the individual test methods
+					in the test class time out.  Timing out of individual test
+					methods is controlled by the "test.timeout.testCase" property.
+					</para>
+				-->
+			</sect1>
+
+			<sect1 id="jsecuritypolicy">
+				<title>Create the security.policy file (optional)</title>
+
+				<para>
+					The default security.policy file in the JavaProjectTemplate should be
+					adequate for most Java projects. Note that Clover, the code coverage
+					tool used by the BuildServer, needs permission to create and write a
+					special file in /tmp and permission to create shutdownHooks. Both of
+					these permissions are granted in the sample file. You may want to
+					selectively grant privileges to student code for certain kinds of
+					tests: for example, writing files.
+				</para>
+			</sect1>
+
+			<sect1 id="jpackaging">
+				<title>
+					Package the test setup jarfile and canonical solution zipfile
+				</title>
+
+				<para>
+					The Java Project Template provides an ANT 
+					<ulink url="samples/build.xml">build.xml</ulink> file that can be used
+					to build the test-setup and canonical archives. It does this by selecting the
+					appropriate files from the project and archiving them in a jar file. To use
+					this file, be sure to change the properties at the top of the page to point
+					to the right files in your project.
+				</para>
+				
+				<para>
+					You can also create the jar files manually. Here is
+					a description of what the test-setup jar file should
+					contain:
+				</para>
+
+				<orderedlist numeration="arabic">
+					<listitem>
+						<para>
+							Any classes required to build and execute a student
+							submission. These should placed in the test setup jarfile
+							according to the usual Java conventions for packages. For
+							example, if the class
+							<literal>edu.umd.cs.Foobar</literal>
+							is needed by submissions, the test setup jarfile should
+							contain a file
+							<filename>edu/umd/cs/Foobar.class</filename>.
+							
+							<warning>
+								Since we are uploading class file, make sure the version
+								of the class files is compatible with the version of
+								java running on the Build Server. E.g. If you compile your
+								test setup with Java 1.6 but the Build Server is running 
+								Java 1.5, the Build Server will fail. Check with your
+								Marmoset Administrator for information on the Build Server 
+								version.
+							</warning>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							JUnit TestCase classes for the public, release, secret, and/or
+							student tests. These should also follow the usual Java package
+							conventions.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							The test.properties file, and optionally a security.policy
+							file.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Any data files needed by the student submissions or test cases
+							at runtime.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							You should also include the source files for your test cases. This is
+							not necessary but is recommended because the test-setup.jar file is the 
+							only record in the Submit Server database of your tests. This is useful 
+							if you or another instructor wish to review this information in a 
+							future semester.							
+						</para>
+					</listitem>
+				</orderedlist>
+
+				<warning>
+					<para>
+						The test setup jarfile should
+						<emphasis>never</emphasis>
+						contain any classes from the canonical solution (i.e., any classes
+						that the student is supposed to write), because they will take
+						precedence over the student classes at runtime. Leaving them in
+						basically means that the test results will be for the canonical
+						solution, and not the student's work.
+					</para>
+				</warning>
+
+				<para>
+					The canonical solution zipfile represents what students are expected
+					to implement, and should pass all of the project tests. The zipfile
+					should contain the source files corresponding to classes that are
+					meant to be implemented by the student. The source files do not need
+					to be in any particular directory structure, although using normal
+					Java conventions is recommended. If the an Eclipse ".project" file is
+					present, that is used as the base directory for the project, and no
+					files outside that directory will be extracted. If an Eclipse
+					".classpath" file is present, it will be used to find source
+					directories in the project, and no source files outside those
+					directories will be compiled.
+				</para>
+			</sect1>
+			
+			<sect1 id="jskeleton">
+				<title>
+					Package the Starter files (Skeleton)
+				</title>
+				<para>
+					You may optionally provide some starter files for students to use at the
+					start of their projects. These files include the methods in the specification
+					emptied of their implementation. Typically these empty methods simply throw
+					a <literal>java.lang.UnsupportedOperationException</literal>. The advantage of
+					this is that the skeleton will compile and fail all the tests. Also Submit Server
+					recognizes this exception and accurately indicates that a test fails because  
+					the associated functionality is not implemented.
+				</para>
+				<para>
+					The skeleton files should be packaged into a jar file that can be uploaded into
+					the submit server. You may also include a <literal>.submit</literal> file which
+					is used by the Eclipse Plugin and the Command Line Submission Utility to automatically
+					upload student submissions into the submit server. This file can be found in the
+					Project Utilities page on the Submit Server.
+				</para>
+			</sect1>
+			
+		</chapter>
+		<chapter id="cprojects">
+			<title>Creating C Projects</title>
+
+			<warning>
+				<para>BuildServer support for C projects is somewhat experimental.</para>
+			</warning>
+
+			<para>
+				Creating a C project to work with the BuildServer is very similar to
+				creating a Java project. (See <xref linkend="javaprojects" />.)
+			</para>
+
+			<para>
+				You will probably want to start by getting the sample C project included
+				with the Marmoset distribution. This is also available in 
+					<ulink url="samples/examples.jar">examples.jar</ulink>.
+			</para>
+
+			<sect1 id="cdirectories">
+				<title>C Projects use a Single Directory for Building and Testing</title>
+
+				<para>
+					One important difference between Java projects and C projects is that
+					for C projects, the BuildServer extracts the student submission and
+					test setup jarfile into the <emphasis>same directory</emphasis>. 
+					Essentially, the build directory and test files directory are the
+					same. The student files are extracted first, and the instructor files
+					(from the test setup jarfile) are extracted last. That way, student
+					files cannot overwrite instructor files.
+				</para>
+			</sect1>
+
+			<sect1 id="creating_test_executables">
+				<title>Creating Test Executables</title>
+
+				<para>
+					In C projects, each test is represented by an executable file
+					file that exercises the implementations with different inputs
+					and return an exit code. 0 means pass, anything non-zero means 
+					fail. See the example C-project for samples of test executables.
+					Here is an example of a Python script that is used as a
+					test executable. The student's implementation executable is called
+					<literal>studentexecutable</literal>:
+					
+					<literallayout>
+						<literal>
+							#!/usr/bin/env python
+							
+							import commands
+							import sys
+							
+							if commands.getoutput("./studentexecutable inputfile1 5") == "Hello World":
+							    print "passed"
+							    sys.exit(0)
+							print "failed"
+							sys.exit(1)						
+						</literal>
+					</literallayout>
+				</para>
+			</sect1>
+
+			<sect1 id="ctestsetup">
+				<title>Create Test Setup Archive</title>
+
+				<para>
+					The test setup should contain the testing files excluding the files
+					the student should implement. The example C project includes a Make
+					file that creates this test setup by archiving all the appropriate
+					files including the test.properties file. 
+				</para>
+				<para>
+					The test setup should also include a Make file that will compile the 
+					student code and create test case executables. On the Build Server 
+					the test-setup is created using this make file (or what ever setting
+					is specified in the test.properties file). 
+				</para>
+				<para>
+					Then the test executables specified in test.properties are executed 
+					one at a time and the results of the tests are recorded
+				</para>
+
+				<para>
+					Note that in Java, it is impossible to create a file with Unix
+					executable permissions set. Therefore, when the BuildServer extracts
+					files, it cannot make them executable. Thus, your Makefile will need
+					to change the permission on any files that need to be invoked, either
+					later in the Makefile or in test cases. If your Makefile or test
+					executables need to invoke shell scripts, perl scripts, and the like,
+					then the Makefile will first need to change the permissions to make
+					these files executable.
+					<!-- 
+						Alternatively, you can
+						explicitly invoke the interpreter
+						executable, passing the name of the script as an argument.
+					-->
+				</para>
+			</sect1>
+
+			<sect1 id="crefsolution">
+				<title>Create Canonical solution and Skeleton</title>
+
+				<para>
+					The canonical solution simply contains the correct implementation. It
+					does NOT need a Make file or supporting files since the test setup 
+					will provide these files.
+				</para>
+
+				<para>
+					The Skeleton archive containing starter files for students should contain
+					header files and any other supporting files students need. It should also
+					contain public tests and perhaps a Makefile that students use to compile
+					their projects. All these files except the implementation file will be 
+					overwritten by the versions in the test setup.
+				</para>
+			</sect1>
+			
+			<sect1 id="csecurity">
+				<title>Security considerations for C projects</title>
+
+				<para>
+					Student code is untrusted, and could do lots of nasty things. For
+					example:
+				</para>
+
+				<orderedlist>
+					<listitem>
+						<para>Killing the BuildServer process.</para>
+					</listitem>
+
+					<listitem>
+						<para>Reading secret instructor files, or overwriting them.</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							Opening network connections, creating fork() bombs, etc.
+						</para>
+					</listitem>
+				</orderedlist>
+				<para>There is no satisfactory way to prevent this at present.</para>
+				<para>
+					Student code cannot, however, access anything that's not physically on
+					the BuildServer machine, such as the database containing grades and
+					other people's submissions, or the submitServer that runs the web
+					application front-end. Thus if students write malicious code, we'll
+					have logs on the last message received from that BuildServer as well
+					as a copy of the malicious submission itself. So it's very likely that
+					we'll figure it out if someone is causing problems in this way.
+				</para>
+			</sect1>
+		</chapter>
+		<chapter id="eclipseplugin">
+			<title>The Eclipse Plugin</title>
+			<para>
+				The Eclipse plugin allows students to make submissions to Submit Server
+				through Eclipse. It is also used at the University of Maryland to keep a
+				detailed record of all student code changes by commiting their work to a
+				CVS repository every time they save their work.
+			</para>
+			<sect1 id="eclipseplugin_install">
+				<title>Installing the Eclipse Plugin</title>
+				<para>To Do</para>
+			</sect1>
+			<sect1 id="eclipseplugin_configure">
+				<title>Configuring the Eclipse Plugin</title>
+				<para>To Do</para>
+			</sect1>
+			<sect1 id="eclipseplugin_submit">
+				<title>Making a Submission Using Eclipse</title>
+				<para>To Do</para>
+			</sect1>
+		</chapter>
+		<chapter id="instructorfaq">
+			<title>Frequently Asked Questions</title>
+			<para>
+				Add FAQ here.
+			</para>
+		</chapter>
+		
+		<!-- 
+		<chapter id="debuggingprojects">
+			<title>Debugging Projects</title>
+
+			<para>
+				Because building and running unknown software is a complex process, it is
+				often difficult to predict exactly what will happen when submissions are
+				built and tested by the build server. Therefore, you will often need to
+				use the BuildServer to test a project submission and test setup in
+				isolation. For example:
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						You might want to make sure that your canonical solution passes
+						all of the tests, and that the tests work as expected.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						The BuildServer might have problems building or testing a
+						particular student submission.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+			<para>
+				The BuildServer supports a debugging mode where a single submission and
+				test setup are built and tested from the command line.
+			</para>
+
+			<note>
+				<para>
+					The debugging mode has only been tested on Unix systems. If you really
+					want to use it on Windows, send an email to
+					<email>jspacco@cs.umd.edu</email>
+					.
+				</para>
+			</note>
+
+			<para>You can use the BuildServer in debugging mode as follows:</para>
+
+			<orderedlist>
+				<listitem>
+					<para>
+						Download and compile the BuildServer as described in
+						<xref linkend="installing" />
+						.
+					</para>
+					<para>
+						Alternatively, if you have access to the BuildServer machine being
+						used to test your class, log into that machine.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						Set the
+						<literal>BUILDSERVER_ROOT</literal>
+						environment variable to the full path of the directory where you
+						installed the BuildServer. I.e., the
+						<filename>BuildServer</filename>
+						directory.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						Add the
+						<filename>scripts</filename>
+						subdirectory of
+						<replaceable>$BUILDSERVER_ROOT</replaceable>
+						to your PATH.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>Invoke the following command:</para>
+
+					<screen>
+						<prompt>$</prompt>
+						<command>
+							testSubmission.sh
+							<replaceable>submission.zip</replaceable>
+							<replaceable>testsetup.jar</replaceable>
+						</command>
+					</screen>
+
+					<para>
+						Replace
+						<replaceable>submission.zip</replaceable>
+						with the submission you want to test, and
+						<replaceable>testsetup.jar</replaceable>
+						with the appropriate test setup jar file.
+					</para>
+
+					<para>
+						Detailed logging messages about the building/testing process will
+						be printed to stdout, and the test outcomes will be saved in a
+						file called
+						<filename>alltests.out</filename>
+						, located in a temporary directory created by the BuildServer. You
+						will see a message printed showing the full path to this file. You
+						can use the
+						<filename>dumpTestOutcomes.sh</filename>
+						script to summarize the contents of this file.
+					</para>
+				</listitem>
+			</orderedlist>
+
+		</chapter>
+		<chapter id="customizing">
+			<title>Customizing the look-and-feel for a new institution</title>
+			<sect1 id="index.jsp">
+				<title>Changing the main login page</title>
+				<para>
+
+				</para>
+			</sect1>
+		</chapter>
+
+		<chapter id="TODO">
+			<title>TODO</title>
+			<orderedlist>
+				<listitem>Sloppy matching for courses/semesters</listitem>
+				<listitem>Finish this f-in documentation</listitem>
+				<listitem>Instructor CVS documentation</listitem>
+				<listitem>CPM documentation</listitem>
+				<listitem>
+					localization documentation section for how to customize
+				</listitem>
+				<listitem>Sections for student Registration</listitem>
+				<listitem>
+					build.xml should be able to build the documenation and put it into the
+					submitServer.war as well
+				</listitem>
+				<listitem>
+					document that log4j.jar needs to go into Tomcat/shared/lib
+				</listitem>
+				<listitem>
+					Sample Java/C projects should be included in here, with their
+					corresponding build.xml files
+				</listitem>
+				<listitem>
+
+				</listitem>
+			</orderedlist>
+		</chapter>
+		-->
+	</part>
+
+
+
+
+</book>
+
+<!-- vim:set ts=3: -->

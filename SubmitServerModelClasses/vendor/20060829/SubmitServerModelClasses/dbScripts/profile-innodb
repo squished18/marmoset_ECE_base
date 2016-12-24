@@ -1,0 +1,13 @@
+DIR=$HOME/submitserver
+
+mysqladmin \
+--no-defaults \
+--socket=$DIR/submitserver.sock \
+--user=root \
+extended
+
+mysqladmin \
+--no-defaults \
+--socket=$DIR/submitserver.sock \
+--user=root \
+status

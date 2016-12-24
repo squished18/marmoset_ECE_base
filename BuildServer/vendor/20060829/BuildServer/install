@@ -1,0 +1,126 @@
+#!/usr/bin/perl
+
+#
+# NOTE: all of these properties can also be set in build.properties
+#
+
+use strict qw(refs vars);
+use Getopt::Std;
+
+my %opts=();
+
+getopts("r:p:b:f:h:c:m:s:u:gi",\%opts);
+
+my ($install) = @ARGV;
+if (scalar @ARGV != 1 or $install ne 'install')
+{
+    print qq{Usage: $0 
+		 [ -r <runDir> ]
+		 [ -m <pmdDir> ]
+		 [ -b <buildServerHome>]
+		 [ -f <findbugsDir> ]
+		 [ -p <port> ]
+		 [ -h <serverHost> ]
+		 [ -u <unprivilegedAccount> ]
+		 [ -i ] (installs and also builds buildServer)
+ 		 [ -g ] (starts building submissions immediately)
+		 [ -c <course1,...,courseN> ]
+		 [ -s <semester> ]
+ 		 install \n
+};
+    exit 1;
+}
+
+my $pwd = `pwd`;
+$pwd =~ s/\s+//;
+my $buildServerHome = "$pwd";
+
+#
+# on the clusters it's useful to set this to
+# /tmp to avoid placing additional pressure on NFS
+$buildServerHome = $opts{'b'} if ($opts{'b'});
+
+#
+# Unprivileged account
+# Can be empty to use none.
+#
+my $unprivilegedAccount=$opts{'u'};
+
+#
+# PMD home directory
+#
+my $pmdDir = "";
+if ($opts{'m'})
+{
+    $pmdDir = "-Dpmd.dir=$opts{'p'}";
+}
+
+my $port = "8443";
+if ($opts{'p'}) {
+	$port=$opts{'p'};
+}
+
+my $serverHost = "";
+if ($opts{'h'})
+{
+    $serverHost = "-Dserver.host=$opts{'h'}";
+}
+
+my $courses = "";
+if ($opts{'c'})
+{
+    $courses = "-Dcourses=\"$opts{'c'}\"";
+}
+
+my $semester = "";
+if ($opts{'s'})
+{
+    $semester = "-Dsemester=\"$opts{'s'}\"";
+}
+
+#
+# FindBugs home directory
+#
+my $findbugsDir = "";
+if ($opts{'f'})
+{
+	$findbugsDir = "-Dfindbugs.dir=$opts{'f'}";
+}
+
+#
+# Sets ant target
+# "install" just copies the necessary files
+# "full.install" also compiles the build server
+#
+my $antTarget = "install";
+if ($opts{'i'}) {
+    $antTarget = "full.install";
+}
+
+#
+# This 'install' script appends the hostname to $runDir
+#
+my $hostname = `hostname`;
+$hostname =~ s/\n//;
+
+my $runDir = $hostname;
+if ($opts{'r'})
+{
+	$runDir = "$opts{'r'}.$hostname";
+}
+
+my $command = "ant -Dunprivileged.account=$unprivilegedAccount -Dbuild.server.home=$buildServerHome -Dhostname=$hostname -Drun.dir=$runDir $pmdDir $findbugsDir $semester $courses -Dport=$port $serverHost $antTarget";
+print "$command\n";
+print `$command`;
+
+print `chmod +x $buildServerHome/$runDir/runBuildServer`;
+print `chmod +x $buildServerHome/$runDir/checkDaemon.sh`;
+print `chmod o-rwx $buildServerHome/$runDir`;
+
+#
+# set -g if you want this to GO (i.e. start building and running) right away
+#
+if ($opts{'g'})
+{
+    exec "cd $buildServerHome/$runDir && ./runBuildServer config.properties &";
+}

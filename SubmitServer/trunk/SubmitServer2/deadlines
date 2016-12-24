@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mysql submitserver -e 'select coursename, project_number, ontime, late from courses AS A JOIN projects AS B ON (A.course_pk = B.course_pk) WHERE semester="Winter 2011" AND (ontime >= NOW() OR late >= NOW()) ORDER BY ontime, late;'

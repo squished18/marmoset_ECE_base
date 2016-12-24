@@ -1,0 +1,13 @@
+java com.cenqua.clover.CloverInstr -s src -d inst-src -i /tmp/clover/myclover-db
+
+javac inst-src/*java -d obj/
+
+java -cp ../build/obj:$CLASSPATH junit.textui.TestRunner PublicTests
+java -cp ../build/obj:$CLASSPATH junit.textui.TestRunner ReleaseTests
+
+java com.cenqua.clover.reporters.html.HtmlReporter -i /tmp/clover/myclover-db -o html
+java com.cenqua.clover.reporters.xml.XMLReporter -i /tmp/clover/myclover-db -o ../coverage.xml -l
+
+java com.cenqua.clover.reporters.jfc.Viewer -i /tmp/clover/myclover-db
+
+java -cp $HOME/workspace/SubmitServer2/WebRoot/WEB-INF/classes:$CLASSPATH edu.umd.cs.submitServer.DisplaySourceCodeAsHTML /tmp/APROJECTS/cloverTest/BuildServer16293/build/src/PokerHandEvaluator.java > /tmp/foo.html 

@@ -1,0 +1,85 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 13. Creating C Projects</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="submitserver_usersguide.html" title="Part IV. SubmitServer Users Guide"><link rel="prev" href="javaprojects.html" title="Chapter 12. Creating Java Projects"><link rel="next" href="eclipseplugin.html" title="Chapter 14. The Eclipse Plugin"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 13. Creating C Projects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="javaprojects.html">Prev</a> </td><th width="60%" align="center">Part IV. SubmitServer Users Guide</th><td width="20%" align="right"> <a accesskey="n" href="eclipseplugin.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="cprojects"></a>Chapter 13. Creating C Projects</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="cprojects.html#cdirectories">1. C Projects use a Single Directory for Building and Testing</a></span></dt><dt><span class="sect1"><a href="cprojects.html#creating_test_executables">2. Creating Test Executables</a></span></dt><dt><span class="sect1"><a href="cprojects.html#ctestsetup">3. Create Test Setup Archive</a></span></dt><dt><span class="sect1"><a href="cprojects.html#crefsolution">4. Create Canonical solution and Skeleton</a></span></dt><dt><span class="sect1"><a href="cprojects.html#csecurity">5. Security considerations for C projects</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>BuildServer support for C projects is somewhat experimental.</p></td></tr></table></div><p>
+				Creating a C project to work with the BuildServer is very similar to
+				creating a Java project. (See <a href="javaprojects.html" title="Chapter 12. Creating Java Projects">Chapter 12, <i>Creating Java Projects</i></a>.)
+			</p><p>
+				You will probably want to start by getting the sample C project included
+				with the Marmoset distribution. This is also available in 
+					<a href="samples/examples.jar" target="_top">examples.jar</a>.
+			</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cdirectories"></a>1. C Projects use a Single Directory for Building and Testing</h2></div></div></div><p>
+					One important difference between Java projects and C projects is that
+					for C projects, the BuildServer extracts the student submission and
+					test setup jarfile into the <span class="emphasis"><em>same directory</em></span>. 
+					Essentially, the build directory and test files directory are the
+					same. The student files are extracted first, and the instructor files
+					(from the test setup jarfile) are extracted last. That way, student
+					files cannot overwrite instructor files.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="creating_test_executables"></a>2. Creating Test Executables</h2></div></div></div><p>
+					In C projects, each test is represented by an executable file
+					file that exercises the implementations with different inputs
+					and return an exit code. 0 means pass, anything non-zero means 
+					fail. See the example C-project for samples of test executables.
+					Here is an example of a Python script that is used as a
+					test executable. The student's implementation executable is called
+					<code class="literal">studentexecutable</code>:
+					
+					</p><div class="literallayout"><p><br>
+						<code class="literal"><br>
+							#!/usr/bin/env python<br>
+							<br>
+							import commands<br>
+							import sys<br>
+							<br>
+							if commands.getoutput("./studentexecutable inputfile1 5") == "Hello World":<br>
+							    print "passed"<br>
+							    sys.exit(0)<br>
+							print "failed"<br>
+							sys.exit(1)						<br>
+						</code><br>
+					</p></div><p>
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ctestsetup"></a>3. Create Test Setup Archive</h2></div></div></div><p>
+					The test setup should contain the testing files excluding the files
+					the student should implement. The example C project includes a Make
+					file that creates this test setup by archiving all the appropriate
+					files including the test.properties file. 
+				</p><p>
+					The test setup should also include a Make file that will compile the 
+					student code and create test case executables. On the Build Server 
+					the test-setup is created using this make file (or what ever setting
+					is specified in the test.properties file). 
+				</p><p>
+					Then the test executables specified in test.properties are executed 
+					one at a time and the results of the tests are recorded
+				</p><p>
+					Note that in Java, it is impossible to create a file with Unix
+					executable permissions set. Therefore, when the BuildServer extracts
+					files, it cannot make them executable. Thus, your Makefile will need
+					to change the permission on any files that need to be invoked, either
+					later in the Makefile or in test cases. If your Makefile or test
+					executables need to invoke shell scripts, perl scripts, and the like,
+					then the Makefile will first need to change the permissions to make
+					these files executable.
+					
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="crefsolution"></a>4. Create Canonical solution and Skeleton</h2></div></div></div><p>
+					The canonical solution simply contains the correct implementation. It
+					does NOT need a Make file or supporting files since the test setup 
+					will provide these files.
+				</p><p>
+					The Skeleton archive containing starter files for students should contain
+					header files and any other supporting files students need. It should also
+					contain public tests and perhaps a Makefile that students use to compile
+					their projects. All these files except the implementation file will be 
+					overwritten by the versions in the test setup.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="csecurity"></a>5. Security considerations for C projects</h2></div></div></div><p>
+					Student code is untrusted, and could do lots of nasty things. For
+					example:
+				</p><div class="orderedlist"><ol type="1"><li><p>Killing the BuildServer process.</p></li><li><p>Reading secret instructor files, or overwriting them.</p></li><li><p>
+							Opening network connections, creating fork() bombs, etc.
+						</p></li></ol></div><p>There is no satisfactory way to prevent this at present.</p><p>
+					Student code cannot, however, access anything that's not physically on
+					the BuildServer machine, such as the database containing grades and
+					other people's submissions, or the submitServer that runs the web
+					application front-end. Thus if students write malicious code, we'll
+					have logs on the last message received from that BuildServer as well
+					as a copy of the malicious submission itself. So it's very likely that
+					we'll figure it out if someone is causing problems in this way.
+				</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="javaprojects.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="submitserver_usersguide.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eclipseplugin.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 12. Creating Java Projects </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 14. The Eclipse Plugin</td></tr></table></div></body></html>

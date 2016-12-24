@@ -1,0 +1,50 @@
+Create a new key using:
+
+keytool  -genkey -alias tomcat -keyalg RSA -validity 365 -file marmoset2.cer -keystore marmoset2Keystore
+
+I put <hostname> for every category of the key to make sure things match up.
+
+The main thing you need to ensure is that where keytool prompts you
+for your first and last name, you should type the fully qualified
+hostname, e.g. "submit.cs.yourschool.edu".  Otherwise web browsers
+will complain when you try to connect that the certificate doesn't
+match the hostname.
+
+Then create a self-signed certificate using:
+
+keytool -export -keystore marmoset2Keystore -alias tomcat -file marmoset2.cer
+
+Then finally copy the key to the client JVM that needs it, and import it using:
+
+keytool -import -alias tomcat -keystore $JAVA_HOME/jre/lib/security/cacerts  -file marmoset2.cer 
+
+To list the installed keys, try:
+
+keytool -list -keystore $JAVA_HOME/jre/lib/security/cacerts
+
+It was necessary to use a self-signed certificate that matched the hostname so that the
+unit testing features (httpunit and the other one) work properly.
+
+
+Installing the certificate in tomcat:
+
+Copy the "marmoset2Keystore" (or whatever you called it) file to tomcat/conf/ssl
+(create this directory if it doesn't already exist)
+
+Find the xml chunk in tomcat/conf/server.xml that looks like this:
+<Connector port="8443"
+      maxHttpHeaderSize="8192"
+      maxThreads="150"
+      minSpareThreads="25"
+      maxSpareThreads="75"
+      enableLookups="false"
+      disableUploadTimeout="true"
+      acceptCount="100"
+      scheme="https"
+      secure="true"
+      keystoreFile="/export/homes/submit/tomcat/conf/ssl/tomcat.kdb"
+      clientAuth="false"
+      sslProtocol="TLS"
+      />
+
+Set keystoreFile attribute to be the full path to your keystore file.

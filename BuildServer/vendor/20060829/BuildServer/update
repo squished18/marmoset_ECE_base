@@ -1,0 +1,9 @@
+cvs update
+cd ../SubmitServerModelClasses
+cvs update
+cd ../BuildServer
+ant clean
+ant
+cron-set off
+./killall
+cron-set on

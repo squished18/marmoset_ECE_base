@@ -1,0 +1,189 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 9. Configuring Marmoset</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="submitserver_usersguide.html" title="Part IV. SubmitServer Users Guide"><link rel="prev" href="instructor_quicklinks.html" title="Chapter 8. Quick Links for Instructors"><link rel="next" href="projects.html" title="Chapter 10. Projects"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. Configuring Marmoset</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="instructor_quicklinks.html">Prev</a> </td><th width="60%" align="center">Part IV. SubmitServer Users Guide</th><td width="20%" align="right"> <a accesskey="n" href="projects.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="configuring-marmoset"></a>Chapter 9. Configuring Marmoset</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="configuring-marmoset.html#create-course">1. Creating a new course</a></span></dt><dt><span class="sect1"><a href="configuring-marmoset.html#create-instructor-accounts">2. Creating instructor accounts</a></span></dt><dt><span class="sect1"><a href="configuring-marmoset.html#register-students-bulk">3. Registering students from a textfile</a></span></dt><dt><span class="sect1"><a href="configuring-marmoset.html#register-one-student">4. Registering a student or TA one at a time</a></span></dt><dt><span class="sect1"><a href="configuring-marmoset.html#adding-ta-permissions">5. Adding/removing TA permissions</a></span></dt><dt><span class="sect1"><a href="configuring-marmoset.html#editing-student-registrations">6. Editing student registrations</a></span></dt><dt><span class="sect1"><a href="configuring-marmoset.html#account-types">7. Types of accounts</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="create-course"></a>1. Creating a new course</h2></div></div></div><p>Only an account with SuperUser privileges can create classes.</p><p>
+					The first item on the left of the "breadcrumb" bar at the top of the
+					screen should be the SuperUser menu. Clicking this will bring up the
+					form for creating a new course.
+				</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>
+						When creating a new course, make sure to get the spacing exactly
+						correct (i.e. "Spring 2006" is not the same as "Spring2006" and
+						"CMSC 456" is not the same as "CMSC456"). It's a good idea to
+						establish a convention and stick with it, because when creating
+						BuildServers to build and test student submissions you will need
+						to enter the exact courseName and semester.
+					</p></td></tr></table></div><p>
+					Creating a course automatically registers the SuperUser account that
+					created the course as an instructor in that course. This account can
+					then be used to register the instructor(s) for the course, who can in
+					turn register their TAs and students. For more information on types of
+					accounts, see
+					<a href="configuring-marmoset.html#account-types" title="7. Types of accounts">Section 7, &#8220;Types of accounts&#8221;</a>
+					.
+				</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>
+						It's possible for a system to have multiple SuperUser accounts.
+						Keep in mind that any SuperUser accounts that did not create a
+						course will not be registered for the course and therefore will
+						not be able to see the course. Currently it is impossible for a
+						SuperUser to register themselves for a course created by a
+						different SuperUser. This is somewhat counter-intuitive. The
+						current solution is that SuperUsers usually have direct access to
+						the database and can register themselves for courses directly in
+						the database.
+					</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="create-instructor-accounts"></a>2. Creating instructor accounts</h2></div></div></div><p>
+					The link labeled "Register an Instructor for this course using a web
+					interface" available from /view/instructor/course.jsp will bring up
+					the webform to register a new instructor account. Fill in the fields
+					with appropriate registration information. The DirectoryID is the name
+					the user will use to login to the Submit Server. (The name DirectoryID
+					comes from the University of Maryland's authentication service.) This
+					can be different from the "Class Account" used to log in to a CVS
+					repository associated with this course. The Employee number is a field
+					used by the University of Maryland authentication service. Replace
+					this with the DirectoryID if it is not relevant to your default
+					authentication service.
+				</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="choose-authentication-service"></a>2.1. Choosing an authentication service</h3></div></div></div><p>
+						Marmoset currently supports two authentication services (see
+						<a href="submitserver_installation_instructions.html#web.xml" title="5.2. Configure Tomcat/conf/web.xml">Section 5.2, &#8220;Configure Tomcat/conf/web.xml&#8221;</a>
+						in the Installation Instructions). The default authentication
+						service was specified in Tomcat/conf/web.xml. Marmoset now allows
+						individual users to authenticate using the generic service instead
+						of the default. (The generic authentication service stores
+						passwords in the submitServer database).
+					</p><p>
+						To register a user to use the generic service, select the "Use
+						generic marmoset authentication" radio box. (This is not available
+						if the generic service is already the default.) If the Generic
+						service is the default service, an additional field is displayed
+						giving you the option of creating a password. Leave this field
+						blank to have the system generate a password.
+					</p><p>
+						When a user is registered to authenticate with the generic
+						service, a password is generated and displayed on the next screen.
+						<span class="emphasis"><em>
+							Save this password and deliver it to the user.
+						</em></span>
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="instructor-accounts"></a>2.2. Instructor Accounts</h3></div></div></div><p>
+						Either a SuperUser or an Instructor is allowed to register
+						instructors. Registering an instructor account actually creates
+						three different accounts (for a description of account types, see
+						<a href="configuring-marmoset.html#account-types" title="7. Types of accounts">Section 7, &#8220;Types of accounts&#8221;</a>
+						):
+					</p><div class="itemizedlist"><ul type="disc"><li><p>
+								An instructor account: Instructor's account with 'modify'
+								privilege.
+							</p></li><li><p>
+								A canonical account: Account for submitting canonical
+								project solutions.
+							</p></li><li><p>
+								An instructor's student-test account. The student-test
+								account is an unprivileged student account. The instructor
+								account has a "student-view" mode for many pages; however,
+								sometimes it is useful to see
+								<span class="emphasis"><em>exactly</em></span>
+								what a student is seeing, especailly if there is some kind
+								of problem or discrepency with the server.
+							</p></li></ul></div></div><p></p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="register-students-bulk"></a>3. Registering students from a textfile</h2></div></div></div><p>
+					Students can be registered by either instructors or superusers. To
+					register many students at once use the file upload utility. From the
+					main course link, select "Register students for this course by
+					uploading a text file". Then browse to the text file and upload. The
+					format for each line in the file is:
+				</p><p>
+					<code class="literal">
+						Last name, First name, University ID, Section, ClassAcct,
+						DirectoryID,...
+					</code>
+				</p><p>
+					This format is based on the output format from the
+					<a href="http://grades.cs.umd.edu" target="_top">Grades Server</a>
+					used at the
+					<a href="http://www.cs.umd.edu" target="_top">University of Maryland</a>
+					and so contains some redundant fields. The University ID is the same
+					as the Employee number in
+					<a href="configuring-marmoset.html#instructor-accounts" title="2.2. Instructor Accounts">Section 2.2, &#8220;Instructor Accounts&#8221;</a>
+					. ClassAcct should be the same as DirectoryID if no separate CVS
+					accounts are used for the course. The Section field is a legacy field
+					from the Grades Server and is not used by the Submit Server -- it
+					should nevertheless be present to provide the correct number of
+					delimiters.
+				</p><p>
+					As with instructors, you can select an authentication service to be
+					applied to all students specified in the text file. (See
+					<a href="configuring-marmoset.html#choose-authentication-service" title="2.1. Choosing an authentication service">Section 2.1, &#8220;Choosing an authentication service&#8221;</a>
+					)
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="register-one-student"></a>4. Registering a student or TA one at a time</h2></div></div></div><p>
+					Students and TAs can be registered by either instructors or
+					superusers. To register one student or TA, select " Register one
+					student or TA for this course using a web interface". Much of the
+					information required for instructors is also required here (Employee
+					number is typically a University ID) -- see
+					<a href="configuring-marmoset.html#instructor-accounts" title="2.2. Instructor Accounts">Section 2.2, &#8220;Instructor Accounts&#8221;</a>
+					.
+				</p><p>
+					As with instructors, you can select an authentication service to be
+					used by the student being registered. (See
+					<a href="configuring-marmoset.html#choose-authentication-service" title="2.1. Choosing an authentication service">Section 2.1, &#8220;Choosing an authentication service&#8221;</a>
+					.) If you select the generic authentication service, a password will
+					be generated and presented on the next screen. If the Generic service
+					is the default service, an additional field is displayed giving you
+					the option of creating a password. Leave this field blank to have the
+					system generate a password.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="adding-ta-permissions"></a>5. Adding/removing TA permissions</h2></div></div></div><p>
+					Submit Server allows super users and instructors to modify the
+					privileges of any students registered for a course. The students can
+					receive TA privileges, which allows them to access all information in
+					the course (including all student submissions), but not to change the
+					course or its projects.
+				</p><p>
+					To give a student TA privileges, select "add" in the "Add TA
+					Permission" column next to the student. This will move the student up
+					in the sort order to the group that includes all registrants with some
+					level of instructor rights (indicated by an asterisk next to the
+					name). To remove TA privileges, select "remove" in the "Remove TA
+					Permission" column next to the student.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="editing-student-registrations"></a>6. Editing student registrations</h2></div></div></div><p>
+					Submit Server allows super users and instructors to modify student
+					registration information for all students registered in a course. To
+					edit a student's registration, select "edit" in the "Edit Student
+					Registration" column next to the student. The next screen allows you
+					to change the name, directory id, employee number and class account
+					for the student (but not the password, even for accounts registering
+					under the Generic authentication service).
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="account-types"></a>7. Types of accounts</h2></div></div></div><div class="table"><a name="table_account-types-table"></a><p class="title"><b>Table 9.1. Types of Accounts</b></p><div class="table-contents"><p>
+						The following table briefly describes the different types of
+						accounts, their functions, and the corresponding
+						'instructor_capability' value in the database.
+					</p><table summary="Types of Accounts" border="1"><colgroup><col><col><col></colgroup><thead><tr><th align="left">type</th><th align="left">instructor_capability in database</th><th align="left">description</th></tr></thead><tbody><tr><td align="left">student</td><td align="left">NULL</td><td align="left">
+									A student account. Can see pages in /view/* but not
+									/view/instructor/*, /view/admin/*, or research/*. Can
+									perform download operations with servlets mapped to
+									/data/* or /action/* but not /data/instructor/* or
+									/action/instructor/*. This is a fancy way of saying
+									that the a student account can download its own
+									submissions and submit new submissions, but cannot
+									download other students' submissions or test-setups,
+									or perform any actions reserved for instructors.
+								</td></tr><tr><td align="left">TA</td><td align="left">read-only</td><td align="left">
+									a TA account. Can see pages in /view/*,
+									/view/instructor/*, and servlets mapped to /data/*,
+									/action/*, /data/instructor/*. Cannot access servlets
+									mapped to /action/instructor/*. A TA account cannot
+									create new projects, update existing projects, upload
+									new canonical solutions or test-setups, or register
+									students or TAs or instructors.
+								</td></tr><tr><td align="left">Instructor</td><td align="left">modify</td><td align="left">
+									An Instructor account. Instructors can do basically
+									anything, such as create projects, register students,
+									TAs and other instructors, update projects, and upload
+									new canonical solutions or new test-setups.
+								</td></tr><tr><td align="left">Canonical</td><td align="left">canonical</td><td align="left">
+									Each instructor has a canonical account. It should
+									never be necessary to log into the system directly
+									using the canonical account. In fact it will
+									eventually become impossible to log into the system
+									using the canonical account. The only reason that
+									there are multiple canonical accounts is so that
+									instructors using Eclipse can submit canonical
+									solutions using the Course Project Manager plugin. Any
+									instructor can upload a new canonical solution through
+									the web interface at
+									/view/instructor/projectUtilities.jsp
+								</td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="instructor_quicklinks.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="submitserver_usersguide.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="projects.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. Quick Links for Instructors </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 10. Projects</td></tr></table></div></body></html>

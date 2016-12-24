@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+import os
+import getopt
+import sys
+
+def usage():
+    print """
+Usage: %s -c <CRONTAB.sh script> (defaults to $HOME/buildSever/BuildServer/CRONTAB.sh)
+          -h print this help message
+          on / off
+""" % (sys.argv[0])
+    sys.exit(1)
+
+crontabScript="%s/buildServer/BuildServer/CRONTAB.sh" % os.environ["HOME"]
+try:
+    opts, args = getopt.getopt(sys.argv[1:], 'hc:')
+except getopt.GetoptError:
+    usage()
+
+for o, a in opts:
+    if o == "-h": 
+       usage()
+    if o == "-c":
+        crontabScript=a
+
+if len(args) < 1:
+    usage()
+
+mode=args[0]
+
+#print "mode: %s" % mode
+# TODO: Ensure crontabScript exists
+
+infile=open(crontabScript, 'r')
+list=infile.readlines()
+infile.close()
+
+outfile=open(crontabScript, 'w')
+for line in list:
+    line=line.strip("^#")
+    if mode=="off":
+        line="#%s" % line
+    outfile.write(line)
+outfile.flush()
+outfile.close()
+
+#print "home is %s" % HOME
+

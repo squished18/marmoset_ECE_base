@@ -1,0 +1,29 @@
+<html>
+<head>
+<title> Managing the research database </title>
+</head>
+<body>
+
+<h3> Notes on the research infrastructure
+</h3>
+
+<ul>
+<li> extractAllVersions/extractEverything.pl is the working script for extracting all the snapshots
+<li> currently code for matching up the students who have given consent is ad-hoc and should be
+	fixed
+<li> SubmitUtilities/DirectSnapshotUpload is the best mechanism for uploading the snapshots, it
+	inserts directly into the database, is very fast compared to using the web application, and
+	should always be used instead of the the SnapshotUtil upload feature that uses the web
+	application
+<li> The research database gets big quickly so it becomes necessary to run analyze table and
+	optimize table on the larger tables (submissions, test_outcomes) to give hints to the query
+	optimizer in MySQL
+<li> SubmitUtilities/ComputeDeltas needs to be refactored to avoid computing some things
+<li> ProjectDumper that given the canonical student registration PK and the course PK of a research DB
+	will dump SQL to create all the projects from the current course.
+<li> To get code-coverage working with Clover, it is necessary to 
+
+</ul>
+
+</body>
+</html>

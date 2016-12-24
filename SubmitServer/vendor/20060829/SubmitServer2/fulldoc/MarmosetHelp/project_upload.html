@@ -1,0 +1,310 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 11. Preparing and Uploading Project Files</title><link rel="stylesheet" href="style.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Marmoset Help Pages"><link rel="up" href="submitserver_usersguide.html" title="Part IV. SubmitServer Users Guide"><link rel="prev" href="projects.html" title="Chapter 10. Projects"><link rel="next" href="javaprojects.html" title="Chapter 12. Creating Java Projects"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. Preparing and Uploading Project Files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="projects.html">Prev</a> </td><th width="60%" align="center">Part IV. SubmitServer Users Guide</th><td width="20%" align="right"> <a accesskey="n" href="javaprojects.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="project_upload"></a>Chapter 11. Preparing and Uploading Project Files</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="project_upload.html#submissionarchive">1. The Submission Archive</a></span></dt><dt><span class="sect1"><a href="project_upload.html#testsetuparchive">2. The Test Setup Archive</a></span></dt><dt><span class="sect1"><a href="project_upload.html#testproperties">3. Test Properties</a></span></dt><dt><span class="sect1"><a href="project_upload.html#uploadarchives">4. 
+					Upload Archives into Submit Server
+				</a></span></dt><dt><span class="sect1"><a href="project_upload.html#aboutbuildserverforinstructors">5. About the Build Server</a></span></dt><dt><span class="sect1"><a href="project_upload.html#other_supported_languages">6. Applying The C Model to Other Languages</a></span></dt></dl></div><p>
+				The next few chapters describe the process of preparing and uploading 
+				project files through the Submit Server, which are then used by the 
+				Build Server to compile and grade student submissions. This chapter 
+				describes the files that make up this process and process of uploading 
+				them into the Submit Server.
+			</p><p>
+				The process of building and testing one submission requires two files: 
+				a <span class="emphasis"><em>submission archive</em></span> containing an implementation of
+				the specification and a	<span class="emphasis"><em>test setup archive</em></span> containing
+				test cases that either pass or fail when run against a submission. 
+				Both of these files can be in the
+				<a href="http://www.info-zip.org/" target="_top">zip</a> format or the Java jar
+				format.
+			</p><p>
+				Some sample files are provided with the Marmoset Distribution and linked here:
+				</p><div class="itemizedlist"><ul type="disc"><li><p>
+						<a href="samples/test-setup.jar" target="_top">test-setup.jar</a>: Test cases
+						for an example specification.
+					</p></li><li><p>
+						<a href="samples/canonical.jar" target="_top">canonical.jar</a>: A submission 
+						that completely implements the example specification.
+					</p></li><li><p>
+						<a href="samples/skeleton.jar" target="_top">skeleton.jar</a>: The initial project
+						files given to students. This is essentially an incomplete implementation
+						of the specification.
+					</p></li></ul></div><p>
+			</p><p>
+				For the full set of examples and templates provided with the marmoset distribution,
+				download <a href="samples/examples.jar" target="_top">examples.jar</a>.
+			</p><p>
+				The next two chapters: <a href="javaprojects.html" title="Chapter 12. Creating Java Projects">Chapter 12, <i>Creating Java Projects</i></a> and 
+				<a href="cprojects.html" title="Chapter 13. Creating C Projects">Chapter 13, <i>Creating C Projects</i></a> provide step by step instructions for creating
+				the necessary files for Java and C projects respectively. The model used for
+				C projects can also be used for other languages such as C++, OCaml and Ruby
+				(see <a href="project_upload.html#other_supported_languages" title="6. Applying The C Model to Other Languages">Section 6, &#8220;Applying The C Model to Other Languages&#8221;</a>).
+			</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="submissionarchive"></a>1. The Submission Archive</h2></div></div></div><p>
+					Student submissions are stored in zip/jar files, referred to as
+					<span class="emphasis"><em>submission archives</em></span>. They contain the source code 
+					files for the student's project. They may also contain other files: for 
+					example, test cases provided to the students, the student's own test 
+					cases, image or data files, etc.
+				</p><p>
+					When setting up a project, an instructor must make a submission that
+					passes all the tests. This submission archive is referred to as the 
+					canonical solution. An example of a canonical solution is 
+					<a href="samples/canonical.jar" target="_top">canonical.jar</a>.
+				</p><p>
+					Submission archives are usually created by archiving the entire
+					student folder. Marmoset then looks for the source files and compiles
+					them. This process is quite robust but sometimes problems can occur if
+					files are in unusual places. The following rules are helpful to avoid
+					any problems:
+					</p><div class="itemizedlist"><ul type="disc"><li><p>
+								In java projects, source files should be in a
+								<code class="literal">src</code> directory and should be arranged in
+								the standard directory structure. E.g. the class
+								cs101.project1.HelloWorld should be located in 
+								<code class="literal">src/cs101/project1/HelloWorld.java</code>.
+							</p></li><li><p>
+								In C projects, source and make files should be at the top 
+								level.
+							</p></li><li><p>
+								Any non-source files referenced using relative paths should
+								be in a directory structure that starts at the top level.
+								This is because the programs are run from the top level. So
+								if a program references <code class="literal">examples/input.txt</code>,
+								then the directory <code class="literal">examples</code> should be at
+								the top level of the archive.
+							</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top">
+								When student programs access non-source files, the
+								<code class="literal">test.runInInstructorDir</code>
+								property (in the test.properties file) determines which
+								files are visible. If this property is true, then files
+								the student's submission are not visible because the
+								program is run from the instructor's directory, not the
+								student's directory. See <a href="project_upload.html#testsetuparchive" title="2. The Test Setup Archive">Section 2, &#8220;The Test Setup Archive&#8221;</a>
+								for more information about the test.properties file and
+								see <a href="project_upload.html#testproperties" title="3. Test Properties">Section 3, &#8220;Test Properties&#8221;</a> for more information 
+								about the <code class="literal">test.runInInstructorDir</code> property.
+							</td></tr></table></div></li></ul></div><p>
+				</p><p>
+					If the project is done using the 
+					<a href="http://www.eclipse.org" target="_top">Eclipse IDE</a>, the student
+					can simply archive the entire project directory and submit this. 
+					Marmoset uses Eclipse's <code class="literal">.classpath</code> file to figure
+					out where all the source files are. There is also an Eclipse plugin
+					provided by the University of Maryland that can be configured to
+					allow students to submit from within Eclipse (see 
+					<a href="eclipseplugin.html" title="Chapter 14. The Eclipse Plugin">Chapter 14, <i>The Eclipse Plugin</i></a>).
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="testsetuparchive"></a>2. The Test Setup Archive</h2></div></div></div><p>
+					All of the information about how to build and test submissions for a
+					particular course project is contained in the
+					<span class="emphasis"><em>test setup archive</em></span>. This archive is a zip or jar 
+					file containing several elements:
+				</p><div class="variablelist"><dl><dt><span class="term">The test.properties file</span></dt><dd><p>
+								This is a Java properties file defining metadata about how
+								to build and test a submission for the particular project.
+								This file must be in the root directory of the test setup
+								archive. For a detailed description of the test.properties file,
+								see	<a href="project_upload.html#testproperties" title="3. Test Properties">Section 3, &#8220;Test Properties&#8221;</a>.
+							</p></dd><dt><span class="term">Test Cases and Supporting Source or Object Files</span></dt><dd><p>
+								The test setup archive contains source and/or object files
+								needed to compile and test the student source code.
+							</p><p>
+								For Java projects, only .class files need to be provided in
+								the test setup archive. (However, we recommend including
+								source files in the test setup because this is often the only
+								record of the test cases in the Marmoset database. Instructors
+								and researchers that review your course in the future often
+								want to see the source of the test cases.) 
+							</p><p>
+								The test setup jarfile is provided on the compile-time and
+								runtime classpath for building/executing the student's
+								code. For testing student code,
+								<a href="http://junit.org/" target="_top">JUnit</a>
+								test cases should be provided. More information is in
+								<a href="javaprojects.html" title="Chapter 12. Creating Java Projects">Chapter 12, <i>Creating Java Projects</i></a>.
+							</p><p>
+								For C projects, either C source files or object files may
+								be provided. (Again we recommend including the source
+								files.) The individual test cases must be standalone
+								executables linked against the student's modules. More
+								information is in <a href="cprojects.html" title="Chapter 13. Creating C Projects">Chapter 13, <i>Creating C Projects</i></a>.
+							</p></dd><dt><span class="term">Files needed by Test Cases at Runtime</span></dt><dd><p>
+								If the test cases require files when they are executed,
+								the files should be stored in the test setup jarfile.
+								These files will be extracted into the
+								<span class="emphasis"><em>testfiles directory</em></span>, and will be 
+								available to the tests at testing time.
+							</p></dd><dt><span class="term">The security.policy file (optional, Java-only)</span></dt><dd><p>
+								For Java projects, a security policy file may be provided,
+								specifying what privileges are granted to student code. It
+								is important to prevent untrusted student code from
+								forging test outcomes, sending secret test information
+								over the network, etc. This file, if present, must be
+								located in the root directory of the test setup jarfile.
+							</p><p>
+								If no security policy file is specified, a restrictive
+								default security policy is used.
+							</p></dd><dt><span class="term">Makefile (C-only)</span></dt><dd><p>
+								Test setup jarfiles for C projects must include a Makefile
+								capable of compiling the executables that will serve as
+								the test cases. The Makefile must be in the root directory
+								of the test setup jarfile.
+							</p></dd></dl></div><p>
+					<a href="javaprojects.html" title="Chapter 12. Creating Java Projects">Chapter 12, <i>Creating Java Projects</i></a>
+					and
+					<a href="cprojects.html" title="Chapter 13. Creating C Projects">Chapter 13, <i>Creating C Projects</i></a>
+					provide more details on what needs to be in the test setup jarfile for
+					Java projects and C projects.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="testproperties"></a>3. Test Properties</h2></div></div></div><p>
+					This chapter describes how to define a test.properties file for a
+					project. As noted in
+					<a href="projects.html" title="Chapter 10. Projects">Chapter 10, <i>Projects</i></a>
+					, this file must be placed in the root directory of the test setup
+					jarfile.
+				</p><p>
+					The format of the test properties file is described in the Java API
+					documentation for the load() and store() methods of the
+					<a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html" target="_top">
+						java.util.Properties class
+					</a>
+					.
+				</p><div class="table"><a name="table_test_properties"></a><p class="title"><b>Table 11.1. Test properties</b></p><div class="table-contents"><table summary="Test properties" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th align="left">Property Name</th><th align="left">Value</th><th align="left">Language</th><th align="left">Meaning</th></tr></thead><tbody><tr><td align="left">build.language</td><td align="left">"c","java","ruby", or "ocaml"</td><td align="left">Any</td><td align="left">
+									Specifies the source language of the project. Case is
+									ignored, so "Java", "java", and "JAVA" are all
+									equivalent. Currently C, Java, Ruby and OCaml projects
+									are supported. If this property is not specified, it
+									defaults to "Java".
+								</td></tr><tr><td align="left">build.sourceVersion</td><td align="left">"1.4", "1.5", etc.</td><td align="left">Java</td><td align="left">
+									Specifies the value of the "-source" command line
+									option used when invoking
+									<span><strong class="command">javac</strong></span>
+									. If not specified, defaults to "1.5".
+								</td></tr><tr><td align="left">build.make.command</td><td align="left">Path of make command</td><td align="left">C</td><td align="left">
+									Specifies the full path of the make command used to
+									build student submissions. If not specified, defaults
+									to "/usr/bin/make". Instructors should not need to set
+									this property unless they are administering their own
+									buildserver.
+								</td></tr><tr><td align="left">build.make.file</td><td align="left">Filename of makefile</td><td align="left">C</td><td align="left">
+									Specifies the filename of the makefile. If not
+									specified, the makefile is left implicit, meaning that
+									the make utility will decide which one to use. If this
+									property is specified, it will be passed as part of
+									the "-f" option to the make command.
+								</td></tr><tr><td align="left">test.class.{public,release,secret,student}</td><td align="left">
+									Name of JUnit TestCase class (Java), or
+									comma-separated list of test executables (C)
+								</td><td align="left">Java or C</td><td align="left">
+									For Java projects, specifies the full classname of a
+									JUnit TestCase class which performs the public,
+									release, secret or student tests. For C/Ruby/OCaml
+									projects, specifies the names of the executables which
+									represent the public, release, or secret tests. Note
+									that C projects do not support student-written tests
+									that are executed by the BuildServer, as this would be
+									insecure and complicated. This property must NOT be
+									left blank; i.e. if a project has no secret tests,
+									then this property must be omitted.
+								</td></tr><tr><td align="left">test.timeout.testCase</td><td align="left">Timeout in seconds</td><td align="left">Java</td><td align="left">
+									Specifies the amount of time a single test method is
+									allowed to execute before considering the test failed.
+									If not specified, defaults to 30 seconds.
+								</td></tr><tr><td align="left">test.timeout.process</td><td align="left">
+									DEPRECATED: This field is ignored (Used to be Timeout
+									in seconds)
+								</td><td align="left">Java or C</td><td align="left">
+									deprecated
+									
+								</td></tr><tr><td align="left">test.output.maxBytes</td><td align="left">Number of bytes</td><td align="left">Java or C</td><td align="left">
+									Specifies the maximum number of bytes of output that
+									will be captured from a test process. If not
+									specified, defaults to 1 MB.
+								</td></tr><tr><td align="left">test.runInInstructorDir</td><td align="left">true or false</td><td align="left">Java</td><td align="left">
+									If true, test processes are run in the directory
+									containing the extracted test setup jarfile (the
+									<span class="emphasis"><em>test files directory</em></span>
+									containing instructor-provided files), rather than the
+									<span class="emphasis"><em>build directory</em></span>
+									(containing student submission files). The default is
+									to run in the build directory.
+								</td></tr><tr><td align="left">test.performCodeCoverage</td><td align="left">true or false</td><td align="left">Java</td><td align="left">
+									Should the buildServer try to perform code coverage?
+									The BuildServer has Clover, a code-coverage tools,
+									installed into it and can collect code coverage
+									results for each test case. This is especially useful
+									when combined with student-written tests because you
+									can download the code-coverage stats from the server
+									and use them for grading purposes to support
+									test-driven development for students. Note that it is
+									possible for students to submit a zip archive through
+									the web interface in a format such that it can be
+									built and tested but the code coverage tool will not
+									work properly.
+								</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="uploadarchives"></a>4. 
+					Upload Archives into Submit Server
+				</h2></div></div></div><p>
+					Once you have created the three archives, you are ready to initialize your project
+					on the Submit Server by uploading these files. Go to the Project Utilities page to 
+					upload all three archives. The test-setup and canonical archives can be uploaded
+					at the bottom of this page. The skeleton is uploaded by selecting 
+					"Upload new project starter files" in the Project Maintenance section.
+				</p><p>
+					Submit Server sends the test-setup and canonical archives to a Build Server for 
+					testing. While this is happening, the state of your test setup should be set to 
+					pending. If this is not the case, contact your Marmoset administrator to ensure 
+					that the Build Servers have been activated. If any of the tests fail, the test-setup
+					status will be set to "failed". Check to make sure the format of your archives is 
+					correct.
+				</p><p>
+					Once all the tests in your test-setup pass on the canonical solution, the test-setup
+					status is upgraded to "tested". This may take a few minutes. You can now assign points 
+					to each of the tests by clicking the "Assign Points" link. When you assign points to a
+					test-setup, it becomes the active test setup, meaning that all student submissions
+					will be tested against this setup.
+				</p><p>
+					Once all this is done, you can make the project visible to students by selecting the
+					"Make Visible" button at the top of the page.
+				</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aboutbuildserverforinstructors"></a>5. About the Build Server</h2></div></div></div><p>
+					This section describes how the build server uses the test setup to test
+					the submissions.				
+				</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="directories"></a>5.1. Directories</h3></div></div></div><p>
+					Two directories are used by the BuildServer at runtime. The
+					<span class="emphasis"><em>build directory</em></span>
+					is where the student submission is extracted. The
+					<span class="emphasis"><em>test files directory</em></span>
+					is where the test setup jarfile is extracted.
+				</p><p>
+					The idea behind keeping these two directories separate is that it
+					prevents commingling of student and instructor files. However, for C
+					projects, a single directory is used as both the build directory and
+					the test files directory.
+				</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="steps"></a>5.2. Building and Testing Steps</h3></div></div></div><p>
+					The following steps are used when building and testing a student
+					submission.
+				</p><div class="orderedlist"><ol type="1"><li><p>
+							The submission zipfile is extracted into the build directory.
+						</p></li><li><p>
+							The test setup jarfile is extracted into the test files
+							directory.
+						</p></li><li><p>
+							The submission is built: either by issuing a command to build
+							all of the source files in the submission (for Java projects)
+							or by invoking a make command (for C projects). If the build
+							fails, the compiler error messages are recorded and a failed
+							build test outcome is recorded.
+						</p></li><li><p>
+							The public, release, secret and student tests specified in the
+							test setup jarfile's test.properties file are executed and
+							test outcomes recorded.
+						</p></li></ol></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="other_supported_languages"></a>6. Applying The C Model to Other Languages</h2></div></div></div><p>
+					The buildServer supports two categories of programming languages: Java
+					projects (which use a security manager and JUnit) and C or C-like
+					projects (which use the
+					<code class="literal">make</code>
+					utility to create executable files which are then run run by the
+					BuildServer.
+				</p><p>
+					The mechanism used for C projects is flexible enough that we've used
+					it for Ruby and OCaml projects as well. Other langauges, such as C++
+					or Python, will also work using the same mechanism.
+				</p><p>
+					Thus when we write "C project", keep in mind that this mechanism is
+					extremely flexible and is not certainly not limited to projects
+					written in the C language.
+				</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="projects.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="submitserver_usersguide.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="javaprojects.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. Projects </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 12. Creating Java Projects</td></tr></table></div></body></html>

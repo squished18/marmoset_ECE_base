@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Vigenere Project (C Version) Readme</title>
+<style>
+<!--
+h1           { font-family: Georgia; color: #000000; font-variant:small-caps }
+code         { padding-left: 10px }
+body         { font-family: Arial; color: #666666 }
+li           { line-height: 150%; margin-top: 12 }
+-->
+</style>
+</head>
+
+<body>
+
+<h1>For Instructors</h1>
+<p>The Vigenere project is provided as an example of a C project that can be 
+used with Marmoset's Submit Server. In this project students will implement the 
+functions indicated in vigenere.h which perform Vigenere encryption and 
+decryption.</p>
+<p>This directory contains all the files an instructor has prepared to support 
+this project. This includes files for testing, files for students, the correct 
+(canonical) solution and a Makefile.</p>
+<h2>Using This Project</h2>
+<p>Perform the following steps to upload this project to the Submit Server and 
+distribute to students:</p>
+<ul>
+	<li>(optional) Edit test.properties. This specifies what files to execute 
+	for testing etc.</li>
+	<li>Create the test setup jar file:<br>
+	<code>make setup</code></li>
+	<li>Create the canonical jar file:<br>
+	<code>make canonical</code></li>
+	<li>Create a jar file containing starter files for students:<br>
+	<code>make starterfiles</code></li>
+	<li>Go to the Project utilities page on the submit server and <br>
+	upload the test-setup, canonical and starter files to the <br>
+	appropriate location.</li>
+	<li>To delete the jar files, directories and executables created<br>
+	by make and restore the project to its initial format:<br>
+	<code>make clean </code> </li>
+</ul>
+<h2>Project Files</h2>
+<p>The files that make up this project are: </p>
+<ul>
+	<li>The specification header file:<br>
+	<a href="vigenere.h">vigenere.h</a></li>
+	<li>The canonical solution:<br>
+	<a href="vigenere.c">vigenere.c</a></li>
+	<li>The student's starter file which is a compilable solution but does not yield the correct results:<br>
+	<a href="Student.vigenere.c">Student.vigenere.c</a></li>
+	<li>A java properties file that is included in the test setup for
+configuring the Submit Server:<br>
+	<a href="test.properties">test.properties</a></li>
+<li>The test cases that return &quot;passed&quot; or &quot;failed&quot;. This is a set
+of executable python scripts and a pair of c programs that
+support these scripts:<br>
+<a href="encrypt.c">encrypt.c</a> <br><a href="decrypt.c">decrypt.c</a><br><br>
+<a href="testSimpleEncrypt.py">testSimpleEncrypt.py</a> <br>
+<a href="testSimpleDecrypt.py">testSimpleDecrypt.py</a><br>
+<a href="testWraparoundEncrypt.py">testWraparoundEncrypt.py</a> 
+<br><a href="testWraparoundDecrypt.py">testWraparoundDecrypt.py</a><br>
+<a href="testEncryptInvalidChar.py">testEncryptInvalidChar.py</a> <br>
+<a href="testInversion.py">testInversion.py</a> 
+<br><a href="testKeyLongerThanPlainText.py">testKeyLongerThanPlainText.py</a><br>
+<a href="testEncryptWithInvalidKey.py">testEncryptWithInvalidKey.py</a></li>
+<li>A make file for creating the jar files, and compiling the project
+files. The Marmoset Build Server uses this make file to compile 
+the test setup and solution before running the tests specified in
+test.properties:<br>
+<a href="Makefile">Makefile</a></li>
+<li>A make file for students that is included with the starter files: <br>
+<a href="Student.Makefile">Student.Makefile</a></li>
+</ul>
+
+</body>
+
+</html>

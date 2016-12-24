@@ -1,0 +1,145 @@
+<html>
+<head>
+<title> Restarting the SubmitServer </title>
+</head>
+<body>
+
+<h2> How to restart the SubmitServer, database and BuildServer </h2>
+
+Hopefully you'll never have to do this.
+
+<h2> The database </h2>
+
+<ul>
+<li> If the database seems to have gone down, first make sure it's really dead:
+<p> Log in to the submit.cs.umd.edu as submit.  Try running 'mysql' from the command line.
+If it brings up a prompt and works, then the database is probably OK.
+<p>
+<li> All of the datbase scripts and utilities are in /export/projects/submit/dbScripts
+<br> This is not submit's home directory, it's a separate directory on the RAID.
+<p>
+To collect profile info from database: /export/projects/submit/dbScripts/profile-innodb
+<p>
+To stop the database: /export/projects/submit/dbScripts/stop-innodb
+<p>
+To start the datbase: /export/projects/submit/dbScripts/start-innodb
+<p>
+That's all the basic things with the database.
+<p>
+<li> If heaven forbid the data gets corrupted, I'm storing hourly snapshots here:
+<br>
+/export/projects/submit/submitServerDatabaseBackup
+<p>
+These are getting huge but we're not close to running out of space yet.
+<p>
+<font color=red><b>NOTE:</b></font> Please don't do this unless absolutely necessary!
+<br> If the database gets corrupted and you need to restore from a backup, then pick
+one of the backups (call it "backup.foo.sql.gz") from /export/projects/submit/submitServerDatabaseBackup
+and unzip it (producing "backup.foo.sql").
+<br>
+Then do this:<br>
+/export/projects/submit/dbScripts/install backup.foo.sql
+<br>
+This should do everything necessary to restore.
+<p>
+If that doesn't work, then you can delete everything in the database, start
+mysql from the command line, and do "source backup.foo.sql" which should regenerate things.
+All of the backup files are stored as a giant series of SQL statements for maximum
+portability and error tolerance.
+</ul>
+
+<h2> The SubmitServer </h2>
+<ul>
+
+<li> First try logging in to the submitServer:
+<br>
+<a href="https://submit.cs.umd.edu/"> https://submit.cs.umd.edu/ </a>
+<br>
+If you don't have an account on the submitServer, you can always use the test account:
+<br>
+DirectoryID: freddy<br>
+password:	bar<br>
+<p>
+This account has no privileges, it only exists to make sure the server is working.
+
+<li> One error tomcat gives is to give a listing of the available context, which
+<a href="rootcontext.html"> looks something like this </a>.  This will go away
+if you shutdown and startup tomcat.
+
+<li> If you can log in but you get a screen <a href="badlogin.html">like this</a>
+then the server is in one of its failure modes and needs to be restarted.  I don't know
+why it will let you log in before telling you that it can't find resources that are there,
+but that's what tomcat does.
+
+<li> To restart, log in to the submit account: submit@submit.cs.umd.edu<br>
+prompt% cd $HOME/tomcat/bin<br>
+prompt% ./shutdown.sh<br>
+prompt% ./startup.sh<br>
+wait a few seconds<br>
+prompt% ./shutdown.sh<br>
+prompt% ./startup.sh<br>
+<p>
+It's almost always better to start it and stop and then start it again.  I don't know
+why and I don't really ask any questions.
+<p>
+Now try logging in again.  It should work and bring you to the main menu, which should look
+something <a href="successfullogin.html"> like this </a>, except that formatting will be pretty
+and it will have more colors.
+
+<li> Sometimes restarting doesn't help.  In this case, first shutdown the
+SubmitServer in the normal way: <br>
+cd $HOME/tomcat/bin<br>
+./shutdown.sh
+<p>
+Then you'll need to delete the 
+current web files and restart tomcat.  There may be several contexts in $HOME/tomcat/webapps,
+for example <b>submitServer</b> and <b>newSubmitServer</b>.  If that happens delete all of
+the directories and leave all of the .war files.
+<p>
+prompt% cd $HOME/tomcat/webapps
+prompt% /bin/rm -rf submitServer
+<p>
+and then restart it the usual way:
+<p>
+prompt% cd $HOME/tomcat/bin<br>
+prompt% ./shutdown.sh<br>
+prompt% ./startup.sh<br>
+wait a few seconds<br>
+prompt% ./shutdown.sh<br>
+prompt% ./startup.sh<br>
+
+<li> After restarting, always log in with the test account to make sure things actually 
+restarted.  Tomcat is stable, but for some reason often doesn't start up properly.
+
+</ul>
+
+<h2> The BuildServer </h2>
+
+<ul>
+
+<li> The BuildServer is a java process that periodically asks the submitServer for student 
+projects to compile and test, and then sends the results of the tests back to the submitServer.
+
+<li> There is a cronjob that runs in my account (jspacco) that checks to make sure the buildSever
+is still running every 5 minutes, and restarts it if necessary.  It should not be possible for the
+BuildServer to go down and not start itself back up.  I have tested that after killing the 
+BuildServer from the command line allows it, the crontab starts it up again.  But we can't be sure
+that this will always work.
+
+<li> There's no useful way to know if the buildServer is down.  Basically one of the instructors will
+notice and email that there's a problem when submissions stop getting built.  You can check to see if the
+BuildServer is down like this: 'ps -auxwww | grep BuildServer' and see if there's a java process
+with the word BuildServer in it anywhere.
+
+<li> If it's necessary to restart the buildServer, login to marmoset2.umiacs.umd.edu as jspacco 
+(or log in as root and then become jspacco) and then do this:
+<p>
+prompt% cd /export/homes/jspacco/buildServer/BuildServer/run<br>
+prompt% ./runBuildServer config.properties
+
+<li> This probably won't be necessary as the crontab has never failed to restart the BuildServer.
+
+</ul>
+
+</body>
+</html>
