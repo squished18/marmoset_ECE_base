@@ -20,7 +20,7 @@
 </context-param>
 <context-param>
     <param-name>database.server.jdbc.url</param-name>
-    <param-value>jdbc:mysql://mysql.cs.uwaterloo.ca/marmoset</param-value>
+    <param-value>jdbc:mysql://localhost/submitserver</param-value>
 </context-param>
 <context-param>
     <param-name>database.user</param-name>
@@ -28,7 +28,7 @@
 </context-param>
 <context-param>
     <param-name>database.password</param-name>
-    <param-value>marm786</param-value>
+    <param-value>marmosetpassword</param-value>
 </context-param>
 <context-param>
     <param-name>database.driver</param-name>
