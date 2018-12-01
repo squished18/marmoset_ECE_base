@@ -56,6 +56,7 @@
 			destdir="bin"
 			debug="on">
 			<classpath refid="buildserver.classpath"/>
+			<compilerarg line="--add-exports java.base/com.sun.net.ssl=ALL-UNNAMED"/>
 		</javac>
 		<copy todir="bin">
 			<fileset dir="src">
