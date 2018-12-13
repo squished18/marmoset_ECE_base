@@ -108,7 +108,7 @@ CREATE TABLE `eclipse_launch_events` (
   `project_number` varchar(20) NOT NULL default '',
   `md5sum` varchar(32) NOT NULL default '',
   `event` varchar(20) NOT NULL default '',
-  `timestamp` datetime NOT NULL default '0000-00-00 00:00:00',
+  `timestamp` datetime NOT NULL default '1000-01-01 00:00:00',
   `skew` mediumint(9) NOT NULL default '0',
   PRIMARY KEY  (`eclipse_launch_event_pk`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -175,8 +175,8 @@ CREATE TABLE `projects` (
   `course_pk` int(20) unsigned NOT NULL default '0',
   `project_jarfile_pk` int(20) unsigned NOT NULL default '0',
   `project_number` varchar(30) NOT NULL default '0',
-  `ontime` datetime NOT NULL default '0000-00-00 00:00:00',
-  `late` datetime NOT NULL default '0000-00-00 00:00:00',
+  `ontime` datetime NOT NULL default '1000-01-01 00:00:00',
+  `late` datetime NOT NULL default '1000-01-01 00:00:00',
   `title` varchar(100) default NULL,
   `URL` varchar(100) default NULL,
   `description` text,
@@ -356,7 +356,7 @@ CREATE TABLE `test_runs` (
   `test_run_pk` int(20) unsigned NOT NULL auto_increment,
   `project_jarfile_pk` int(20) unsigned NOT NULL default '0',
   `submission_pk` int(20) unsigned NOT NULL default '0',
-  `test_timestamp` datetime NOT NULL default '0000-00-00 00:00:00',
+  `test_timestamp` datetime NOT NULL default '1000-01-01 00:00:00',
   `test_machine` varchar(100) NOT NULL default 'unknown',
   `num_passed_overall` smallint(3) NOT NULL default '0',
   `num_build_tests_passed` smallint(3) NOT NULL default '0',
